@@ -874,13 +874,16 @@
     /* Congratulations banner — wraps around composer */
     .home-congrats-banner {
       display: none;
-      border: 1px solid rgba(181, 155, 91, 0.2);
+      margin: 0 -13px;
+      border: 1px solid rgba(29, 28, 29, 0.1);
       border-radius: 12px;
       overflow: hidden;
-      background: linear-gradient(160deg, #fdf8ed 0%, #f9f3e2 100%);
+      background: linear-gradient(135deg, rgba(74, 21, 75, 0.08), rgba(224, 30, 90, 0.1), rgba(236, 178, 46, 0.1), rgba(46, 182, 125, 0.1), rgba(54, 197, 240, 0.1));
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       opacity: 0;
       transform: translateY(8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
+      position: relative;
     }
 
     .home-congrats-banner.visible {
@@ -889,39 +892,38 @@
       transform: translateY(0);
     }
 
-    .home-congrats-banner-inner {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 12px 0;
+    .home-congrats-header {
+      padding: 10px 12px 0;
+      position: relative;
     }
 
-    .home-congrats-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0px 2px 4px rgba(246, 228, 255, 0.75));
-      flex-shrink: 0;
+    .home-congrats-title {
+      text-align: center;
+      margin-bottom: 2px;
     }
 
-    .home-congrats-text {
+    .home-congrats-title-text {
       font-size: 13px;
-      font-weight: 400;
-      color: var(--sk-content-secondary);
-      line-height: 18px;
-      flex: 1;
+      font-weight: 700;
+      color: var(--sk-primary-text);
     }
 
-    .home-congrats-text strong {
-      font-weight: 700;
-      color: #5C440D;
+    .home-congrats-body {
+      font-size: 12px;
+      color: var(--sk-content-secondary);
+      line-height: 16px;
+      padding: 0 12px 8px;
+      text-align: center;
+    }
+
+    .home-congrats-body p {
+      margin: 0;
     }
 
     .home-congrats-dismiss {
+      position: absolute;
+      top: 8px;
+      right: 8px;
       background: none;
       border: none;
       color: #616061;
@@ -932,7 +934,6 @@
       justify-content: center;
       border-radius: 4px;
       opacity: 0.6;
-      flex-shrink: 0;
     }
 
     .home-congrats-dismiss:hover {
@@ -941,9 +942,8 @@
     }
 
     .home-congrats-banner .home-composer {
-      margin: 12px;
-      border-radius: 8px;
-      box-shadow: none;
+      margin: 0 13px 10px;
+      background: #ffffff;
     }
 
     .home-composer {
@@ -1253,15 +1253,17 @@
       <div class="home-composer-wrapper" id="homeComposerWrapper">
         <!-- Congratulations wrapper — wraps around composer, only shown on second visit -->
         <div class="home-congrats-banner" id="homeCongratsBanner">
-          <div class="home-congrats-banner-inner">
-            <div class="home-congrats-icon">
-              <svg width="20" height="20" viewBox="0 0 20.09 20.09" fill="none"><path d="M1.46297 15.1779C2.18866 14.4523 2.94999 14.5879 3.83894 14.9689C3.80428 14.9949 3.77085 15.0243 3.73933 15.0558L2.75496 16.0392C2.39809 16.3961 2.3982 16.9753 2.75496 17.3322C3.11188 17.6891 3.69101 17.6891 4.04793 17.3322L5.0323 16.3478C5.06377 16.3163 5.09232 16.2828 5.11824 16.2482C5.4993 17.1372 5.6349 17.8985 4.90926 18.6242C2.75506 20.7784 0.169999 19.9172 0.169999 19.9172C0.163517 19.8976 -0.683022 17.3239 1.46297 15.1779ZM7.06453 6.66813C10.4506 1.27525 15.2183 -0.274302 19.21 0.0382464L19.9884 0.0987933L20.0489 0.877114C20.3616 4.86891 18.8121 9.63648 13.419 13.0226C13.664 14.271 13.734 15.2953 13.3253 16.2531C12.8673 17.3262 11.8645 18.1639 10.4923 19.2277C9.65334 19.878 8.48038 19.4963 8.08211 18.6115C7.69103 17.7415 6.86196 16.2126 5.36824 14.7189C3.87474 13.2255 2.34661 12.3971 1.47664 12.006C0.59143 11.608 0.209011 10.434 0.859452 9.59489C1.92323 8.22272 2.76097 7.21984 3.83406 6.76188C4.79179 6.35318 5.81623 6.42318 7.06453 6.66813ZM18.2598 1.82731C14.956 1.81767 11.0989 3.33753 8.29988 8.15348L7.96394 8.73161L7.3116 8.58707C5.7267 8.23463 5.06693 8.22289 4.55183 8.44254C4.02515 8.6673 3.49861 9.19155 2.49617 10.4679C3.52854 10.9613 5.11106 11.8797 6.65926 13.4279C8.2069 14.9755 9.12573 16.5576 9.61922 17.59C10.895 16.588 11.4208 16.0628 11.6456 15.5363C11.8653 15.0213 11.8534 14.3611 11.5011 12.7765L11.3555 12.1232L11.9346 11.7882C16.7506 8.98911 18.2696 5.1312 18.2598 1.82731ZM13.753 4.80973C14.5921 4.80973 15.2783 5.4951 15.2784 6.33414C15.2784 7.17323 14.5921 7.85954 13.753 7.85954C12.914 7.85941 12.2286 7.17316 12.2286 6.33414C12.2286 5.49517 12.9141 4.80985 13.753 4.80973Z" fill="url(#rocketGrad2)"/><defs><radialGradient id="rocketGrad2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10.04 10.04) rotate(90) scale(15.64)"><stop stop-color="#1D1C1D"/><stop offset="1" stop-color="#77757A"/></radialGradient></defs></svg>
+          <div class="home-congrats-header">
+            <div class="home-congrats-title">
+              <span class="home-congrats-title-text">&#127881; Free Slackbot preview</span>
             </div>
-            <span class="home-congrats-text"><strong>Congratulations!</strong> You have free access to Slackbot to help you get started!</span>
-            <button class="home-congrats-dismiss" id="homeCongratsDismiss" aria-label="Dismiss">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </button>
           </div>
+          <div class="home-congrats-body">
+            <p>Ask me anything to get started.</p>
+          </div>
+          <button class="home-congrats-dismiss" id="homeCongratsDismiss" aria-label="Dismiss">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
         </div>
         <div class="home-composer">
           <div class="home-composer-input">
@@ -1872,24 +1874,35 @@
     if (homeCongratsDismiss) {
       homeCongratsDismiss.addEventListener('click', () => {
         homeCongratsBanner.dataset.dismissed = 'true';
-        const header = homeCongratsBanner.querySelector('.home-congrats-banner-inner');
-        // Animate header out
-        header.style.transition = 'opacity 0.2s, max-height 0.3s ease 0.1s';
+        // Fade out wrapper chrome (header, body, background) but keep composer
+        const header = homeCongratsBanner.querySelector('.home-congrats-header');
+        const body = homeCongratsBanner.querySelector('.home-congrats-body');
+        const dismiss = homeCongratsDismiss;
+        // Fade out text content
+        header.style.transition = 'opacity 0.3s ease, max-height 0.4s ease 0.1s';
+        body.style.transition = 'opacity 0.3s ease, max-height 0.4s ease 0.1s';
+        dismiss.style.transition = 'opacity 0.2s ease';
         header.style.opacity = '0';
         header.style.maxHeight = '0';
         header.style.overflow = 'hidden';
-        // Remove banner styling and move composer back out
+        body.style.opacity = '0';
+        body.style.maxHeight = '0';
+        body.style.overflow = 'hidden';
+        dismiss.style.opacity = '0';
+        // Fade out wrapper styling
+        homeCongratsBanner.style.transition = 'background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease';
+        homeCongratsBanner.style.background = 'transparent';
+        homeCongratsBanner.style.borderColor = 'transparent';
+        homeCongratsBanner.style.boxShadow = 'none';
+        // Smoothly remove bottom margin on composer
+        homeComposer.style.transition = 'margin 0.4s ease';
+        homeComposer.style.margin = '0 13px 0';
+        // After transition, clean up DOM
         setTimeout(() => {
-          header.remove();
-          homeCongratsBanner.style.background = 'none';
-          homeCongratsBanner.style.border = 'none';
-          homeCongratsBanner.style.borderRadius = '0';
-          homeCongratsBanner.style.overflow = 'visible';
-          homeComposer.style.margin = '0';
-          // Move composer back to wrapper as sibling
+          homeComposer.removeAttribute('style');
           homeCongratsBanner.parentNode.insertBefore(homeComposer, homeCongratsBanner.nextSibling);
           homeCongratsBanner.style.display = 'none';
-        }, 300);
+        }, 450);
       });
     }
 
