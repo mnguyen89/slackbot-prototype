@@ -679,6 +679,35 @@
       left: 0;
     }
 
+    .bot-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #007A5A;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .bot-cta:hover {
+      background: #006048;
+    }
+
+    .bot-cta-fade {
+      opacity: 0;
+      animation: ctaFadeIn 0.3s ease forwards;
+    }
+
+    @keyframes ctaFadeIn {
+      to { opacity: 1; }
+    }
+
     /* Typing indicator */
     .typing-indicator {
       display: flex;
@@ -1678,6 +1707,18 @@
     }
 
     function typewriterEffect(el, text) {
+      // Extract CTA line if present (starts with "Want me to" or "Tell me which")
+      let ctaText = '';
+      const lines = text.split('\n');
+      const lastLine = lines[lines.length - 1].trim();
+      if (lastLine.startsWith('Want me to') || lastLine.startsWith('Tell me which')) {
+        ctaText = lastLine;
+        // Remove CTA line and any trailing blank lines
+        lines.pop();
+        while (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+        text = lines.join('\n');
+      }
+
       // Convert markdown to HTML
       const formatted = markdownToHtml(text);
 
@@ -1715,6 +1756,13 @@
           // Pause slightly longer at line breaks
           const delay = chars[index - 1] === '<br>' ? speed * 3 : speed;
           setTimeout(type, delay);
+        } else if (ctaText) {
+          // Append CTA button after typing finishes
+          const btn = document.createElement('button');
+          btn.className = 'bot-cta bot-cta-fade';
+          btn.textContent = ctaText;
+          el.appendChild(btn);
+          scrollToBottom();
         }
       }
       type();
