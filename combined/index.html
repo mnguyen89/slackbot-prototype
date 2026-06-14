@@ -50,8 +50,8 @@
       display: block;
     }
 
-    /* Shared modal overlay */
-    .modal-overlay {
+    /* Persistent scrim behind all modals */
+    .scrim {
       position: absolute;
       top: 40px;
       left: 4px;
@@ -67,7 +67,22 @@
       transition: opacity 0.4s ease-out;
     }
 
-    .modal-overlay.hidden {
+    .scrim.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Individual modal panels */
+    .modal-panel {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      inset: 0;
+      transition: opacity 0.35s ease-out;
+    }
+
+    .modal-panel.hidden {
       opacity: 0;
       pointer-events: none;
     }
@@ -87,9 +102,8 @@
       transition: transform 0.4s ease-out, opacity 0.4s ease-out;
     }
 
-    .modal-overlay.hidden .upsell-modal {
+    .modal-panel.hidden .upsell-modal {
       transform: scale(0.97);
-      opacity: 0;
     }
 
     /* Left content area */
@@ -383,9 +397,8 @@
       transition: transform 0.4s ease-out, opacity 0.4s ease-out;
     }
 
-    .modal-overlay.hidden .segmentation-modal {
+    .modal-panel.hidden .segmentation-modal {
       transform: scale(0.97);
-      opacity: 0;
     }
 
     /* Background decorations — static */
@@ -850,8 +863,11 @@
       <iframe src="../slackbot-dm/index.html"></iframe>
     </div>
 
+    <!-- Persistent scrim -->
+    <div class="scrim" id="scrim">
+
     <!-- ====== UPSELL MODAL — Start with Business+ ====== -->
-    <div class="modal-overlay" id="upsellOverlay">
+    <div class="modal-panel" id="upsellPanel">
       <div class="upsell-modal">
         <!-- Left content -->
         <div class="upsell-content">
@@ -923,7 +939,7 @@
     </div>
 
     <!-- ====== SEGMENTATION MODAL ====== -->
-    <div class="modal-overlay hidden" id="segmentationOverlay">
+    <div class="modal-panel hidden" id="segmentationPanel">
       <div class="segmentation-modal intro-active">
 
         <!-- Background decorations (static) -->
@@ -1028,22 +1044,24 @@
         </div>
       </div>
     </div>
+
+    </div><!-- /scrim -->
   </div>
 
   <script>
     // ====== UPSELL MODAL ======
     // Both buttons dismiss the upsell and show segmentation
     function dismissUpsell() {
-      const upsellOverlay = document.getElementById('upsellOverlay');
-      const segOverlay = document.getElementById('segmentationOverlay');
-      const segModal = segOverlay.querySelector('.segmentation-modal');
+      const upsellPanel = document.getElementById('upsellPanel');
+      const segPanel = document.getElementById('segmentationPanel');
+      const segModal = segPanel.querySelector('.segmentation-modal');
 
-      // Hide upsell
-      upsellOverlay.classList.add('hidden');
+      // Hide upsell panel, scrim stays visible
+      upsellPanel.classList.add('hidden');
 
-      // Show segmentation after upsell fades
+      // Show segmentation panel after upsell fades
       setTimeout(() => {
-        segOverlay.classList.remove('hidden');
+        segPanel.classList.remove('hidden');
 
         // Trigger segmentation intro animation
         setTimeout(() => {
@@ -1114,7 +1132,7 @@
       // Send personalization data down to the slackbot-dm iframe
       appIframe.contentWindow.postMessage(personalizationData, '*');
 
-      document.getElementById('segmentationOverlay').classList.add('hidden');
+      document.getElementById('scrim').classList.add('hidden');
       appIframe.contentWindow.postMessage('modal-dismissed', '*');
     }
 
