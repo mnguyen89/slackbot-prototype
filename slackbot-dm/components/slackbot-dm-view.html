@@ -875,15 +875,36 @@
     .home-congrats-banner {
       display: none;
       margin: 0 -13px;
-      border: 1px solid rgba(29, 28, 29, 0.1);
       border-radius: 12px;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(74, 21, 75, 0.08), rgba(224, 30, 90, 0.1), rgba(236, 178, 46, 0.1), rgba(46, 182, 125, 0.1), rgba(54, 197, 240, 0.1));
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      box-shadow: 0 0.5px 5px rgba(0, 0, 0, 0.04), 0 3.75px 11px rgba(0, 0, 0, 0.19);
       opacity: 0;
       transform: translateY(8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       position: relative;
+      padding: 16px 8px 8px;
+    }
+
+    .home-congrats-banner-bg {
+      position: absolute;
+      bottom: -20px;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .home-congrats-banner-bg img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .home-congrats-banner-inner {
+      padding: 0 0 16px;
+      position: relative;
+      z-index: 1;
     }
 
     .home-congrats-banner.visible {
@@ -893,27 +914,29 @@
     }
 
     .home-congrats-header {
-      padding: 10px 12px 0;
+      padding: 0;
       position: relative;
     }
 
     .home-congrats-title {
       text-align: center;
-      margin-bottom: 2px;
+      margin-bottom: 0;
     }
 
     .home-congrats-title-text {
       font-size: 13px;
-      font-weight: 700;
-      color: var(--sk-primary-text);
+      font-weight: 900;
+      color: #1d1c1d;
+      line-height: 18px;
     }
 
     .home-congrats-body {
-      font-size: 12px;
-      color: var(--sk-content-secondary);
-      line-height: 16px;
-      padding: 0 12px 8px;
+      font-size: 13px;
+      color: #1d1c1d;
+      line-height: 18px;
+      padding: 2px 0 0;
       text-align: center;
+      font-weight: 400;
     }
 
     .home-congrats-body p {
@@ -932,18 +955,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 4px;
+      border-radius: 6px;
       opacity: 0.6;
+      transition: opacity 0.15s, background 0.15s;
+      z-index: 2;
     }
 
     .home-congrats-dismiss:hover {
       opacity: 1;
-      background: #f0f0f0;
+      background: rgba(0, 0, 0, 0.05);
     }
 
     .home-congrats-banner .home-composer {
-      margin: 0 13px 10px;
+      margin: 0;
       background: #ffffff;
+      border-radius: 8px;
+      border-color: rgba(94, 93, 96, 0.13);
+      position: relative;
+      z-index: 1;
     }
 
     .home-composer {
@@ -1061,6 +1090,120 @@
       font-size: 11px;
       color: #77757a;
       line-height: 14px;
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .modal-overlay.visible {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-panel {
+      background: #fff;
+      border-radius: 12px;
+      width: 380px;
+      max-height: 80%;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1d1c1d;
+      margin: 0;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #616061;
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: #f0f0f0;
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .modal-body p {
+      font-size: 14px;
+      color: #1d1c1d;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .modal-body p:last-child {
+      margin-bottom: 0;
+    }
+    .modal-app-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .modal-app-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 14px;
+      color: #1d1c1d;
+    }
+    .modal-app-list li:last-child {
+      border-bottom: none;
+    }
+    .modal-app-list li img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+    .modal-invite-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1d1c1d;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .modal-invite-input:focus {
+      border-color: #1264a3;
+    }
+    .modal-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #007a5a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .modal-btn:hover {
+      background: #005e45;
     }
 
   </style>
@@ -1253,13 +1396,18 @@
       <div class="home-composer-wrapper" id="homeComposerWrapper">
         <!-- Congratulations wrapper — wraps around composer, only shown on second visit -->
         <div class="home-congrats-banner" id="homeCongratsBanner">
-          <div class="home-congrats-header">
-            <div class="home-congrats-title">
-              <span class="home-congrats-title-text">&#127881; Free Slackbot preview</span>
-            </div>
+          <div class="home-congrats-banner-bg">
+            <img src="../images/banner-bg-shapes.svg" alt="">
           </div>
-          <div class="home-congrats-body">
-            <p>Ask me anything to get started.</p>
+          <div class="home-congrats-banner-inner">
+            <div class="home-congrats-header">
+              <div class="home-congrats-title">
+                <span class="home-congrats-title-text">&#127881; Free Slackbot preview</span>
+              </div>
+            </div>
+            <div class="home-congrats-body">
+              <p>Ask me anything to get started.</p>
+            </div>
           </div>
           <button class="home-congrats-dismiss" id="homeCongratsDismiss" aria-label="Dismiss">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -1268,10 +1416,6 @@
         <div class="home-composer">
           <div class="home-composer-input">
             <div class="home-composer-input-field" id="homeComposerInput" contenteditable="true" data-placeholder="How should I use Slackbot for my role?"></div>
-            <div class="autofill-chip" id="autofillChip">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              to autofill
-            </div>
           </div>
           <div class="home-composer-actions">
             <button class="home-composer-action-btn" aria-label="Attach">
@@ -1300,6 +1444,44 @@
           </div>
         </div>
         <div class="home-disclaimer">This tool uses generative AI, which can produce inaccurate or harmful responses.</div>
+      </div>
+    </div>
+
+    <!-- Modal: Team Tools (Apps) -->
+    <div class="modal-overlay" id="modalApps">
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2>Team tools</h2>
+          <button class="modal-close" id="modalAppsClose" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Connect your favorite tools to keep everything in one place.</p>
+          <ul class="modal-app-list">
+            <li><img src="../images/tool-sheets.png" alt="Google Sheets">Google Sheets</li>
+            <li><img src="../images/tool-drive.png" alt="Google Drive">Google Drive</li>
+            <li><img src="../images/tool-gmail.png" alt="Gmail">Gmail</li>
+            <li><img src="../images/tool-zoom.png" alt="Zoom">Zoom</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Invite Team -->
+    <div class="modal-overlay" id="modalInvite">
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2>Invite your team</h2>
+          <button class="modal-close" id="modalInviteClose" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Slack works best with your whole team. Invite members by email.</p>
+          <input type="email" class="modal-invite-input" placeholder="name@company.com">
+          <button class="modal-btn">Send invite</button>
+        </div>
       </div>
     </div>
 
@@ -1859,10 +2041,12 @@
 
     const homeComposer = document.querySelector('#homeComposerWrapper .home-composer');
 
+    const congratsBannerInner = homeCongratsBanner ? homeCongratsBanner.querySelector('.home-congrats-banner-inner') : null;
+
     function showCongratsBannerIfSecondVisit() {
       homeVisitCount++;
       if (homeVisitCount >= 2 && homeCongratsBanner && !homeCongratsBanner.dataset.dismissed) {
-        // Move composer inside banner (wrapping it)
+        // Move composer inside the banner (after the inner wrapper)
         homeCongratsBanner.appendChild(homeComposer);
         homeCongratsBanner.style.display = 'block';
         requestAnimationFrame(() => {
@@ -1874,29 +2058,29 @@
     if (homeCongratsDismiss) {
       homeCongratsDismiss.addEventListener('click', () => {
         homeCongratsBanner.dataset.dismissed = 'true';
-        // Fade out wrapper chrome (header, body, background) but keep composer
-        const header = homeCongratsBanner.querySelector('.home-congrats-header');
-        const body = homeCongratsBanner.querySelector('.home-congrats-body');
         const dismiss = homeCongratsDismiss;
-        // Fade out text content
-        header.style.transition = 'opacity 0.3s ease, max-height 0.4s ease 0.1s';
-        body.style.transition = 'opacity 0.3s ease, max-height 0.4s ease 0.1s';
+        // Fade out inner content and dismiss button
+        congratsBannerInner.style.transition = 'opacity 0.3s ease, max-height 0.4s ease 0.1s, padding 0.4s ease 0.1s';
+        congratsBannerInner.style.opacity = '0';
+        congratsBannerInner.style.maxHeight = '0';
+        congratsBannerInner.style.padding = '0';
+        congratsBannerInner.style.overflow = 'hidden';
         dismiss.style.transition = 'opacity 0.2s ease';
-        header.style.opacity = '0';
-        header.style.maxHeight = '0';
-        header.style.overflow = 'hidden';
-        body.style.opacity = '0';
-        body.style.maxHeight = '0';
-        body.style.overflow = 'hidden';
         dismiss.style.opacity = '0';
-        // Fade out wrapper styling
-        homeCongratsBanner.style.transition = 'background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease';
+        // Fade out the banner background and shadow
+        homeCongratsBanner.style.transition = 'background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease';
         homeCongratsBanner.style.background = 'transparent';
-        homeCongratsBanner.style.borderColor = 'transparent';
         homeCongratsBanner.style.boxShadow = 'none';
-        // Smoothly remove bottom margin on composer
+        homeCongratsBanner.style.padding = '0';
+        // Hide the bg shapes
+        const bgShapes = homeCongratsBanner.querySelector('.home-congrats-banner-bg');
+        if (bgShapes) {
+          bgShapes.style.transition = 'opacity 0.3s ease';
+          bgShapes.style.opacity = '0';
+        }
+        // Smoothly remove composer margin
         homeComposer.style.transition = 'margin 0.4s ease';
-        homeComposer.style.margin = '0 13px 0';
+        homeComposer.style.margin = '0';
         // After transition, clean up DOM
         setTimeout(() => {
           homeComposer.removeAttribute('style');
@@ -2161,6 +2345,35 @@
       // Enter conversation mode with user's text
       enterConversationMode(text);
     }
+
+    // === Modal interactions for cards ===
+    const modalApps = document.getElementById('modalApps');
+    const modalInvite = document.getElementById('modalInvite');
+
+    document.getElementById('card1').addEventListener('click', () => {
+      modalApps.classList.add('visible');
+    });
+
+    document.getElementById('card2').addEventListener('click', () => {
+      modalInvite.classList.add('visible');
+    });
+
+    document.getElementById('modalAppsClose').addEventListener('click', () => {
+      modalApps.classList.remove('visible');
+    });
+
+    document.getElementById('modalInviteClose').addEventListener('click', () => {
+      modalInvite.classList.remove('visible');
+    });
+
+    // Close modals on overlay click
+    modalApps.addEventListener('click', (e) => {
+      if (e.target === modalApps) modalApps.classList.remove('visible');
+    });
+
+    modalInvite.addEventListener('click', (e) => {
+      if (e.target === modalInvite) modalInvite.classList.remove('visible');
+    });
   </script>
 
 </body>
