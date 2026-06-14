@@ -878,12 +878,44 @@
       border-radius: 12px;
       overflow: hidden;
       background: #ffffff;
-      box-shadow: 0 0.5px 5px rgba(0, 0, 0, 0.04), 0 3.75px 11px rgba(0, 0, 0, 0.19);
+      box-shadow: 0 0.5px 7.5px rgba(0, 0, 0, 0.04), 0 3.75px 16.5px rgba(0, 0, 0, 0.19);
       opacity: 0;
       transform: translateY(8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
       position: relative;
-      padding: 16px 8px 8px;
+      padding: 16px 8px 12px;
+    }
+
+    /* Sharp saturated border all around */
+    .home-congrats-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      padding: 1px;
+      background: linear-gradient(90deg, #36c5f0 10%, #2eb67d 35%, #ecb22e 58%, #e01e5a 90%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      opacity: 0.75;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Soft diffused glow that spreads into the card */
+    .home-congrats-banner::after {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(90deg, #36c5f0 10%, #2eb67d 35%, #ecb22e 58%, #e01e5a 90%);
+      opacity: 0.35;
+      filter: blur(32px);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .home-congrats-banner-bg {
@@ -894,6 +926,7 @@
       height: 120%;
       pointer-events: none;
       z-index: 0;
+      display: none;
     }
 
     .home-congrats-banner-bg img {
@@ -902,7 +935,7 @@
     }
 
     .home-congrats-banner-inner {
-      padding: 0 0 16px;
+      padding: 0 17px 16px;
       position: relative;
       z-index: 1;
     }
@@ -919,7 +952,7 @@
     }
 
     .home-congrats-title {
-      text-align: center;
+      text-align: left;
       margin-bottom: 0;
     }
 
@@ -935,7 +968,7 @@
       color: #1d1c1d;
       line-height: 18px;
       padding: 2px 0 0;
-      text-align: center;
+      text-align: left;
       font-weight: 400;
     }
 
@@ -1112,6 +1145,7 @@
       background: #fff;
       border-radius: 12px;
       width: 380px;
+      min-width: 304px;
       max-height: 80%;
       overflow-y: auto;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -1402,7 +1436,7 @@
           <div class="home-congrats-banner-inner">
             <div class="home-congrats-header">
               <div class="home-congrats-title">
-                <span class="home-congrats-title-text">&#127881; Free Slackbot preview</span>
+                <span class="home-congrats-title-text">&#127881; Try Slackbot Free</span>
               </div>
             </div>
             <div class="home-congrats-body">

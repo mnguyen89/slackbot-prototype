@@ -94,9 +94,13 @@
   --sk-duration-emphasis: 0.42s;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: var(--sk-font);
-  background: #2c0e30;
+  background: #000000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,6 +109,9 @@ body {
   -webkit-font-smoothing: antialiased;
   font-size: 15px;
   line-height: 1.4;
+  margin: 0;
+  padding: 8px;
+  overflow: hidden;
 }
 
 /* When embedded in an iframe, fill the container flush */
@@ -150,15 +157,16 @@ body.embedded .top-bar-right {
 
 /* === App Window === */
 .app-window {
-  width: 1040px;
-  height: 800px;
-  border-radius: 10px;
+  width: 100%;
+  height: calc(100vh - 16px);
+  min-width: 600px;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
   position: relative;
-  border-top: 1px solid rgba(249, 237, 255, 0.25);
+  border-top: none;
 }
 
 /* Window background layers */
@@ -166,7 +174,7 @@ body.embedded .top-bar-right {
   position: absolute;
   inset: 0;
   z-index: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -394,7 +402,6 @@ body.embedded .top-bar-right {
 
 /* === Sidebar === */
 .sidebar {
-  width: 230px;
   background: var(--sk-sidebar-bg);
   display: flex;
   flex-direction: column;
@@ -548,20 +555,20 @@ body.embedded .top-bar-right {
 }
 
 /* Sidebar entry animation — collapsed to expanded from left */
-.embedded .sidebar {
+.sidebar {
   width: 0;
   will-change: width;
   transition: width 1.2s cubic-bezier(0.4, 0, 0, 1);
 }
 
-.embedded .sidebar.revealed {
+.sidebar.revealed {
   width: 230px;
   will-change: auto;
 }
 
-.embedded .sidebar-header,
-.embedded .sidebar-content,
-.embedded .sidebar-bottom {
+.sidebar-header,
+.sidebar-content,
+.sidebar-bottom {
   opacity: 0;
   transform: translateX(-8px);
   will-change: opacity, transform;
