@@ -188,7 +188,6 @@
 
     .slackbot-body.conversation-active {
       overflow: hidden;
-      align-items: stretch;
     }
 
     /* Background gradient */
@@ -556,13 +555,13 @@
       pointer-events: none;
       position: absolute;
       inset: 0;
-      transition: opacity 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+      z-index: 2;
+      transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     .conversation-view.active {
       opacity: 1;
       pointer-events: auto;
-      position: relative;
     }
 
     .chat-messages {
@@ -870,15 +869,15 @@
       line-height: 12px;
     }
 
-    /* Hide body-content in conversation mode */
-    .slackbot-body .body-content {
+    /* Transition between home and conversation mode */
+    .slackbot-body .body-content,
+    .slackbot-body .body-bg {
       transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     .slackbot-body.conversation-active .body-content {
       opacity: 0;
       pointer-events: none;
-      position: absolute;
     }
 
     .slackbot-body.conversation-active .body-bg {
