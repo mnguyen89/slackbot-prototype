@@ -962,7 +962,7 @@ body.embedded .top-bar-right {
   display: flex;
   align-items: center;
   padding: 10px 16px;
-  background: var(--sk-surface-inverse);
+  background: #1264A3;
   border-radius: 10px;
   margin-top: 4px;
   flex-shrink: 0;
