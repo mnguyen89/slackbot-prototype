@@ -398,12 +398,17 @@
     .hero-image {
       width: 244px;
       height: auto;
+      max-height: 200px;
       object-fit: contain;
       margin-top: 0;
       margin-bottom: -4px;
       mix-blend-mode: multiply;
-      will-change: width;
-      transition: var(--intro-transition, width 1.4s cubic-bezier(0.4, 0, 0, 1));
+      will-change: width, opacity;
+      transition: var(--intro-transition,
+        width 1.4s cubic-bezier(0.4, 0, 0, 1),
+        opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+        max-height 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+        margin 1s cubic-bezier(0.25, 0.1, 0.25, 1));
     }
 
     .hero-image.settled {
@@ -523,19 +528,12 @@
       transform: translateY(0);
     }
 
-    .slackbot-tabs.visible ~ .slackbot-body .hero-image {
-      display: none;
-    }
-    .slackbot-tabs.visible ~ .slackbot-body .body-content {
-      padding-top: 72px;
-    }
-
-    .body-content.animate-expand {
-      transition: padding-top 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .body-content.expanded {
-      padding-top: 72px;
+    /* When home composer is visible, hide hero and reduce spacing */
+    .slackbot-body:has(.home-composer-wrapper.visible) .hero-image {
+      opacity: 0;
+      max-height: 28px;
+      margin: 0;
+      pointer-events: none;
     }
 
     /* Scrollbar */
@@ -732,7 +730,7 @@
       30% { transform: translateY(-4px); opacity: 1; }
     }
 
-    /* Composer wrapper with banner */
+    /* Composer wrapper */
     .composer-wrapper {
       padding: 16px 20px;
       flex-shrink: 0;
@@ -747,73 +745,6 @@
       transform: translateY(0);
     }
 
-    .composer-banner {
-      border: 1px solid rgba(181, 155, 91, 0.2);
-      border-radius: 12px;
-      overflow: hidden;
-      background: linear-gradient(
-        160deg,
-        #fdf8ed 0%,
-        #f9f3e2 100%
-      );
-    }
-
-    .composer-banner-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 12px 0;
-    }
-
-    .composer-banner-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0px 2px 4px rgba(246, 228, 255, 0.75));
-      flex-shrink: 0;
-    }
-
-    .composer-banner-icon img {
-      width: 24px;
-      height: 24px;
-    }
-
-    .composer-banner-text {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--sk-content-secondary);
-      line-height: 18px;
-      flex: 1;
-    }
-
-    .composer-banner-text strong {
-      font-weight: 700;
-      color: #5C440D;
-    }
-
-    .composer-banner-dismiss {
-      background: none;
-      border: none;
-      color: #616061;
-      cursor: pointer;
-      padding: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      opacity: 0.6;
-      flex-shrink: 0;
-    }
-
-    .composer-banner-dismiss:hover {
-      opacity: 1;
-      background: #f0f0f0;
-    }
-
     /* Composer input */
     .chat-composer {
       background: var(--sk-white);
@@ -821,7 +752,6 @@
       border-radius: 8px;
       overflow: hidden;
       flex-shrink: 0;
-      margin: 12px 12px 12px;
     }
 
     .composer-input {
@@ -931,14 +861,89 @@
       transform: translateX(-50%) translateY(30px);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     .home-composer-wrapper.visible {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
       pointer-events: auto;
+    }
+
+    /* Congratulations banner — wraps around composer */
+    .home-congrats-banner {
+      display: none;
+      border: 1px solid rgba(181, 155, 91, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #fdf8ed 0%, #f9f3e2 100%);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .home-congrats-banner.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .home-congrats-banner-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 12px 0;
+    }
+
+    .home-congrats-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0px 2px 4px rgba(246, 228, 255, 0.75));
+      flex-shrink: 0;
+    }
+
+    .home-congrats-text {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--sk-content-secondary);
+      line-height: 18px;
+      flex: 1;
+    }
+
+    .home-congrats-text strong {
+      font-weight: 700;
+      color: #5C440D;
+    }
+
+    .home-congrats-dismiss {
+      background: none;
+      border: none;
+      color: #616061;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    .home-congrats-dismiss:hover {
+      opacity: 1;
+      background: #f0f0f0;
+    }
+
+    .home-congrats-banner .home-composer {
+      margin: 12px;
+      border-radius: 8px;
+      box-shadow: none;
     }
 
     .home-composer {
@@ -1213,41 +1218,30 @@
           </div>
         </div>
 
-        <!-- Wrapped Composer with banner -->
+        <!-- Composer (no banner in conversation view) -->
         <div class="composer-wrapper">
-          <div class="composer-banner">
-            <div class="composer-banner-header">
-              <div class="composer-banner-icon">
-                <svg width="20" height="20" viewBox="0 0 20.09 20.09" fill="none"><path d="M1.46297 15.1779C2.18866 14.4523 2.94999 14.5879 3.83894 14.9689C3.80428 14.9949 3.77085 15.0243 3.73933 15.0558L2.75496 16.0392C2.39809 16.3961 2.3982 16.9753 2.75496 17.3322C3.11188 17.6891 3.69101 17.6891 4.04793 17.3322L5.0323 16.3478C5.06377 16.3163 5.09232 16.2828 5.11824 16.2482C5.4993 17.1372 5.6349 17.8985 4.90926 18.6242C2.75506 20.7784 0.169999 19.9172 0.169999 19.9172C0.163517 19.8976 -0.683022 17.3239 1.46297 15.1779ZM7.06453 6.66813C10.4506 1.27525 15.2183 -0.274302 19.21 0.0382464L19.9884 0.0987933L20.0489 0.877114C20.3616 4.86891 18.8121 9.63648 13.419 13.0226C13.664 14.271 13.734 15.2953 13.3253 16.2531C12.8673 17.3262 11.8645 18.1639 10.4923 19.2277C9.65334 19.878 8.48038 19.4963 8.08211 18.6115C7.69103 17.7415 6.86196 16.2126 5.36824 14.7189C3.87474 13.2255 2.34661 12.3971 1.47664 12.006C0.59143 11.608 0.209011 10.434 0.859452 9.59489C1.92323 8.22272 2.76097 7.21984 3.83406 6.76188C4.79179 6.35318 5.81623 6.42318 7.06453 6.66813ZM18.2598 1.82731C14.956 1.81767 11.0989 3.33753 8.29988 8.15348L7.96394 8.73161L7.3116 8.58707C5.7267 8.23463 5.06693 8.22289 4.55183 8.44254C4.02515 8.6673 3.49861 9.19155 2.49617 10.4679C3.52854 10.9613 5.11106 11.8797 6.65926 13.4279C8.2069 14.9755 9.12573 16.5576 9.61922 17.59C10.895 16.588 11.4208 16.0628 11.6456 15.5363C11.8653 15.0213 11.8534 14.3611 11.5011 12.7765L11.3555 12.1232L11.9346 11.7882C16.7506 8.98911 18.2696 5.1312 18.2598 1.82731ZM13.753 4.80973C14.5921 4.80973 15.2783 5.4951 15.2784 6.33414C15.2784 7.17323 14.5921 7.85954 13.753 7.85954C12.914 7.85941 12.2286 7.17316 12.2286 6.33414C12.2286 5.49517 12.9141 4.80985 13.753 4.80973Z" fill="url(#rocketGrad)"/><defs><radialGradient id="rocketGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10.04 10.04) rotate(90) scale(15.64)"><stop stop-color="#1D1C1D"/><stop offset="1" stop-color="#77757A"/></radialGradient></defs></svg>
-              </div>
-              <span class="composer-banner-text"><strong>Congratulations!</strong> You have free access to Slackbot to help you get started!</span>
-              <button class="composer-banner-dismiss" id="composerBannerDismiss" aria-label="Dismiss">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <div class="chat-composer" id="chatComposer">
+            <div class="composer-input" id="composerInput" contenteditable="true" data-placeholder="Message Slackbot"></div>
+            <div class="composer-actions">
+              <button class="composer-action-btn" aria-label="Attach">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 5.5v7M5.5 9h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
               </button>
-            </div>
-            <div class="chat-composer" id="chatComposer">
-              <div class="composer-input" id="composerInput" contenteditable="true" data-placeholder="Message Slackbot"></div>
-              <div class="composer-actions">
-                <button class="composer-action-btn" aria-label="Attach">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 5.5v7M5.5 9h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <button class="composer-action-btn" aria-label="Format">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 5h3v8H5.5V7H4V5zM8 5h3.5c1.1 0 2 .7 2 1.7 0 .6-.3 1.1-.8 1.4.7.3 1.1.9 1.1 1.6 0 1.1-.9 1.8-2.1 1.8H8V5z" stroke="currentColor" stroke-width="1.1"/></svg>
+              </button>
+              <button class="composer-action-btn" aria-label="Emoji">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.2"/><circle cx="6.5" cy="7.5" r="1" fill="currentColor"/><circle cx="11.5" cy="7.5" r="1" fill="currentColor"/><path d="M6 11c.8 1.2 2 1.5 3 1.5s2.2-.3 3-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
+              <button class="composer-action-btn" aria-label="Mention">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M11.5 9v1.5a1.5 1.5 0 003 0V9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
+              <button class="composer-action-btn" aria-label="More">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="4.5" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="13.5" cy="9" r="1.2" fill="currentColor"/></svg>
+              </button>
+              <div class="composer-right">
+                <button class="composer-send" id="composerSend" aria-label="Send">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M4 6l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
-                <button class="composer-action-btn" aria-label="Format">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 5h3v8H5.5V7H4V5zM8 5h3.5c1.1 0 2 .7 2 1.7 0 .6-.3 1.1-.8 1.4.7.3 1.1.9 1.1 1.6 0 1.1-.9 1.8-2.1 1.8H8V5z" stroke="currentColor" stroke-width="1.1"/></svg>
-                </button>
-                <button class="composer-action-btn" aria-label="Emoji">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.2"/><circle cx="6.5" cy="7.5" r="1" fill="currentColor"/><circle cx="11.5" cy="7.5" r="1" fill="currentColor"/><path d="M6 11c.8 1.2 2 1.5 3 1.5s2.2-.3 3-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                </button>
-                <button class="composer-action-btn" aria-label="Mention">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M11.5 9v1.5a1.5 1.5 0 003 0V9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                </button>
-                <button class="composer-action-btn" aria-label="More">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="4.5" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="13.5" cy="9" r="1.2" fill="currentColor"/></svg>
-                </button>
-                <div class="composer-right">
-                  <button class="composer-send" id="composerSend" aria-label="Send">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M4 6l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -1257,6 +1251,18 @@
 
       <!-- Home Composer (shown after "New chat" click) -->
       <div class="home-composer-wrapper" id="homeComposerWrapper">
+        <!-- Congratulations wrapper — wraps around composer, only shown on second visit -->
+        <div class="home-congrats-banner" id="homeCongratsBanner">
+          <div class="home-congrats-banner-inner">
+            <div class="home-congrats-icon">
+              <svg width="20" height="20" viewBox="0 0 20.09 20.09" fill="none"><path d="M1.46297 15.1779C2.18866 14.4523 2.94999 14.5879 3.83894 14.9689C3.80428 14.9949 3.77085 15.0243 3.73933 15.0558L2.75496 16.0392C2.39809 16.3961 2.3982 16.9753 2.75496 17.3322C3.11188 17.6891 3.69101 17.6891 4.04793 17.3322L5.0323 16.3478C5.06377 16.3163 5.09232 16.2828 5.11824 16.2482C5.4993 17.1372 5.6349 17.8985 4.90926 18.6242C2.75506 20.7784 0.169999 19.9172 0.169999 19.9172C0.163517 19.8976 -0.683022 17.3239 1.46297 15.1779ZM7.06453 6.66813C10.4506 1.27525 15.2183 -0.274302 19.21 0.0382464L19.9884 0.0987933L20.0489 0.877114C20.3616 4.86891 18.8121 9.63648 13.419 13.0226C13.664 14.271 13.734 15.2953 13.3253 16.2531C12.8673 17.3262 11.8645 18.1639 10.4923 19.2277C9.65334 19.878 8.48038 19.4963 8.08211 18.6115C7.69103 17.7415 6.86196 16.2126 5.36824 14.7189C3.87474 13.2255 2.34661 12.3971 1.47664 12.006C0.59143 11.608 0.209011 10.434 0.859452 9.59489C1.92323 8.22272 2.76097 7.21984 3.83406 6.76188C4.79179 6.35318 5.81623 6.42318 7.06453 6.66813ZM18.2598 1.82731C14.956 1.81767 11.0989 3.33753 8.29988 8.15348L7.96394 8.73161L7.3116 8.58707C5.7267 8.23463 5.06693 8.22289 4.55183 8.44254C4.02515 8.6673 3.49861 9.19155 2.49617 10.4679C3.52854 10.9613 5.11106 11.8797 6.65926 13.4279C8.2069 14.9755 9.12573 16.5576 9.61922 17.59C10.895 16.588 11.4208 16.0628 11.6456 15.5363C11.8653 15.0213 11.8534 14.3611 11.5011 12.7765L11.3555 12.1232L11.9346 11.7882C16.7506 8.98911 18.2696 5.1312 18.2598 1.82731ZM13.753 4.80973C14.5921 4.80973 15.2783 5.4951 15.2784 6.33414C15.2784 7.17323 14.5921 7.85954 13.753 7.85954C12.914 7.85941 12.2286 7.17316 12.2286 6.33414C12.2286 5.49517 12.9141 4.80985 13.753 4.80973Z" fill="url(#rocketGrad2)"/><defs><radialGradient id="rocketGrad2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(10.04 10.04) rotate(90) scale(15.64)"><stop stop-color="#1D1C1D"/><stop offset="1" stop-color="#77757A"/></radialGradient></defs></svg>
+            </div>
+            <span class="home-congrats-text"><strong>Congratulations!</strong> You have free access to Slackbot to help you get started!</span>
+            <button class="home-congrats-dismiss" id="homeCongratsDismiss" aria-label="Dismiss">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="home-composer">
           <div class="home-composer-input">
             <div class="home-composer-input-field" id="homeComposerInput" contenteditable="true" data-placeholder="How should I use Slackbot for my role?"></div>
@@ -1305,6 +1311,7 @@
 
     // Intro animation: triggered after onboarding modal closes
     let introPlayed = false;
+    let homeVisitCount = 0;
 
     function playIntroAnimation(data) {
       if (introPlayed) return;
@@ -1390,6 +1397,9 @@
 
         // Fallback in case message never arrives (e.g., standalone)
         setTimeout(triggerSubhead, 4500);
+
+        // Count initial home view as first visit
+        homeVisitCount = 1;
       }); // end requestAnimationFrame
     }
 
@@ -1713,10 +1723,8 @@
       const lastLine = lines[lines.length - 1].trim();
       if (lastLine.startsWith('Want me to') || lastLine.startsWith('Tell me which')) {
         ctaText = lastLine;
-        // Remove CTA line and any trailing blank lines
-        lines.pop();
-        while (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
-        text = lines.join('\n');
+        // Keep CTA text in the body — it will render as normal text
+        // Button will be appended after typing finishes
       }
 
       // Convert markdown to HTML
@@ -1757,10 +1765,10 @@
           const delay = chars[index - 1] === '<br>' ? speed * 3 : speed;
           setTimeout(type, delay);
         } else if (ctaText) {
-          // Append CTA button after typing finishes
+          // Append short CTA button after typing finishes
           const btn = document.createElement('button');
           btn.className = 'bot-cta bot-cta-fade';
-          btn.textContent = ctaText;
+          btn.textContent = ctaText.startsWith('Tell me') ? 'Let\u2019s do it' : 'Yes, let\u2019s go';
           el.appendChild(btn);
           scrollToBottom();
         }
@@ -1843,25 +1851,44 @@
     // Initial attach
     attachFocusHandlers();
 
-    // === Composer Banner Dismiss ===
-    const composerBannerDismiss = document.getElementById('composerBannerDismiss');
-    if (composerBannerDismiss) {
-      composerBannerDismiss.addEventListener('click', () => {
-        const banner = composerBannerDismiss.closest('.composer-banner');
-        const header = banner.querySelector('.composer-banner-header');
-        const composer = banner.querySelector('.chat-composer');
+    // === Home Congrats Banner ===
+    const homeCongratsBanner = document.getElementById('homeCongratsBanner');
+    const homeCongratsDismiss = document.getElementById('homeCongratsDismiss');
+
+    const homeComposer = document.querySelector('#homeComposerWrapper .home-composer');
+
+    function showCongratsBannerIfSecondVisit() {
+      homeVisitCount++;
+      if (homeVisitCount >= 2 && homeCongratsBanner && !homeCongratsBanner.dataset.dismissed) {
+        // Move composer inside banner (wrapping it)
+        homeCongratsBanner.appendChild(homeComposer);
+        homeCongratsBanner.style.display = 'block';
+        requestAnimationFrame(() => {
+          homeCongratsBanner.classList.add('visible');
+        });
+      }
+    }
+
+    if (homeCongratsDismiss) {
+      homeCongratsDismiss.addEventListener('click', () => {
+        homeCongratsBanner.dataset.dismissed = 'true';
+        const header = homeCongratsBanner.querySelector('.home-congrats-banner-inner');
         // Animate header out
         header.style.transition = 'opacity 0.2s, max-height 0.3s ease 0.1s';
         header.style.opacity = '0';
         header.style.maxHeight = '0';
         header.style.overflow = 'hidden';
-        // Remove banner styling, keep composer bare
+        // Remove banner styling and move composer back out
         setTimeout(() => {
           header.remove();
-          banner.style.background = 'none';
-          banner.style.border = 'none';
-          banner.style.borderRadius = '0';
-          composer.style.margin = '0';
+          homeCongratsBanner.style.background = 'none';
+          homeCongratsBanner.style.border = 'none';
+          homeCongratsBanner.style.borderRadius = '0';
+          homeCongratsBanner.style.overflow = 'visible';
+          homeComposer.style.margin = '0';
+          // Move composer back to wrapper as sibling
+          homeCongratsBanner.parentNode.insertBefore(homeComposer, homeCongratsBanner.nextSibling);
+          homeCongratsBanner.style.display = 'none';
         }, 300);
       });
     }
@@ -2059,6 +2086,7 @@
       requestAnimationFrame(() => {
         homeComposerWrapper.classList.add('visible');
         homeComposerInput.focus();
+        showCongratsBannerIfSecondVisit();
       });
     });
 
@@ -2089,6 +2117,7 @@
       requestAnimationFrame(() => {
         homeComposerWrapper.classList.add('visible');
         homeComposerInput.focus();
+        showCongratsBannerIfSecondVisit();
       });
     });
 
