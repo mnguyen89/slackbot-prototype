@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.slack-kit.com)",
+      "WebFetch(domain:zeroheight.com)",
+      "WebFetch(domain:a.slack-edge.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:www.google.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.slack.com)",
+      "Bash(npm search:*)",
+      "Bash(npm view:*)",
+      "WebFetch(domain:slack.engineering)",
+      "WebFetch(domain:slack.com)",
+      "WebFetch(domain:brand.slackhq.com)",
+      "WebFetch(domain:app.slack.com)",
+      "WebFetch(domain:www.figma.com)",
+      "WebFetch(domain:web.archive.org)",
+      "Bash(curl -sL https://a.slack-edge.com/bv1-9/slack-kit-styles.f6c98c0.css -H 'Referer: https://docs.slack-kit.com/' -H \"User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\")",
+      "Bash(curl:*)",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "WebFetch(domain:slack.design)",
+      "Bash(python3:*)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/minh.nguyen/Desktop/Projects/Vision/images/gift-icon.png)",
+      "Bash(open:*)",
+      "WebFetch(domain:api.figma.com)"
+    ]
+  }
+}

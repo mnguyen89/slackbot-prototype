@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slack Onboarding + DM Prototype</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* App window container — the modal is a child of this */
+    .app-container {
+      position: relative;
+      width: 1200px;
+      height: 900px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    /* The slackbot-dm app fills the container */
+    .app-background {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .app-background iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Modal overlay — inset to show aubergine chrome rim */
+    .modal-overlay {
+      position: absolute;
+      top: 40px;
+      left: 4px;
+      right: 4px;
+      bottom: 0;
+      z-index: 10;
+      background: rgba(29, 28, 29, 0.7);
+      backdrop-filter: blur(16px);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .modal-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Modal */
+    .modal {
+      position: relative;
+      background: #fff;
+      border-radius: 12px;
+      width: 900px;
+      height: 672px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+    }
+
+    .modal-overlay.hidden .modal {
+      transform: scale(0.97);
+      opacity: 0;
+    }
+
+    /* Background decorations — static */
+    .bg-decoration {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-yellow-circle {
+      position: absolute;
+      top: -84px;
+      left: -124px;
+      width: 252px;
+      height: 249px;
+      background: #f5a623;
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .bg-green-shape {
+      position: absolute;
+      bottom: -100px;
+      right: -382px;
+      width: 549px;
+      height: 211px;
+      background: #41b658;
+      border-radius: 112px;
+      z-index: 0;
+    }
+
+    .pill {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-radius: 305px;
+      padding: 9px 16px;
+      box-shadow: 3px 3px 11px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      height: 40px;
+      z-index: 1;
+    }
+
+    .pill-top {
+      top: 103px;
+      left: 56px;
+    }
+
+    .pill-bottom {
+      bottom: 89px;
+      right: 25px;
+    }
+
+    .pill-emoji {
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .pill-number {
+      font-family: 'Lato', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: #000;
+      letter-spacing: -0.37px;
+    }
+
+    /* Steps container */
+    .steps-wrapper {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Each step */
+    .step {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 64px;
+    }
+
+    .step.enter-right {
+      pointer-events: none;
+    }
+
+    .step.exit-left {
+      pointer-events: none;
+    }
+
+    /* Gentle fade transitions */
+    .step .title-section,
+    .step .middle-content,
+    .step .cta-section {
+      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+      transition-delay: 0s;
+    }
+
+    .step.active .title-section {
+      transform: translateY(0);
+      opacity: 1;
+      transition-delay: 0s;
+    }
+
+    .step.active .middle-content {
+      transform: translateY(0);
+      opacity: 1;
+      transition-delay: 0.12s;
+    }
+
+    .step.active .cta-section {
+      transform: none;
+      opacity: 1;
+      transition-delay: 0.24s;
+    }
+
+    .step.exit-left .title-section,
+    .step.exit-left .middle-content,
+    .step.exit-left .cta-section {
+      transform: translateY(0);
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+      transition-delay: 0s;
+    }
+
+    .step.enter-right .title-section {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+
+    .step.enter-right .middle-content {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+
+    .step.enter-right .cta-section {
+      transform: none;
+      opacity: 0;
+    }
+
+    /* Shared content layout */
+    .step-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 60px;
+      width: 100%;
+      height: 100%;
+      justify-content: flex-start;
+    }
+
+    /* Title section */
+    .title-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px;
+    }
+
+    .question-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .question-container h1 {
+      font-family: 'Lato', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #1d1c1d;
+      letter-spacing: 0.16px;
+      white-space: nowrap;
+    }
+
+    .question-container p {
+      font-family: 'Lato', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #454447;
+      line-height: 27px;
+      width: 572px;
+    }
+
+    /* Step 1: Options */
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      padding: 0 100px;
+      width: 100%;
+    }
+
+    .option-button {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      width: 508px;
+      background: #fff;
+      border-radius: 11px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease;
+      border: none;
+    }
+
+    .option-button:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .option-button:active,
+    .option-button.selected {
+      transform: scale(0.99);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      background: #fafafa;
+    }
+
+    .option-inner {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 14px;
+      padding: 28px 32px;
+      width: 100%;
+      white-space: nowrap;
+    }
+
+    .option-emoji {
+      font-size: 28px;
+      line-height: normal;
+    }
+
+    .option-icon {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .option-icon svg {
+      display: block;
+    }
+
+    .option-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1d1c1d;
+      line-height: 27px;
+      text-align: center;
+    }
+
+    /* Step 2: Checklist */
+    .step-2 .step-body {
+      justify-content: space-between;
+    }
+
+    .checklist-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 16px 0;
+      width: 100%;
+      max-width: 492px;
+      min-width: 484px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 32px 8px 28px;
+      cursor: pointer;
+      gap: 24px;
+      height: 43px;
+    }
+
+    .checklist-item:hover {
+      background: #f8f8f8;
+    }
+
+    .checklist-item-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #454447;
+      line-height: 27px;
+      flex: 1;
+    }
+
+    .checklist-item-label::after {
+      content: attr(data-text);
+      display: block;
+      font-weight: 700;
+      height: 0;
+      overflow: hidden;
+      visibility: hidden;
+    }
+
+    .checklist-item.checked .checklist-item-label {
+      font-weight: 700;
+      color: #1d1c1d;
+    }
+
+    .checklist-card.has-selection .checklist-item:not(.checked) .checklist-item-label {
+      color: #7c7a7f;
+    }
+
+    .checkbox {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid #77757a;
+      background: #fff;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
+      position: relative;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .checklist-item.checked .checkbox {
+      background: #1264a3;
+      border-color: #1264a3;
+      box-shadow: none;
+    }
+
+    .checklist-item.checked .checkbox::after {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 4px;
+      width: 4px;
+      height: 7px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* CTA buttons */
+    .cta-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-get-started {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 72px;
+      height: 36px;
+      background: #007a5a;
+      border: 1px solid #007a5a;
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 22px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-get-started:hover {
+      background: #005e45;
+    }
+
+    .btn-explore {
+      background: none;
+      border: none;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #454447;
+      line-height: 22px;
+      cursor: pointer;
+      padding: 6px 12px;
+    }
+
+    .btn-explore:hover {
+      text-decoration: underline;
+    }
+
+
+    /* Hide steps until welcome fades out */
+    .modal .steps-wrapper {
+      opacity: 0;
+      transition: opacity 0.55s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .modal.steps-visible .steps-wrapper {
+      opacity: 1;
+    }
+
+    /* Background decorations — staggered entry with movement */
+    .modal.intro-active .bg-decoration {
+      opacity: 0;
+      transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .modal.intro-active .bg-yellow-circle {
+      transform: translate(-10px, -10px) scale(0.95);
+    }
+
+    .modal.intro-active .bg-green-shape {
+      transform: translate(10px, 10px) scale(0.95);
+    }
+
+    .modal.intro-active .pill-top {
+      transform: translateX(-8px);
+    }
+
+    .modal.intro-active .pill-bottom {
+      transform: translateX(8px);
+    }
+
+    .modal.intro-done .bg-decoration {
+      opacity: 1;
+      transform: none;
+      transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .modal.intro-done .bg-yellow-circle {
+      transition-delay: 0s;
+    }
+
+    .modal.intro-done .bg-green-shape {
+      transition-delay: 0s;
+    }
+
+    .modal.intro-done .pill-top {
+      transition-delay: 0.3s;
+    }
+
+    .modal.intro-done .pill-bottom {
+      transition-delay: 0.3s;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Slackbot DM app as background -->
+    <div class="app-background">
+      <iframe src="../slackbot-dm/index.html"></iframe>
+    </div>
+
+    <!-- Onboarding modal overlay — inside the app window -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal intro-active">
+
+        <!-- Background decorations (static) -->
+        <div class="bg-yellow-circle bg-decoration"></div>
+        <div class="bg-green-shape bg-decoration"></div>
+        <div class="pill pill-top bg-decoration">
+          <span class="pill-emoji">&#x2705;</span>
+          <span class="pill-number">1</span>
+        </div>
+        <div class="pill pill-bottom bg-decoration">
+          <span class="pill-emoji">&#x1F64C;</span>
+          <span class="pill-number">5</span>
+        </div>
+
+        <!-- Animated steps -->
+        <div class="steps-wrapper">
+          <!-- Step 1 -->
+          <div class="step step-1 active" id="step1">
+            <div class="step-body">
+              <div class="title-section">
+                <div class="question-container">
+                  <h1>How big is your org?</h1>
+                  <p>We'll tailor recommendations based on the size of your organization.</p>
+                </div>
+              </div>
+              <div class="middle-content">
+                <div class="options-container">
+                  <div class="options-list">
+                    <div class="option-button" data-value="1-2">
+                      <div class="option-inner">
+                        <span class="option-icon"><svg width="20" height="20" viewBox="0 0 18 18" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M9 2C10.222 2 11.356 2.4379 12.186 3.2666C13.018 4.0981 13.499 5.2774 13.499 6.6729C13.499 8.1506 12.892 9.4307 12.049 10.3389C11.891 10.5087 11.723 10.6679 11.546 10.8145C12.178 10.9692 12.814 11.1845 13.421 11.4717C14.885 12.1647 16.232 13.2993 16.869 15.0283C17.168 15.8394 16.936 16.6182 16.447 17.1602C15.971 17.6859 15.253 18 14.499 18H3.499C2.745 18 2.027 17.6859 1.552 17.1602C1.062 16.6182 0.83 15.8395 1.129 15.0283C1.766 13.2993 3.113 12.1647 4.577 11.4717C5.184 11.1846 5.82 10.9692 6.451 10.8145C6.275 10.668 6.107 10.5086 5.949 10.3389C5.107 9.4307 4.499 8.1506 4.499 6.6729C4.499 5.2773 4.98 4.0981 5.813 3.2666C6.643 2.4379 7.777 2 9 2ZM9 12C7.852 12 6.448 12.2456 5.219 12.8271C3.995 13.4066 2.999 14.2907 2.536 15.5469C2.453 15.7721 2.503 15.9742 2.665 16.1543C2.843 16.3505 3.149 16.5 3.499 16.5H14.499C14.85 16.5 15.156 16.3505 15.333 16.1543C15.496 15.9742 15.545 15.772 15.462 15.5469C14.999 14.2907 14.004 13.4066 12.78 12.8271C11.551 12.2456 10.147 12 9 12ZM9 3.5C8.139 3.5 7.398 3.8048 6.873 4.3281C6.352 4.8489 5.999 5.6319 5.999 6.6729C5.999 7.7302 6.434 8.6552 7.049 9.3184C7.678 9.9963 8.429 10.333 9 10.333C9.569 10.333 10.32 9.9963 10.949 9.3184C11.565 8.6552 11.999 7.7302 11.999 6.6729C11.999 5.6319 11.647 4.8489 11.125 4.3281C10.601 3.8048 9.86 3.5 9 3.5Z" fill="#77757A"/></svg></span>
+                        <span class="option-label">1 - 2</span>
+                      </div>
+                    </div>
+                    <div class="option-button" data-value="3-10">
+                      <div class="option-inner">
+                        <span class="option-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.498 4.5C9.784 4.5 11.498 6.1875 11.498 8.4375C11.498 10.0977 10.921 11.4326 10.078 12.3145C10.516 12.4251 10.948 12.5654 11.361 12.7441C12.595 13.2775 13.715 14.1535 14.319 15.4951C14.683 16.3039 14.466 17.1017 13.978 17.6523C13.507 18.1819 12.784 18.5 12.029 18.5H2.969C2.214 18.5 1.491 18.1819 1.021 17.6523C0.531 17.1017 0.313 16.304 0.678 15.4951C1.282 14.1534 2.402 13.2775 3.636 12.7441C4.049 12.5657 4.48 12.426 4.917 12.3154C4.074 11.4336 3.498 10.0975 3.498 8.4375C3.498 6.1876 5.213 4.5002 7.498 4.5ZM7.499 13.5C6.407 13.5 5.232 13.6888 4.231 14.1211C3.235 14.5518 2.455 15.2031 2.046 16.1113C1.957 16.3095 1.99 16.4855 2.142 16.6562C2.312 16.8479 2.619 17 2.969 17H12.029C12.379 17 12.685 16.8478 12.855 16.6562C13.007 16.4855 13.041 16.3094 12.952 16.1113C12.543 15.2031 11.763 14.5519 10.767 14.1211C9.766 13.6887 8.591 13.5001 7.499 13.5ZM3.613 1.5C5.213 1.5 6.498 3.422 6.498 5.5C6.498 6.602 6.209 7.658 5.508 8.809C5.808 8.914 6.134 9.053 6.49 9.236C7.584 9.798 8.887 10.808 9.425 12.549C9.634 13.227 9.428 13.869 9.021 14.314C8.624 14.745 8.038 15 7.422 15H7.2C6.786 15 6.45 14.664 6.45 14.25C6.45 13.836 6.786 13.5 7.2 13.5H7.422C7.634 13.5 7.814 13.41 7.915 13.3C8.004 13.203 8.027 13.104 7.992 12.991C7.618 11.781 6.702 11.031 5.806 10.57C5.361 10.342 4.939 10.195 4.629 10.106C4.475 10.061 4.349 10.031 4.266 10.013C4.225 10.004 4.193 9.998 4.174 9.994L4.153 9.99H4.152L4.077 9.975C4.03 9.962 3.986 9.945 3.943 9.925C3.908 9.908 3.876 9.886 3.843 9.863L3.822 9.849L3.814 9.845C3.786 9.823 3.761 9.798 3.736 9.773L3.72 9.756L3.679 9.703C3.663 9.683 3.647 9.663 3.634 9.641C3.622 9.621 3.613 9.601 3.603 9.58C3.591 9.557 3.58 9.534 3.571 9.51L3.553 9.453C3.545 9.427 3.54 9.401 3.535 9.374C3.532 9.356 3.53 9.337 3.528 9.318C3.526 9.289 3.524 9.26 3.524 9.231C3.525 9.211 3.527 9.191 3.529 9.171C3.531 9.158 3.529 9.144 3.531 9.131C3.533 9.118 3.538 9.106 3.541 9.094L3.558 9.03C3.566 9.004 3.574 8.978 3.585 8.953C3.595 8.93 3.606 8.907 3.618 8.885L3.635 8.856C3.648 8.834 3.661 8.813 3.677 8.793C4.699 7.463 5.021 6.467 5.021 5.5C5.021 4.192 4.098 3 3.613 3C3.431 3 3.034 3.012 2.873 3.034C2.463 3.09 2.085 2.803 2.028 2.393C1.972 1.982 2.26 1.604 2.67 1.548C2.901 1.516 3.14 1.5 3.613 1.5ZM7.498 6C6.019 6 4.998 7.038 4.998 8.4375C4.998 10.935 6.541 12 7.498 12C8.455 12 9.998 10.935 9.998 8.4375C9.998 7.038 8.978 6 7.498 6Z" fill="#77757A"/></svg></span>
+                        <span class="option-label">3 - 10</span>
+                      </div>
+                    </div>
+                    <div class="option-button" data-value="10-30">
+                      <div class="option-inner">
+                        <span class="option-icon"><svg width="20" height="20" viewBox="0 0 12 18" fill="none"><path d="M9 0.5C10.519 0.5 11.75 1.7312 11.75 3.25V16.25C11.75 16.9404 11.19 17.5 10.5 17.5H1C0.31 17.5 -0.25 16.9404 -0.25 16.25V3.25C-0.25 1.7312 0.981 0.5 2.5 0.5H9ZM2.5 2C1.81 2 1.25 2.5596 1.25 3.25V16H3V14C3 13.0335 3.784 12.25 4.75 12.25H6.75C7.716 12.25 8.5 13.0335 8.5 14V16H10.25V3.25C10.25 2.5596 9.69 2 9 2H2.5ZM4.75 13.75C4.612 13.75 4.5 13.8619 4.5 14V16H7V14C7 13.8619 6.888 13.75 6.75 13.75H4.75ZM4.25 9.5C4.802 9.5 5.25 9.9477 5.25 10.5C5.25 11.0523 4.802 11.5 4.25 11.5C3.698 11.5 3.25 11.0523 3.25 10.5C3.25 9.9477 3.698 9.5 4.25 9.5ZM7.25 9.5C7.802 9.5 8.25 9.9477 8.25 10.5C8.25 11.0523 7.802 11.5 7.25 11.5C6.698 11.5 6.25 11.0523 6.25 10.5C6.25 9.9477 6.698 9.5 7.25 9.5ZM4.25 6.5C4.802 6.5 5.25 6.9477 5.25 7.5C5.25 8.0523 4.802 8.5 4.25 8.5C3.698 8.5 3.25 8.0523 3.25 7.5C3.25 6.9477 3.698 6.5 4.25 6.5ZM7.25 6.5C7.802 6.5 8.25 6.9477 8.25 7.5C8.25 8.0523 7.802 8.5 7.25 8.5C6.698 8.5 6.25 8.0523 6.25 7.5C6.25 6.9477 6.698 6.5 7.25 6.5ZM4.25 3.5C4.802 3.5 5.25 3.9477 5.25 4.5C5.25 5.0523 4.802 5.5 4.25 5.5C3.698 5.5 3.25 5.0523 3.25 4.5C3.25 3.9477 3.698 3.5 4.25 3.5ZM7.25 3.5C7.802 3.5 8.25 3.9477 8.25 4.5C8.25 5.0523 7.802 5.5 7.25 5.5C6.698 5.5 6.25 5.0523 6.25 4.5C6.25 3.9477 6.698 3.5 7.25 3.5Z" fill="#77757A"/></svg></span>
+                        <span class="option-label">10 - 30</span>
+                      </div>
+                    </div>
+                    <div class="option-button" data-value="30+">
+                      <div class="option-inner">
+                        <span class="option-icon"><svg width="20" height="20" viewBox="0 0 18 18" fill="none"><path d="M9.25 0C11.321 0 13 1.6789 13 3.75V6.25H14.25C16.321 6.25 18 7.9289 18 10V16.25C18 17.2165 17.216 18 16.25 18H1.75C0.784 18 0 17.2165 0 16.25V3.75C0 1.6789 1.679 0 3.75 0H9.25ZM3.75 1.5C2.507 1.5 1.5 2.5074 1.5 3.75V16.25C1.5 16.3881 1.612 16.5 1.75 16.5H3.5V14.75C3.5 13.7835 4.284 13 5.25 13H7.75C8.716 13 9.5 13.7835 9.5 14.75V16.5H11.5V3.75C11.5 2.5074 10.493 1.5 9.25 1.5H3.75ZM5.25 14.5C5.112 14.5 5 14.6119 5 14.75V16.5H8V14.75C8 14.6119 7.888 14.5 7.75 14.5H5.25ZM13 16.5H16.25C16.388 16.5 16.5 16.3881 16.5 16.25V10C16.5 8.7574 15.493 7.75 14.25 7.75H13V16.5ZM5 9.5C5.552 9.5 6 9.9477 6 10.5C6 11.0523 5.552 11.5 5 11.5C4.448 11.5 4 11.0523 4 10.5C4 9.9477 4.448 9.5 5 9.5ZM8 9.5C8.552 9.5 9 9.9477 9 10.5C9 11.0523 8.552 11.5 8 11.5C7.448 11.5 7 11.0523 7 10.5C7 9.9477 7.448 9.5 8 9.5ZM5 6.5C5.552 6.5 6 6.9477 6 7.5C6 8.0523 5.552 8.5 5 8.5C4.448 8.5 4 8.0523 4 7.5C4 6.9477 4.448 6.5 5 6.5ZM8 6.5C8.552 6.5 9 6.9477 9 7.5C9 8.0523 8.552 8.5 8 8.5C7.448 8.5 7 8.0523 7 7.5C7 6.9477 7.448 6.5 8 6.5ZM5 3.5C5.552 3.5 6 3.9477 6 4.5C6 5.0523 5.552 5.5 5 5.5C4.448 5.5 4 5.0523 4 4.5C4 3.9477 4.448 3.5 5 3.5ZM8 3.5C8.552 3.5 9 3.9477 9 4.5C9 5.0523 8.552 5.5 8 5.5C7.448 5.5 7 5.0523 7 4.5C7 3.9477 7.448 3.5 8 3.5Z" fill="#77757A"/></svg></span>
+                        <span class="option-label">30 +</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step step-2 enter-right" id="step2">
+            <div class="step-body">
+              <div class="title-section">
+                <div class="question-container">
+                  <h1>How do you want to use Slack?</h1>
+                  <p>We'll suggest the right setup for your goals.</p>
+                </div>
+              </div>
+              <div class="middle-content">
+                <div class="checklist-card has-selection">
+                  <div class="checklist-item checked" data-choice="collab">
+                    <span class="checklist-item-label" data-text="Chat and collaboration">Chat and collaboration</span>
+                    <div class="checkbox"></div>
+                  </div>
+                  <div class="checklist-item" data-choice="projects">
+                    <span class="checklist-item-label" data-text="Project management">Project management</span>
+                    <div class="checkbox"></div>
+                  </div>
+                  <div class="checklist-item" data-choice="customers">
+                    <span class="checklist-item-label" data-text="Nurturing customer relations">Nurturing customer relations</span>
+                    <div class="checkbox"></div>
+                  </div>
+                  <div class="checklist-item" data-choice="external">
+                    <span class="checklist-item-label" data-text="Work with external teams">Work with external teams</span>
+                    <div class="checkbox"></div>
+                  </div>
+                  <div class="checklist-item" data-choice="integrations">
+                    <span class="checklist-item-label" data-text="Integrate tools & apps">Integrate tools & apps</span>
+                    <div class="checkbox"></div>
+                  </div>
+                  <div class="checklist-item" data-choice="ai">
+                    <span class="checklist-item-label" data-text="Explore AI and agents">Explore AI and agents</span>
+                    <div class="checkbox"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="cta-section">
+                <button class="btn-get-started" id="btnGetStarted">Get started</button>
+                <button class="btn-explore" id="btnExplore">I want to explore</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Intro animation
+    (function() {
+      const modal = document.querySelector('.modal');
+
+      // Phase 1: Shapes animate in
+      setTimeout(() => {
+        modal.classList.remove('intro-active');
+        modal.classList.add('intro-done');
+      }, 50);
+
+      // Phase 2: Step content fades in after shapes settle
+      setTimeout(() => {
+        modal.classList.add('steps-visible');
+      }, 700);
+    })();
+
+    // Track onboarding selections
+    let selectedTeamSize = null;
+
+    document.querySelectorAll('.option-button').forEach(button => {
+      button.addEventListener('click', () => {
+        selectedTeamSize = button.dataset.value;
+        button.classList.add('selected');
+
+        setTimeout(() => {
+          const step1 = document.getElementById('step1');
+          const step2 = document.getElementById('step2');
+
+          step1.classList.remove('active');
+          step1.classList.add('exit-left');
+
+          setTimeout(() => {
+            step2.classList.remove('enter-right');
+            void step2.offsetWidth;
+            step2.classList.add('active');
+          }, 300);
+        }, 150);
+      });
+    });
+
+    const checklistCard = document.querySelector('.checklist-card');
+    document.querySelectorAll('.checklist-item').forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('checked');
+        const hasAnyChecked = checklistCard.querySelector('.checklist-item.checked') !== null;
+        checklistCard.classList.toggle('has-selection', hasAnyChecked);
+      });
+    });
+
+    function getSelectedUseCases() {
+      return Array.from(document.querySelectorAll('.checklist-item.checked'))
+        .map(item => item.dataset.choice);
+    }
+
+    function dismissModal() {
+      const appIframe = document.querySelector('.app-background iframe');
+      const personalizationData = {
+        type: 'onboarding-complete',
+        teamSize: selectedTeamSize,
+        useCases: getSelectedUseCases()
+      };
+
+      // Store in localStorage as fallback for cross-iframe communication
+      try {
+        localStorage.setItem('slackbot-onboarding', JSON.stringify(personalizationData));
+      } catch(e) {}
+
+      // Send personalization data down to the slackbot-dm iframe
+      // which will relay it to the slackbot-dm-view iframe
+      appIframe.contentWindow.postMessage(personalizationData, '*');
+
+      document.getElementById('modalOverlay').classList.add('hidden');
+      // Tell the iframe to reveal the full top bar
+      appIframe.contentWindow.postMessage('modal-dismissed', '*');
+    }
+
+    document.getElementById('btnGetStarted').addEventListener('click', dismissModal);
+    document.getElementById('btnExplore').addEventListener('click', dismissModal);
+  </script>
+</body>
+</html>
