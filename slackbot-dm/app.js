@@ -401,6 +401,14 @@ const devMenuBtn = document.getElementById('devMenuBtn');
 const devMenu = document.getElementById('devMenu');
 
 if (devMenuBtn && devMenu) {
+  // Restore saved design choice on load
+  const savedDesign = localStorage.getItem('slackbot-design') || 'a';
+  if (savedDesign !== 'a') {
+    devMenu.querySelectorAll('.dev-menu-item').forEach(i => i.classList.remove('active'));
+    const savedItem = devMenu.querySelector(`.dev-menu-item[data-design="${savedDesign}"]`);
+    if (savedItem) savedItem.classList.add('active');
+  }
+
   devMenuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     devMenu.classList.toggle('visible');
@@ -419,6 +427,7 @@ if (devMenuBtn && devMenu) {
       devMenu.classList.remove('visible');
 
       const design = item.dataset.design;
+      localStorage.setItem('slackbot-design', design);
       const iframe = document.querySelector('.slackbot-dm-view-iframe');
       if (iframe && iframe.contentWindow) {
         iframe.contentWindow.postMessage({ type: 'switch-design', design: design }, '*');

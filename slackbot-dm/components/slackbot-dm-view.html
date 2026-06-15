@@ -1907,6 +1907,14 @@
       // Apply personalization first (while cards are still hidden)
       if (data) applyPersonalization(data);
 
+      // Apply saved design choice (sticky across refresh)
+      try {
+        const savedDesign = localStorage.getItem('slackbot-design');
+        if (savedDesign && savedDesign !== 'a') {
+          applyDesignLayout(savedDesign);
+        }
+      } catch(e) {}
+
       const cardsRight = document.querySelector('.cards-right');
 
       // Re-enable transitions after a frame so the browser doesn't interpolate from stale values
@@ -2124,6 +2132,7 @@
       }
       // Handle design switching from parent dev menu
       if (e.data && e.data.type === 'switch-design') {
+        try { localStorage.setItem('slackbot-design', e.data.design); } catch(ex) {}
         switchDesign(e.data.design);
       }
     });
@@ -2934,38 +2943,32 @@
     });
 
     // === Design Switching ===
-    function switchDesign(design) {
+    // Applies layout changes without resetting state (used on initial load)
+    function applyDesignLayout(design) {
       currentDesign = design;
       const cardsGrid = document.querySelector('.cards-grid');
       const cardsLeft = document.querySelector('.cards-left');
       const homeComposerWrapper = document.getElementById('homeComposerWrapper');
       const designBComposer = document.getElementById('designBComposer');
 
-      // Reset to home state first
-      fullReset();
-
       if (design === 'b') {
         document.body.classList.add('design-b');
-        // Hide left column, show only right column prompts in single column
         if (cardsLeft) cardsLeft.style.display = 'none';
         if (cardsGrid) {
           cardsGrid.style.gridTemplateColumns = '1fr';
           cardsGrid.style.maxWidth = '400px';
           cardsGrid.style.margin = '0 auto';
         }
-        // Hide Design A composer, use Design B card composer instead
         if (homeComposerWrapper) {
           homeComposerWrapper.classList.remove('visible');
           homeComposerWrapper.style.display = 'none';
         }
-        // Show Design B composer card
         if (designBComposer) {
           designBComposer.style.display = 'flex';
           requestAnimationFrame(() => designBComposer.classList.add('visible'));
         }
       } else {
         document.body.classList.remove('design-b');
-        // Restore Design A layout
         if (cardsLeft) cardsLeft.style.display = '';
         if (cardsGrid) {
           cardsGrid.style.gridTemplateColumns = '';
@@ -2973,12 +2976,17 @@
           cardsGrid.style.margin = '';
         }
         if (homeComposerWrapper) homeComposerWrapper.style.display = '';
-        // Hide Design B composer
         if (designBComposer) {
           designBComposer.classList.remove('visible');
           designBComposer.style.display = 'none';
         }
       }
+    }
+
+    // Full switch: resets state then applies layout
+    function switchDesign(design) {
+      fullReset();
+      applyDesignLayout(design);
     }
 
     // === Design B Composer Interactions ===
