@@ -395,3 +395,34 @@ if (aiBannerClose) {
     }
   });
 }
+
+// Dev menu toggle and design switching
+const devMenuBtn = document.getElementById('devMenuBtn');
+const devMenu = document.getElementById('devMenu');
+
+if (devMenuBtn && devMenu) {
+  devMenuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    devMenu.classList.toggle('visible');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!devMenu.contains(e.target) && !devMenuBtn.contains(e.target)) {
+      devMenu.classList.remove('visible');
+    }
+  });
+
+  devMenu.querySelectorAll('.dev-menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+      devMenu.querySelectorAll('.dev-menu-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      devMenu.classList.remove('visible');
+
+      const design = item.dataset.design;
+      const iframe = document.querySelector('.slackbot-dm-view-iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'switch-design', design: design }, '*');
+      }
+    });
+  });
+}
