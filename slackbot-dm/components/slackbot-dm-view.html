@@ -1893,6 +1893,10 @@
       if (e.data && e.data.type === 'nav-restore') {
         restoreSubstate(e.data.substate);
       }
+      // Handle full reset from parent (workspace escape hatch)
+      if (e.data && e.data.type === 'nav-full-reset') {
+        fullReset();
+      }
     });
 
     function restoreSubstate(substate) {
@@ -1923,6 +1927,47 @@
         conversationView.classList.add('active');
         document.getElementById('slackbotTabs').classList.add('visible');
       }
+    }
+
+    function fullReset() {
+      const slackbotBody = document.querySelector('.slackbot-body');
+      const conversationView = document.getElementById('conversationView');
+      const chatMessages = document.getElementById('chatMessages');
+      const homeComposerWrapper = document.getElementById('homeComposerWrapper');
+
+      // Exit conversation mode
+      conversationView.classList.remove('active');
+      slackbotBody.classList.remove('conversation-active');
+      document.getElementById('slackbotTabs').classList.remove('visible');
+
+      // Reset bot messages
+      const botMsg = document.getElementById('botMsg');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const botMsgText = document.getElementById('botMsgText');
+      botMsg.style.display = 'none';
+      typingIndicator.style.display = 'flex';
+      botMsgText.style.display = 'none';
+      botMsgText.innerHTML = '';
+
+      // Clear follow-up messages
+      const extraMessages = chatMessages.querySelectorAll('.msg-row:not(#userMsg):not(#botMsg)');
+      extraMessages.forEach(msg => msg.remove());
+
+      // Hide home composer (return to fresh card state)
+      homeComposerWrapper.classList.remove('visible');
+
+      // Reset congrats banner state
+      const homeCongratsBanner = document.getElementById('homeCongratsBanner');
+      if (homeCongratsBanner) {
+        homeCongratsBanner.style.display = 'none';
+        homeCongratsBanner.classList.remove('visible');
+        delete homeCongratsBanner.dataset.dismissed;
+      }
+
+      // Reset visit counter and prompt state
+      homeVisitCount = 0;
+      currentPromptTitle = '';
+      isDefaultUseCaseOnly = true;
     }
 
     // Clear any stale localStorage on load so it doesn't trigger prematurely
