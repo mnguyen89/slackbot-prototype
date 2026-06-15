@@ -1262,6 +1262,52 @@
       line-height: 14px;
     }
 
+    /* === Design B Layout Overrides === */
+    body.design-b .hero-image {
+      display: none !important;
+    }
+
+    body.design-b .body-content {
+      justify-content: flex-start;
+      padding-top: 60px;
+      transform: none !important;
+    }
+
+    body.design-b .welcome-section {
+      margin-bottom: 24px;
+    }
+
+    body.design-b .welcome-title {
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    body.design-b .welcome-subtitle {
+      font-size: 15px;
+      color: #616061;
+      margin-top: 2px;
+    }
+
+    body.design-b .cards-right .card {
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+    }
+
+    body.design-b .cards-right .card:hover {
+      border-color: #ccc;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    body.design-b .cards-right .card-list-item {
+      gap: 2px;
+    }
+
+    body.design-b .cards-right .card-list-subtitle {
+      padding-left: 28px;
+      font-size: 13px;
+    }
+
     /* === Design B Composer Card === */
     .designb-composer-card {
       display: none;
@@ -2944,28 +2990,48 @@
 
     // === Design Switching ===
     // Applies layout changes without resetting state (used on initial load)
+    // Store original welcome text for restoring Design A
+    const originalWelcomeTitle = document.getElementById('welcomeTitle').textContent;
+    const originalWelcomeSubtitle = document.getElementById('welcomeSubtitle').textContent;
+
+    function getDesignBGreeting() {
+      const hour = new Date().getHours();
+      if (hour < 12) return 'Good morning';
+      if (hour < 17) return 'Good afternoon';
+      return 'Good evening';
+    }
+
     function applyDesignLayout(design) {
       currentDesign = design;
       const cardsGrid = document.querySelector('.cards-grid');
       const cardsLeft = document.querySelector('.cards-left');
       const homeComposerWrapper = document.getElementById('homeComposerWrapper');
       const designBComposer = document.getElementById('designBComposer');
+      const welcomeTitle = document.getElementById('welcomeTitle');
+      const welcomeSubtitle = document.getElementById('welcomeSubtitle');
 
       if (design === 'b') {
         document.body.classList.add('design-b');
         if (cardsLeft) cardsLeft.style.display = 'none';
         if (cardsGrid) {
           cardsGrid.style.gridTemplateColumns = '1fr';
-          cardsGrid.style.maxWidth = '400px';
+          cardsGrid.style.maxWidth = '440px';
           cardsGrid.style.margin = '0 auto';
         }
+        // Update welcome text to Design B style
+        const name = originalWelcomeTitle.match(/Welcome,\s+(\S+)/);
+        const firstName = name ? name[1] : 'there';
+        welcomeTitle.textContent = `${getDesignBGreeting()}, ${firstName}!`;
+        welcomeSubtitle.textContent = 'How can Slackbot help you today?';
+
         if (homeComposerWrapper) {
           homeComposerWrapper.classList.remove('visible');
           homeComposerWrapper.style.display = 'none';
         }
-        if (designBComposer) {
-          designBComposer.style.display = 'flex';
-          requestAnimationFrame(() => designBComposer.classList.add('visible'));
+        // Design B composer uses same trigger logic as Design A
+        // (shown after first card interaction or "Ask Slackbot" click)
+        if (designBComposer && !designBComposer.classList.contains('visible')) {
+          designBComposer.style.display = 'none';
         }
       } else {
         document.body.classList.remove('design-b');
@@ -2975,6 +3041,10 @@
           cardsGrid.style.maxWidth = '';
           cardsGrid.style.margin = '';
         }
+        // Restore original welcome text
+        welcomeTitle.textContent = originalWelcomeTitle;
+        welcomeSubtitle.textContent = originalWelcomeSubtitle;
+
         if (homeComposerWrapper) homeComposerWrapper.style.display = '';
         if (designBComposer) {
           designBComposer.classList.remove('visible');
