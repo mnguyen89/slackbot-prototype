@@ -981,9 +981,7 @@
     }
 
     .slackbot-body.conversation-active .home-composer-wrapper {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateX(-50%) translateY(20px);
+      /* Stays visible — only dismissed by explicit X click */
     }
 
     /* === Home Composer (pinned to bottom) === */
@@ -1272,7 +1270,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(12px);
       width: calc(100% - 32px);
-      min-width: 700px;
+      max-width: 700px;
       background: #fff;
       border: 1px solid rgba(94, 93, 96, 0.13);
       border-radius: 12px;
@@ -2357,12 +2355,6 @@
       const typingIndicator = document.getElementById('typingIndicator');
       const botMsgText = document.getElementById('botMsgText');
 
-      // Hide Design B composer if active
-      if (currentDesign === 'b') {
-        const dbc = document.getElementById('designBComposer');
-        if (dbc) { dbc.classList.remove('visible'); }
-      }
-
       currentPromptTitle = promptTitle;
 
       // Notify parent of state change for back/forward nav
@@ -2910,8 +2902,6 @@
       const text = homeComposerInput.textContent.trim();
       if (!text) return;
 
-      // Hide home composer
-      homeComposerWrapper.classList.remove('visible');
       homeComposerInput.textContent = '';
       homeComposerSend.classList.remove('active');
 
@@ -3026,9 +3016,6 @@
       // Use same conversation entry logic as home composer
       designBInput.textContent = '';
       designBSend.classList.remove('active');
-
-      // Hide Design B composer card
-      designBComposer.classList.remove('visible');
 
       // Enter conversation mode with the typed text
       enterConversationMode(text);
