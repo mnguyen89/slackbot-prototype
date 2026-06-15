@@ -1272,7 +1272,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(12px);
       width: calc(100% - 32px);
-      max-width: 560px;
+      min-width: 700px;
       background: #fff;
       border: 1px solid rgba(94, 93, 96, 0.13);
       border-radius: 12px;
@@ -1360,12 +1360,15 @@
     .designb-input-wrapper {
       position: relative;
       z-index: 1;
+      border-radius: 12px;
+      padding: 1.5px;
+      background: linear-gradient(90deg, #36C5F0 0%, #2EB67D 30%, #ECB22E 60%, #E01E5A 100%);
+      box-shadow: 0 0.5px 5px rgba(0, 0, 0, 0.04), 0 3.75px 11px rgba(0, 0, 0, 0.19);
     }
 
     .designb-input-box {
-      border: 1px solid #e01e5a;
-      border-radius: 12px;
-      box-shadow: 0 0.5px 5px rgba(0, 0, 0, 0.04), 0 3.75px 11px rgba(0, 0, 0, 0.19);
+      border: none;
+      border-radius: 10.5px;
       overflow: hidden;
       background: #fff;
     }
