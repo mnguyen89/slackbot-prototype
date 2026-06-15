@@ -87,13 +87,40 @@ const slackbotDmView = document.querySelector('.slackbot-dm-view-frame');
 const placeholderView = document.querySelector('.placeholder-view');
 const channelView = document.querySelector('.channel-view-frame');
 
+// Navigation history for back/forward
+const navHistory = ['slackbot-dm'];
+let navIndex = 0;
+const btnBack = document.getElementById('btnBack');
+const btnForward = document.getElementById('btnForward');
+
+function updateNavButtons() {
+  if (btnBack) {
+    btnBack.disabled = navIndex <= 0;
+    btnBack.classList.toggle('disabled', navIndex <= 0);
+  }
+  if (btnForward) {
+    btnForward.disabled = navIndex >= navHistory.length - 1;
+    btnForward.classList.toggle('disabled', navIndex >= navHistory.length - 1);
+  }
+}
+
 function clearAllSelections() {
   document.querySelectorAll('.page-row').forEach(r => r.classList.remove('active-page'));
   document.querySelectorAll('.channel-row').forEach(r => r.classList.remove('active-channel'));
   document.querySelectorAll('.dm-row').forEach(r => r.classList.remove('active-dm'));
 }
 
-function showView(viewName) {
+function selectSidebarItem(viewName) {
+  clearAllSelections();
+  const pageRow = document.querySelector(`.page-row[data-view="${viewName}"]`);
+  if (pageRow) { pageRow.classList.add('active-page'); return; }
+  const channelRow = document.querySelector(`.channel-row[data-view="${viewName}"]`);
+  if (channelRow) { channelRow.classList.add('active-channel'); return; }
+  const dmRow = document.querySelector(`.dm-row[data-view="${viewName}"]`);
+  if (dmRow) { dmRow.classList.add('active-dm'); }
+}
+
+function showView(viewName, addToHistory) {
   slackbotDmView.style.display = 'none';
   placeholderView.style.display = 'none';
   channelView.style.display = 'none';
@@ -105,7 +132,40 @@ function showView(viewName) {
   } else {
     placeholderView.style.display = '';
   }
+
+  // Push to history unless navigating via back/forward
+  if (addToHistory !== false) {
+    // Trim forward history when navigating to a new view
+    navHistory.splice(navIndex + 1);
+    navHistory.push(viewName);
+    navIndex = navHistory.length - 1;
+  }
+  updateNavButtons();
 }
+
+if (btnBack) {
+  btnBack.addEventListener('click', () => {
+    if (navIndex > 0) {
+      navIndex--;
+      const viewName = navHistory[navIndex];
+      selectSidebarItem(viewName);
+      showView(viewName, false);
+    }
+  });
+}
+
+if (btnForward) {
+  btnForward.addEventListener('click', () => {
+    if (navIndex < navHistory.length - 1) {
+      navIndex++;
+      const viewName = navHistory[navIndex];
+      selectSidebarItem(viewName);
+      showView(viewName, false);
+    }
+  });
+}
+
+updateNavButtons();
 
 // Page rows (Slackbot, Directory, Huddles)
 document.querySelectorAll('.page-row').forEach(row => {
