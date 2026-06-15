@@ -203,6 +203,22 @@ if (btnForward) {
 
 updateNavButtons();
 
+// Workspace name escape hatch — returns to default Slackbot home
+const workspaceHome = document.getElementById('workspaceHome');
+if (workspaceHome) {
+  workspaceHome.addEventListener('click', () => {
+    clearAllSelections();
+    const slackbotRow = document.querySelector('.page-row[data-view="slackbot-dm"]');
+    if (slackbotRow) slackbotRow.classList.add('active-page');
+    showView('slackbot-dm');
+    // Tell iframe to restore home state
+    const iframe = document.querySelector('.slackbot-dm-view-iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'nav-restore', substate: 'home' }, '*');
+    }
+  });
+}
+
 // Page rows (Slackbot, Directory, Huddles)
 document.querySelectorAll('.page-row').forEach(row => {
   row.addEventListener('click', () => {
