@@ -981,7 +981,15 @@
     }
 
     .slackbot-body.conversation-active .home-composer-wrapper {
-      /* Stays visible — only dismissed by explicit X click */
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(20px);
+    }
+
+    .slackbot-body.conversation-active .designb-composer-card {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(20px);
     }
 
     /* === Home Composer (pinned to bottom) === */
