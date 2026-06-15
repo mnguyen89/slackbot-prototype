@@ -360,9 +360,10 @@ body.embedded .top-bar-right {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  min-width: 200px;
+  min-width: 240px;
   padding: 6px 0;
   z-index: 9999;
+  white-space: nowrap;
 }
 
 .dev-menu.visible {

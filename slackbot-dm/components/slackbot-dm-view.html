@@ -529,11 +529,16 @@
     }
 
     /* When home composer is visible, hide hero and reduce spacing */
-    .slackbot-body:has(.home-composer-wrapper.visible) .hero-image {
+    .slackbot-body:has(.home-composer-wrapper.visible) .hero-image,
+    .slackbot-body:has(.designb-composer-wrapper.visible) .hero-image {
       opacity: 0;
       max-height: 28px;
       margin: 0;
       pointer-events: none;
+    }
+
+    .slackbot-body:has(.designb-composer-wrapper.visible) .body-content {
+      padding-top: 16px;
     }
 
     /* Scrollbar */
@@ -986,7 +991,7 @@
       transform: translateX(-50%) translateY(20px);
     }
 
-    .slackbot-body.conversation-active .designb-composer-card {
+    .slackbot-body.conversation-active .designb-composer-wrapper {
       opacity: 0;
       pointer-events: none;
       transform: translateX(-50%) translateY(20px);
@@ -1270,32 +1275,39 @@
 
     /* === Design B Layout Overrides === */
 
-    /* === Design B Composer Card === */
-    .designb-composer-card {
+    /* === Design B Composer Wrapper (positioned container) === */
+    .designb-composer-wrapper {
       display: none;
       position: absolute;
-      bottom: 16px;
+      bottom: 8px;
       left: 50%;
       transform: translateX(-50%) translateY(12px);
       width: calc(100% - 32px);
       max-width: 700px;
-      background: #fff;
-      border: 1px solid rgba(94, 93, 96, 0.13);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
       flex-direction: column;
-      gap: 16px;
-      padding: 16px 12px 12px;
       z-index: 20;
       opacity: 0;
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
-    .designb-composer-card.visible {
+    .designb-composer-wrapper.visible {
       display: flex;
       opacity: 1;
       transform: translateX(-50%) translateY(0);
+    }
+
+    /* === Design B Composer Card === */
+    .designb-composer-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid rgba(94, 93, 96, 0.13);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px 12px 12px;
     }
 
     .designb-glow {
@@ -1367,7 +1379,7 @@
       position: relative;
       z-index: 1;
       border-radius: 12px;
-      padding: 1.5px;
+      padding: 1px;
       background: linear-gradient(90deg, #36C5F0 0%, #2EB67D 30%, #ECB22E 60%, #E01E5A 100%);
       box-shadow: 0 0.5px 5px rgba(0, 0, 0, 0.04), 0 3.75px 11px rgba(0, 0, 0, 0.19);
     }
@@ -1457,10 +1469,10 @@
 
     .designb-disclaimer {
       text-align: center;
-      font-size: 12px;
+      font-size: 11px;
       color: #77757a;
-      line-height: 16px;
-      padding: 4px 12px 0;
+      line-height: 14px;
+      padding: 8px 20px 4px;
     }
 
     /* Modal overlay */
@@ -1819,42 +1831,44 @@
       </div>
 
       <!-- Design B Composer Card (shown in Design B only) -->
-      <div class="designb-composer-card" id="designBComposer">
-        <div class="designb-glow"></div>
-        <div class="designb-header">
-          <div class="designb-header-text">
-            <span class="designb-title">&#x1F680;&nbsp; Try Slackbot for Free</span>
-            <span class="designb-subtitle">Ask me anything</span>
+      <div class="designb-composer-wrapper" id="designBComposer">
+        <div class="designb-composer-card">
+          <div class="designb-glow"></div>
+          <div class="designb-header">
+            <div class="designb-header-text">
+              <span class="designb-title">&#x1F680;&nbsp; Try Slackbot for Free</span>
+              <span class="designb-subtitle">Ask me anything</span>
+            </div>
+            <button class="designb-close" id="designBClose" aria-label="Dismiss">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
           </div>
-          <button class="designb-close" id="designBClose" aria-label="Dismiss">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <div class="designb-input-wrapper">
-          <div class="designb-input-box">
-            <div class="designb-input-field" id="designBInput" contenteditable="true" data-placeholder="Message Slackbot"></div>
-            <div class="designb-input-actions">
-              <div class="designb-actions-left">
-                <button class="designb-action-btn" aria-label="Attach">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.2"/><path d="M8 4.5v7M4.5 8h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                </button>
-                <button class="designb-action-btn" aria-label="Format">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4h4.5M3 8h3M3 12h2.5M10 4l2 8M12 4l2 8M9.5 9.5h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <button class="designb-action-btn" aria-label="Emoji">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 9.5s1 1.5 2.5 1.5 2.5-1.5 2.5-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6" cy="6.5" r="0.75" fill="currentColor"/><circle cx="10" cy="6.5" r="0.75" fill="currentColor"/></svg>
-                </button>
-                <button class="designb-action-btn" aria-label="Mention">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M13 8v1a2 2 0 01-4 0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                </button>
-                <button class="designb-action-btn" aria-label="More">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="8" r="1.25" fill="currentColor"/><circle cx="8" cy="8" r="1.25" fill="currentColor"/><circle cx="12" cy="8" r="1.25" fill="currentColor"/></svg>
-                </button>
-              </div>
-              <div class="designb-actions-right">
-                <button class="designb-send-btn" id="designBSend" aria-label="Send">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l10-4.5L8.5 12 7 8.5 2 7z" fill="currentColor"/></svg>
-                </button>
+          <div class="designb-input-wrapper">
+            <div class="designb-input-box">
+              <div class="designb-input-field" id="designBInput" contenteditable="true" data-placeholder="Message Slackbot"></div>
+              <div class="designb-input-actions">
+                <div class="designb-actions-left">
+                  <button class="designb-action-btn" aria-label="Attach">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.2"/><path d="M8 4.5v7M4.5 8h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  </button>
+                  <button class="designb-action-btn" aria-label="Format">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4h4.5M3 8h3M3 12h2.5M10 4l2 8M12 4l2 8M9.5 9.5h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <button class="designb-action-btn" aria-label="Emoji">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 9.5s1 1.5 2.5 1.5 2.5-1.5 2.5-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6" cy="6.5" r="0.75" fill="currentColor"/><circle cx="10" cy="6.5" r="0.75" fill="currentColor"/></svg>
+                  </button>
+                  <button class="designb-action-btn" aria-label="Mention">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M13 8v1a2 2 0 01-4 0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  </button>
+                  <button class="designb-action-btn" aria-label="More">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="4" cy="8" r="1.25" fill="currentColor"/><circle cx="8" cy="8" r="1.25" fill="currentColor"/><circle cx="12" cy="8" r="1.25" fill="currentColor"/></svg>
+                  </button>
+                </div>
+                <div class="designb-actions-right">
+                  <button class="designb-send-btn" id="designBSend" aria-label="Send">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l10-4.5L8.5 12 7 8.5 2 7z" fill="currentColor"/></svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -2976,8 +2990,7 @@
           homeComposerWrapper.classList.remove('visible');
           homeComposerWrapper.style.display = 'none';
         }
-        // Design B composer uses same trigger logic as Design A
-        // (shown after first card interaction or "Ask Slackbot" click)
+        // Design B composer shown after first interaction or "Ask Slackbot" click
         if (designBComposer && !designBComposer.classList.contains('visible')) {
           designBComposer.style.display = 'none';
         }
