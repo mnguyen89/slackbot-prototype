@@ -1263,58 +1263,16 @@
     }
 
     /* === Design B Layout Overrides === */
-    body.design-b .hero-image {
-      display: none !important;
-    }
-
-    body.design-b .body-content {
-      justify-content: flex-start;
-      padding-top: 60px;
-      transform: none !important;
-    }
-
-    body.design-b .welcome-section {
-      margin-bottom: 24px;
-    }
-
-    body.design-b .welcome-title {
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    body.design-b .welcome-subtitle {
-      font-size: 15px;
-      color: #616061;
-      margin-top: 2px;
-    }
-
-    body.design-b .cards-right .card {
-      padding: 14px 20px;
-      border-radius: 12px;
-      border: 1px solid #e0e0e0;
-    }
-
-    body.design-b .cards-right .card:hover {
-      border-color: #ccc;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    }
-
-    body.design-b .cards-right .card-list-item {
-      gap: 2px;
-    }
-
-    body.design-b .cards-right .card-list-subtitle {
-      padding-left: 28px;
-      font-size: 13px;
-    }
 
     /* === Design B Composer Card === */
     .designb-composer-card {
       display: none;
       position: absolute;
       bottom: 16px;
-      left: 16px;
-      right: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      width: calc(100% - 32px);
+      max-width: 560px;
       background: #fff;
       border: 1px solid rgba(94, 93, 96, 0.13);
       border-radius: 12px;
@@ -1325,27 +1283,26 @@
       padding: 16px 12px 12px;
       z-index: 20;
       opacity: 0;
-      transform: translateY(12px);
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
     .designb-composer-card.visible {
       display: flex;
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(-50%) translateY(0);
     }
 
     .designb-glow {
       position: absolute;
-      top: 86px;
+      top: 70%;
       left: 50%;
       transform: translateX(-50%);
-      width: 629px;
-      height: 58px;
+      width: 110%;
+      height: 60px;
       border-radius: 10px;
-      background: linear-gradient(90deg, #36C5F0 16.8%, #2EB67D 37.4%, #ECB22E 58.2%, #E01E5A 85.6%);
-      opacity: 0.4;
-      filter: blur(29px);
+      background: linear-gradient(90deg, #36C5F0 10%, #2EB67D 30%, #ECB22E 55%, #E01E5A 80%);
+      opacity: 0.45;
+      filter: blur(30px);
       pointer-events: none;
     }
 
@@ -2990,25 +2947,12 @@
 
     // === Design Switching ===
     // Applies layout changes without resetting state (used on initial load)
-    // Store original welcome text for restoring Design A
-    const originalWelcomeTitle = document.getElementById('welcomeTitle').textContent;
-    const originalWelcomeSubtitle = document.getElementById('welcomeSubtitle').textContent;
-
-    function getDesignBGreeting() {
-      const hour = new Date().getHours();
-      if (hour < 12) return 'Good morning';
-      if (hour < 17) return 'Good afternoon';
-      return 'Good evening';
-    }
-
     function applyDesignLayout(design) {
       currentDesign = design;
       const cardsGrid = document.querySelector('.cards-grid');
       const cardsLeft = document.querySelector('.cards-left');
       const homeComposerWrapper = document.getElementById('homeComposerWrapper');
       const designBComposer = document.getElementById('designBComposer');
-      const welcomeTitle = document.getElementById('welcomeTitle');
-      const welcomeSubtitle = document.getElementById('welcomeSubtitle');
 
       if (design === 'b') {
         document.body.classList.add('design-b');
@@ -3018,12 +2962,6 @@
           cardsGrid.style.maxWidth = '440px';
           cardsGrid.style.margin = '0 auto';
         }
-        // Update welcome text to Design B style
-        const name = originalWelcomeTitle.match(/Welcome,\s+(\S+)/);
-        const firstName = name ? name[1] : 'there';
-        welcomeTitle.textContent = `${getDesignBGreeting()}, ${firstName}!`;
-        welcomeSubtitle.textContent = 'How can Slackbot help you today?';
-
         if (homeComposerWrapper) {
           homeComposerWrapper.classList.remove('visible');
           homeComposerWrapper.style.display = 'none';
@@ -3041,10 +2979,6 @@
           cardsGrid.style.maxWidth = '';
           cardsGrid.style.margin = '';
         }
-        // Restore original welcome text
-        welcomeTitle.textContent = originalWelcomeTitle;
-        welcomeSubtitle.textContent = originalWelcomeSubtitle;
-
         if (homeComposerWrapper) homeComposerWrapper.style.display = '';
         if (designBComposer) {
           designBComposer.classList.remove('visible');
