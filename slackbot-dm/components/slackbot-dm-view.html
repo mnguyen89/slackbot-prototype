@@ -1889,7 +1889,41 @@
           requestAnimationFrame(() => bodyContent.classList.add('expanded'));
         }
       }
+      // Handle nav-restore from parent (back/forward navigation)
+      if (e.data && e.data.type === 'nav-restore') {
+        restoreSubstate(e.data.substate);
+      }
     });
+
+    function restoreSubstate(substate) {
+      const slackbotBody = document.querySelector('.slackbot-body');
+      const conversationView = document.getElementById('conversationView');
+
+      if (substate === 'home') {
+        // Return to home/cards view
+        conversationView.classList.remove('active');
+        slackbotBody.classList.remove('conversation-active');
+
+        // Reset bot messages
+        const botMsg = document.getElementById('botMsg');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const botMsgText = document.getElementById('botMsgText');
+        botMsg.style.display = 'none';
+        typingIndicator.style.display = 'flex';
+        botMsgText.style.display = 'none';
+        botMsgText.innerHTML = '';
+
+        // Clear extra follow-up messages
+        const chatMessages = document.getElementById('chatMessages');
+        const extraMessages = chatMessages.querySelectorAll('.msg-row:not(#userMsg):not(#botMsg)');
+        extraMessages.forEach(msg => msg.remove());
+      } else if (substate === 'conversation') {
+        // Re-enter conversation mode (show as-is if already there)
+        slackbotBody.classList.add('conversation-active');
+        conversationView.classList.add('active');
+        document.getElementById('slackbotTabs').classList.add('visible');
+      }
+    }
 
     // Clear any stale localStorage on load so it doesn't trigger prematurely
     try { localStorage.removeItem('slackbot-onboarding'); } catch(e) {}
@@ -2026,6 +2060,11 @@
       const botMsgText = document.getElementById('botMsgText');
 
       currentPromptTitle = promptTitle;
+
+      // Notify parent of state change for back/forward nav
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'nav-state-push', substate: 'conversation' }, '*');
+      }
 
       // Show user dimension in the conversation prompt
       userMsgText.textContent = promptTitle;
@@ -2464,6 +2503,11 @@
     btnNewChat.addEventListener('click', () => {
       const slackbotBody = document.querySelector('.slackbot-body');
       const conversationView = document.getElementById('conversationView');
+
+      // Notify parent of state change for back/forward nav
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'nav-state-push', substate: 'home' }, '*');
+      }
 
       // Exit conversation mode if active
       conversationView.classList.remove('active');

@@ -88,8 +88,10 @@ const placeholderView = document.querySelector('.placeholder-view');
 const channelView = document.querySelector('.channel-view-frame');
 
 // Navigation history for back/forward
-const navHistory = ['slackbot-dm'];
+// Each entry: { view: 'slackbot-dm', substate: 'home' | 'conversation' }
+const navHistory = [{ view: 'slackbot-dm', substate: 'home' }];
 let navIndex = 0;
+let isNavigating = false; // flag to prevent re-pushing during back/forward
 const btnBack = document.getElementById('btnBack');
 const btnForward = document.getElementById('btnForward');
 
@@ -102,6 +104,14 @@ function updateNavButtons() {
     btnForward.disabled = navIndex >= navHistory.length - 1;
     btnForward.classList.toggle('disabled', navIndex >= navHistory.length - 1);
   }
+}
+
+function pushNavState(state) {
+  if (isNavigating) return;
+  navHistory.splice(navIndex + 1);
+  navHistory.push(state);
+  navIndex = navHistory.length - 1;
+  updateNavButtons();
 }
 
 function clearAllSelections() {
@@ -135,11 +145,41 @@ function showView(viewName, addToHistory) {
 
   // Push to history unless navigating via back/forward
   if (addToHistory !== false) {
-    // Trim forward history when navigating to a new view
-    navHistory.splice(navIndex + 1);
-    navHistory.push(viewName);
-    navIndex = navHistory.length - 1;
+    pushNavState({ view: viewName, substate: 'home' });
   }
+  updateNavButtons();
+}
+
+// Listen for substate changes from slackbot-dm-view iframe
+window.addEventListener('message', (e) => {
+  if (e.data && e.data.type === 'nav-state-push') {
+    pushNavState({ view: 'slackbot-dm', substate: e.data.substate });
+  }
+});
+
+function restoreState(state) {
+  isNavigating = true;
+  selectSidebarItem(state.view);
+
+  // Show the correct view
+  slackbotDmView.style.display = 'none';
+  placeholderView.style.display = 'none';
+  channelView.style.display = 'none';
+
+  if (state.view === 'slackbot-dm') {
+    slackbotDmView.style.display = '';
+    // Tell iframe to restore substate
+    const iframe = document.querySelector('.slackbot-dm-view-iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'nav-restore', substate: state.substate }, '*');
+    }
+  } else if (state.view === 'new-channel') {
+    channelView.style.display = '';
+  } else {
+    placeholderView.style.display = '';
+  }
+
+  isNavigating = false;
   updateNavButtons();
 }
 
@@ -147,9 +187,7 @@ if (btnBack) {
   btnBack.addEventListener('click', () => {
     if (navIndex > 0) {
       navIndex--;
-      const viewName = navHistory[navIndex];
-      selectSidebarItem(viewName);
-      showView(viewName, false);
+      restoreState(navHistory[navIndex]);
     }
   });
 }
@@ -158,9 +196,7 @@ if (btnForward) {
   btnForward.addEventListener('click', () => {
     if (navIndex < navHistory.length - 1) {
       navIndex++;
-      const viewName = navHistory[navIndex];
-      selectSidebarItem(viewName);
-      showView(viewName, false);
+      restoreState(navHistory[navIndex]);
     }
   });
 }
