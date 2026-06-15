@@ -1,0 +1,2672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slackbot View Component</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sk-primary-text: #1D1C1D;
+      --sk-secondary-text: #616061;
+      --sk-white: #FFFFFF;
+      --sk-border-subtle: rgba(94, 93, 96, 0.13);
+      --sk-success: #007A5A;
+      --sk-aubergine: #611f69;
+      --sk-font: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+      --sk-radius-md: 6px;
+      --sk-radius-lg: 8px;
+      --sk-radius-xl: 12px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--sk-font);
+      background: transparent;
+      -webkit-font-smoothing: antialiased;
+      color: var(--sk-primary-text);
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    /* Main Container */
+    .slackbot-view {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--sk-white);
+      border-radius: var(--sk-radius-md);
+    }
+
+    /* Header Bar */
+    .slackbot-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: none;
+      gap: 10px;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: var(--intro-transition, opacity 0.72s cubic-bezier(0.4, 0, 0.2, 1));
+    }
+
+    /* Tabs subheader */
+    .slackbot-tabs {
+      display: none;
+      align-items: flex-end;
+      height: 36px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--sk-border-subtle);
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .slackbot-tabs.visible {
+      display: flex;
+    }
+
+    .tab-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 36px;
+      padding: 10px 8px 12px;
+      border-radius: 8px 8px 0 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #454447;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-item.active {
+      color: #1D1C1D;
+      border-bottom-color: #a350af;
+    }
+
+    .tab-item svg {
+      flex-shrink: 0;
+    }
+
+    .tab-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 16px;
+      cursor: pointer;
+      color: #616061;
+      margin-bottom: 4px;
+    }
+
+    .tab-add:hover {
+      background: #f0f0f0;
+    }
+
+    .slackbot-header.visible {
+      opacity: 1;
+    }
+
+    .slackbot-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .slackbot-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--sk-primary-text);
+      flex: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .header-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--sk-radius-md);
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #616061;
+      transition: background 0.12s;
+    }
+
+    .header-btn:hover {
+      background: #f0f0f0;
+    }
+
+    .btn-new-chat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--sk-success);
+      border: none;
+      border-radius: var(--sk-radius-lg);
+      color: var(--sk-white);
+      font-family: var(--sk-font);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-new-chat:hover {
+      background: #005e45;
+    }
+
+    /* Body */
+    .slackbot-body {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .slackbot-body.conversation-active {
+      overflow: hidden;
+    }
+
+    /* Background gradient */
+    .body-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 10% 0%, rgba(180, 220, 255, 0.35) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 0%, rgba(200, 240, 210, 0.3) 0%, transparent 45%),
+        radial-gradient(ellipse at 30% 60%, rgba(255, 200, 220, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 80%, rgba(255, 225, 200, 0.15) 0%, transparent 40%),
+        #ffffff;
+      transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* (styles moved to Entry Animation section below) */
+
+    /* Left Column */
+    .cards-left {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Right Column */
+    .cards-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* === Shared Card Style === */
+    .card {
+      background: var(--sk-white);
+      border: 1px solid #e8e8e8;
+      border-radius: var(--sk-radius-xl);
+      padding: 20px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      border-color: #ddd;
+    }
+
+    /* === Team Tools Card (left-top) === */
+    .card-team-tools {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card-team-tools-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .card-team-tools-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .card-team-tools-label {
+      font-size: 13px;
+      color: var(--sk-secondary-text);
+    }
+
+    .card-team-tools-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--sk-primary-text);
+    }
+
+    .card-arrow {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+    }
+
+    .card-app-icons {
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+
+    .card-app-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--sk-white);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+      margin-right: -6px;
+      position: relative;
+    }
+
+    .card-app-icon:nth-child(1) { z-index: 4; }
+    .card-app-icon:nth-child(2) { z-index: 3; }
+    .card-app-icon:nth-child(3) { z-index: 2; }
+    .card-app-icon:nth-child(4) { z-index: 1; margin-right: 0; }
+
+    .card-app-icon img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    /* === Invite Card (left-bottom) === */
+    .card-invite {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .card-invite-text {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-invite-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1d1c1d;
+      line-height: 22px;
+    }
+
+    .card-invite-subtitle {
+      font-size: 13px;
+      color: #454447;
+      line-height: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-invite-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f8f8f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-invite-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* === Right Column Cards (list-style with icon) === */
+    .card-list-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-list-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-list-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-list-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--sk-primary-text);
+      line-height: 22px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-list-subtitle {
+      font-size: 13px;
+      color: var(--sk-secondary-text);
+      line-height: 18px;
+      padding-left: 28px;
+    }
+
+    /* === Intro Animation — GPU-only (opacity + transform) === */
+
+    .hero-image {
+      width: 244px;
+      height: auto;
+      max-height: 200px;
+      object-fit: contain;
+      margin-top: 0;
+      margin-bottom: -4px;
+      mix-blend-mode: multiply;
+      will-change: width, opacity;
+      transition: var(--intro-transition,
+        width 1.4s cubic-bezier(0.4, 0, 0, 1),
+        opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+        max-height 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+        margin 1s cubic-bezier(0.25, 0.1, 0.25, 1));
+    }
+
+    .hero-image.settled {
+      width: 102px;
+    }
+
+    .hero-image.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Welcome section */
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .welcome-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--sk-primary-text);
+      line-height: 30px;
+      text-align: center;
+      margin-bottom: 0;
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    .welcome-title.visible {
+      opacity: 1;
+    }
+
+    .welcome-subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--sk-primary-text);
+      line-height: 27px;
+      text-align: center;
+      margin-top: 4px;
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      column-gap: 24px;
+      row-gap: 12px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(12px);
+      will-change: transform, opacity;
+      transition: opacity 0.81s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.81s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cards-grid.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered card entry */
+    .cards-grid .card {
+      opacity: 0;
+      transform: translateY(8px);
+      will-change: transform, opacity;
+      transition: opacity 0.63s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.63s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .cards-grid.visible .card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cards-grid.visible .cards-left .card:nth-child(1) { transition-delay: 0s; }
+    .cards-grid.visible .cards-left .card:nth-child(2) { transition-delay: 0.09s; }
+
+    .cards-right .card {
+      transform: translateY(16px);
+    }
+
+    .cards-right.visible .card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cards-right.visible .card:nth-child(1) { transition-delay: 0s; }
+    .cards-right.visible .card:nth-child(2) { transition-delay: 0.14s; }
+    .cards-right.visible .card:nth-child(3) { transition-delay: 0.27s; }
+
+    /* Body content */
+    .body-content {
+      position: relative;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at 10% 0%, rgba(180, 220, 255, 0.35) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 0%, rgba(200, 240, 210, 0.3) 0%, transparent 45%),
+        radial-gradient(ellipse at 30% 60%, rgba(255, 200, 220, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 80%, rgba(255, 225, 200, 0.15) 0%, transparent 40%),
+        #ffffff;
+      width: 100%;
+      max-width: 680px;
+      padding: 36px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      flex: 1;
+      transform: translateY(12%);
+      transition: var(--intro-transition, transform 1.4s cubic-bezier(0.4, 0, 0, 1));
+    }
+
+    .body-content.settled {
+      transform: translateY(0);
+    }
+
+    /* When home composer is visible, hide hero and reduce spacing */
+    .slackbot-body:has(.home-composer-wrapper.visible) .hero-image {
+      opacity: 0;
+      max-height: 28px;
+      margin: 0;
+      pointer-events: none;
+    }
+
+    /* Scrollbar */
+    .slackbot-body::-webkit-scrollbar { width: 6px; }
+    .slackbot-body::-webkit-scrollbar-track { background: transparent; }
+    .slackbot-body::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 3px; }
+
+    /* === Conversation View === */
+    /* Conversation View (inline messages) */
+    .conversation-view {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .conversation-view.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .chat-messages {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 16px 0;
+      opacity: 0;
+      transition: opacity 0.35s cubic-bezier(0.25, 0.1, 0.25, 1) 0.1s;
+    }
+
+    .conversation-view.active .chat-messages {
+      opacity: 1;
+    }
+
+    .chat-messages-spacer {
+      flex: 1;
+    }
+
+    /* Message rows */
+    .msg-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 8px 20px;
+    }
+
+    .msg-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .msg-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .msg-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .msg-sender {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--sk-primary-text);
+      line-height: 22px;
+    }
+
+    .msg-time {
+      font-size: 12px;
+      color: #454447;
+      line-height: 18px;
+    }
+
+    .msg-text {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--sk-primary-text);
+      line-height: 22px;
+    }
+
+    .msg-text .bot-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .msg-text .bot-table th,
+    .msg-text .bot-table td {
+      text-align: left;
+      padding: 4px 12px 4px 0;
+      vertical-align: top;
+    }
+
+    .msg-text .bot-table th {
+      font-weight: 700;
+      color: var(--sk-primary-text);
+      border-bottom: 1px solid var(--sk-border-subtle);
+      padding-bottom: 6px;
+    }
+
+    .msg-text .bot-table td {
+      color: var(--sk-primary-text);
+      border-bottom: 1px solid var(--sk-border-subtle);
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+
+    .msg-text .bot-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .msg-text .bot-bullet {
+      padding-left: 16px;
+      position: relative;
+      margin: 4px 0;
+    }
+
+    .msg-text .bot-bullet::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+    }
+
+    .bot-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #007A5A;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .bot-cta:hover {
+      background: #006048;
+    }
+
+    .bot-cta-fade {
+      opacity: 0;
+      animation: ctaFadeIn 0.3s ease forwards;
+    }
+
+    @keyframes ctaFadeIn {
+      to { opacity: 1; }
+    }
+
+    /* CTA button group at end of bot responses */
+    .bot-cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      opacity: 0;
+      animation: ctaFadeIn 0.3s ease forwards;
+    }
+
+    .bot-cta-group .bot-cta-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bot-cta-group .bot-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      background: #007A5A;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .bot-cta-group .bot-cta-btn:hover {
+      background: #006048;
+    }
+
+    .bot-cta-group .bot-cta-desc {
+      font-size: 13px;
+      color: #616061;
+      line-height: 1.3;
+    }
+
+    /* Inline link */
+    .msg-text .bot-link {
+      color: #1264a3;
+      text-decoration: none;
+    }
+
+    .msg-text .bot-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Channel badge (inline code-like pill) */
+    .msg-text .channel-badge {
+      display: inline;
+      background: #f8e7ee;
+      color: #d1265d;
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 18px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    /* Category section with emoji header */
+    .msg-text .bot-category {
+      margin-top: 8px;
+      margin-bottom: 2px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    /* Divider line in bot responses */
+    .msg-text .bot-divider {
+      border: none;
+      border-top: 1px solid #e8e8e8;
+      margin: 8px 0;
+    }
+
+    /* Green connect buttons row */
+    .msg-text .connect-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .msg-text .connect-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      background: #007A5A;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .msg-text .connect-btn:hover {
+      background: #006048;
+    }
+
+    .msg-text .connect-btn-outline {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      background: #fff;
+      color: #1d1c1d;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid #d1d2d3;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .msg-text .connect-btn-outline:hover {
+      background: #f8f8f8;
+    }
+
+    /* Numbered step heading */
+    .msg-text .bot-step-heading {
+      font-weight: 700;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+
+    /* Bold question prompt */
+    .msg-text .bot-question {
+      font-weight: 700;
+      margin-top: 12px;
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #999;
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* Composer wrapper */
+    .composer-wrapper {
+      padding: 16px 20px;
+      flex-shrink: 0;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) 0.2s,
+                  transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) 0.2s;
+    }
+
+    .conversation-view.active .composer-wrapper {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Composer input */
+    .chat-composer {
+      background: var(--sk-white);
+      border: 1px solid rgba(94, 93, 96, 0.45);
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .composer-input {
+      padding: 12px 16px 8px;
+      font-size: 15px;
+      color: var(--sk-primary-text);
+      line-height: 22px;
+      outline: none;
+      min-height: 22px;
+      max-height: 120px;
+      overflow-y: auto;
+      font-family: var(--sk-font);
+    }
+
+    .composer-input:empty::before {
+      content: attr(data-placeholder);
+      color: #77757a;
+      pointer-events: none;
+    }
+
+    .composer-actions {
+      display: flex;
+      align-items: center;
+      padding: 4px 8px 8px;
+      gap: 4px;
+    }
+
+    .composer-action-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #616061;
+      cursor: pointer;
+    }
+
+    .composer-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .composer-send {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #77757a;
+      opacity: 0.3;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sk-white);
+      cursor: pointer;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .composer-send.active {
+      opacity: 1;
+      background: var(--sk-success);
+    }
+
+    /* AI disclaimer */
+    .conversation-disclaimer {
+      padding: 0 20px 8px;
+      text-align: center;
+      font-size: 11px;
+      color: #77757a;
+      line-height: 12px;
+    }
+
+    /* Transition between home and conversation mode */
+    .slackbot-body .body-content,
+    .slackbot-body .body-bg {
+      transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .slackbot-body.conversation-active .body-content {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .slackbot-body.conversation-active .body-bg {
+      opacity: 0;
+    }
+
+    .slackbot-body.conversation-active .home-composer-wrapper {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(20px);
+    }
+
+    /* === Home Composer (pinned to bottom) === */
+    .home-composer-wrapper {
+      z-index: 1;
+      width: 100%;
+      max-width: 680px;
+      padding: 0 40px 16px;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .home-composer-wrapper.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Congratulations banner — wraps around composer */
+    .home-congrats-banner {
+      display: none;
+      margin: 0 -13px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 0.5px 7.5px rgba(0, 0, 0, 0.04), 0 3.75px 16.5px rgba(0, 0, 0, 0.19);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: relative;
+      padding: 16px 8px 12px;
+    }
+
+    /* Sharp saturated border all around */
+    .home-congrats-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      padding: 1px;
+      background: linear-gradient(90deg, #36c5f0 10%, #2eb67d 35%, #ecb22e 58%, #e01e5a 90%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      opacity: 0.75;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Soft diffused glow that spreads into the card */
+    .home-congrats-banner::after {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(90deg, #36c5f0 10%, #2eb67d 35%, #ecb22e 58%, #e01e5a 90%);
+      opacity: 0.35;
+      filter: blur(32px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .home-congrats-banner-bg {
+      position: absolute;
+      bottom: -20px;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      pointer-events: none;
+      z-index: 0;
+      display: none;
+    }
+
+    .home-congrats-banner-bg img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .home-congrats-banner-inner {
+      padding: 0 17px 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .home-congrats-banner.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .home-congrats-header {
+      padding: 0;
+      position: relative;
+    }
+
+    .home-congrats-title {
+      text-align: left;
+      margin-bottom: 0;
+    }
+
+    .home-congrats-title-text {
+      font-size: 13px;
+      font-weight: 900;
+      color: #1d1c1d;
+      line-height: 18px;
+    }
+
+    .home-congrats-body {
+      font-size: 13px;
+      color: #1d1c1d;
+      line-height: 18px;
+      padding: 2px 0 0;
+      text-align: left;
+      font-weight: 400;
+    }
+
+    .home-congrats-body p {
+      margin: 0;
+    }
+
+    .home-congrats-dismiss {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      color: #616061;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      opacity: 0.6;
+      transition: opacity 0.15s, background 0.15s;
+      z-index: 2;
+    }
+
+    .home-congrats-dismiss:hover {
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .home-congrats-banner .home-composer {
+      margin: 0;
+      background: #ffffff;
+      border-radius: 8px;
+      border-color: rgba(94, 93, 96, 0.13);
+      position: relative;
+      z-index: 1;
+    }
+
+    .home-composer {
+      background: var(--sk-white);
+      border: 1px solid rgba(94, 93, 96, 0.45);
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .home-composer-input {
+      padding: 14px 16px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .home-composer-input-field {
+      flex: 1;
+      font-size: 15px;
+      color: var(--sk-primary-text);
+      line-height: 22px;
+      outline: none;
+      min-height: 22px;
+      max-height: 120px;
+      overflow-y: auto;
+      font-family: var(--sk-font);
+    }
+
+    .home-composer-input-field:empty::before {
+      content: attr(data-placeholder);
+      color: #77757a;
+      pointer-events: none;
+    }
+
+    .autofill-chip {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: #f5f2f7;
+      border: 1px solid #e8e4ec;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b4c75;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .autofill-chip:hover {
+      background: #ede8f0;
+    }
+
+    .autofill-chip svg {
+      flex-shrink: 0;
+    }
+
+    .home-composer-actions {
+      display: flex;
+      align-items: center;
+      padding: 4px 8px 8px;
+      gap: 2px;
+    }
+
+    .home-composer-action-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #616061;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .home-composer-action-btn:hover {
+      background: #f0f0f0;
+    }
+
+    .home-composer-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .home-composer-send {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #77757a;
+      opacity: 0.3;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sk-white);
+      cursor: pointer;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .home-composer-send.active {
+      opacity: 1;
+      background: var(--sk-success);
+    }
+
+    .home-disclaimer {
+      padding: 8px 20px 4px;
+      text-align: center;
+      font-size: 11px;
+      color: #77757a;
+      line-height: 14px;
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .modal-overlay.visible {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-panel {
+      background: #fff;
+      border-radius: 12px;
+      width: 380px;
+      min-width: 304px;
+      max-height: 80%;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid #eee;
+    }
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1d1c1d;
+      margin: 0;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #616061;
+      padding: 4px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover {
+      background: #f0f0f0;
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .modal-body p {
+      font-size: 14px;
+      color: #1d1c1d;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .modal-body p:last-child {
+      margin-bottom: 0;
+    }
+    .modal-app-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .modal-app-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 14px;
+      color: #1d1c1d;
+    }
+    .modal-app-list li:last-child {
+      border-bottom: none;
+    }
+    .modal-app-list li img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+    .modal-invite-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1d1c1d;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .modal-invite-input:focus {
+      border-color: #1264a3;
+    }
+    .modal-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #007a5a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .modal-btn:hover {
+      background: #005e45;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="slackbot-view">
+    <!-- Header -->
+    <div class="slackbot-header">
+      <img src="../images/app-avatar.png" alt="Slackbot" class="slackbot-avatar">
+      <span class="slackbot-title">Slackbot</span>
+      <button class="btn-new-chat" id="btnNewChat">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M3 4C3 2.89543 3.89543 2 5 2H15C16.1046 2 17 2.89543 17 4V12C17 13.1046 16.1046 14 15 14H7L3.5 17.5V14H3V4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Ask Slackbot
+      </button>
+      <div class="header-actions">
+        <button class="header-btn" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M8.1 1.35C11.83 1.35 14.85 4.37 14.85 8.1C14.85 9.72 14.28 11.21 13.33 12.37L16.45 15.5C16.72 15.76 16.72 16.19 16.45 16.45C16.19 16.72 15.76 16.72 15.5 16.45L12.37 13.33C11.21 14.28 9.72 14.85 8.1 14.85C4.37 14.85 1.35 11.83 1.35 8.1C1.35 4.37 4.37 1.35 8.1 1.35ZM8.1 2.7C5.12 2.7 2.7 5.12 2.7 8.1C2.7 11.08 5.12 13.5 8.1 13.5C11.08 13.5 13.5 11.08 13.5 8.1C13.5 5.12 11.08 2.7 8.1 2.7Z" fill="currentColor"/></svg>
+        </button>
+        <button class="header-btn" aria-label="More actions">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="4.5" r="1.5" fill="currentColor"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><circle cx="9" cy="13.5" r="1.5" fill="currentColor"/></svg>
+        </button>
+        <button class="header-btn" id="btnClose" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4.5 4.5l9 9M13.5 4.5l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabs subheader -->
+    <div class="slackbot-tabs" id="slackbotTabs">
+      <div class="tab-item active">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 3C2.5 2.17157 3.17157 1.5 4 1.5H12C12.8284 1.5 13.5 2.17157 13.5 3V9.5C13.5 10.3284 12.8284 11 12 11H6L3.5 13.5V11H2.5V3Z" fill="currentColor"/></svg>
+        <span>Messages</span>
+      </div>
+      <div class="tab-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C4.41 1.5 1.5 4.41 1.5 8C1.5 11.59 4.41 14.5 8 14.5C11.59 14.5 14.5 11.59 14.5 8C14.5 4.41 11.59 1.5 8 1.5ZM8 13C5.24 13 3 10.76 3 8C3 5.24 5.24 3 8 3C10.76 3 13 5.24 13 8C13 10.76 10.76 13 8 13ZM8.5 4.5H7V8.5L10.5 10.6L11.2 9.4L8.5 7.7V4.5Z" fill="currentColor"/></svg>
+        <span>History</span>
+      </div>
+      <div class="tab-add">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="slackbot-body">
+      <div class="body-bg"></div>
+      <div class="body-content" id="bodyContent">
+        <img src="../images/slackbot-hero.gif" alt="Slackbot" class="hero-image" id="heroImage">
+        <div class="welcome-section">
+          <h1 class="welcome-title" id="welcomeTitle">Welcome, Alex &#x2014; I&#x2019;m Slackbot!</h1>
+          <p class="welcome-subtitle" id="welcomeSubtitle">Let me help you get started</p>
+        </div>
+
+        <div class="cards-grid">
+          <!-- Left Column -->
+          <div class="cards-left">
+            <!-- Card 1: Team Tools — personalized by use case -->
+            <div class="card card-team-tools" id="card1">
+              <div class="card-team-tools-header">
+                <div class="card-team-tools-text">
+                  <span class="card-team-tools-label" id="card1Label">Team tools</span>
+                  <span class="card-team-tools-title" id="card1Title">Bring in your work</span>
+                </div>
+                <div class="card-arrow">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="card-app-icons" id="card1Icons">
+                <div class="card-app-icon"><img src="../images/tool-sheets.png" alt="Calendar"></div>
+                <div class="card-app-icon"><img src="../images/tool-drive.png" alt="Drive"></div>
+                <div class="card-app-icon"><img src="../images/tool-gmail.png" alt="Gmail"></div>
+                <div class="card-app-icon"><img src="../images/tool-zoom.png" alt="Zoom"></div>
+              </div>
+            </div>
+
+            <!-- Card 2: Invite — personalized by team size -->
+            <div class="card card-invite" id="card2">
+              <div class="card-invite-text">
+                <span class="card-invite-title" id="card2Title">Invite your team</span>
+                <span class="card-invite-subtitle" id="card2Subtitle">Best with 3+ members</span>
+              </div>
+              <div class="card-invite-icon">
+                <svg viewBox="0 0 18 16" fill="none"><path d="M8 0C9.23 0 10.36.44 11.19 1.27 12.02 2.1 12.5 3.28 12.5 4.67c0 1.48-.6 2.76-1.45 3.67-.16.17-.33.33-.5.47.32.08.64.17.95.28.39.14.6.57.46.96-.14.39-.56.6-.95.46C10 10.15 8.91 10 8 10c-1.15 0-2.55.25-3.78.83C3 11.41 2 12.29 1.54 13.55c-.08.22-.03.42.13.6.18.2.49.35.83.35h8.75c.41 0 .75.34.75.75s-.34.75-.75.75H2.5c-.75 0-1.47-.31-1.95-.84-.49-.54-.72-1.32-.42-2.13.64-1.73 1.98-2.86 3.45-3.56.6-.29 1.24-.5 1.87-.65-.18-.15-.35-.31-.5-.47C4.11 7.43 3.5 6.15 3.5 4.67c0-1.4.48-2.57 1.32-3.41C5.65.44 6.78 0 8 0zm6.5 9c.41 0 .75.34.75.75v2h2c.41 0 .75.34.75.75s-.34.75-.75.75h-2v2c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-2h-2c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h2v-2c0-.41.34-.75.75-.75zM8 1.5c-.86 0-1.6.3-2.13.83C5.36 2.85 5 3.63 5 4.67c0 1.06.44 1.98 1.05 2.65C6.68 8 7.43 8.33 8 8.33s1.32-.33 1.95-1.01C10.57 6.65 11 5.73 11 4.67c0-1.04-.35-1.82-.87-2.34C9.6 1.8 8.86 1.5 8 1.5z" fill="#77757A"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column — Card 3: personalized by use case -->
+          <div class="cards-right" id="card3Container">
+            <div class="card card-list-item">
+              <div class="card-list-header">
+                <div class="card-list-icon">
+                  <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.25 0C15.3211 0 17 1.67893 17 3.75V11.25C17 13.3211 15.3211 15 13.25 15H3.75C1.67893 15 0 13.3211 0 11.25V3.75C0 1.67893 1.67893 0 3.75 0H13.25ZM3.75 1.5C2.50736 1.5 1.5 2.50736 1.5 3.75V11.25C1.5 12.4926 2.50736 13.5 3.75 13.5H6.75V1.5H3.75ZM8.25 1.5V13.5H13.25C14.4926 13.5 15.5 12.4926 15.5 11.25V3.75C15.5 2.50736 14.4926 1.5 13.25 1.5H8.25ZM5 9.25C5.41421 9.25 5.75 9.58579 5.75 10C5.75 10.4142 5.41421 10.75 5 10.75H3.5C3.08579 10.75 2.75 10.4142 2.75 10C2.75 9.58579 3.08579 9.25 3.5 9.25H5ZM5 6.25C5.41421 6.25 5.75 6.58579 5.75 7C5.75 7.41421 5.41421 7.75 5 7.75H3.5C3.08579 7.75 2.75 7.41421 2.75 7C2.75 6.58579 3.08579 6.25 3.5 6.25H5ZM5 3.25C5.41421 3.25 5.75 3.58579 5.75 4C5.75 4.41421 5.41421 4.75 5 4.75H3.5C3.08579 4.75 2.75 4.41421 2.75 4C2.75 3.58579 3.08579 3.25 3.5 3.25H5Z" fill="#36C5F0"/></svg>
+                </div>
+                <span class="card-list-title" style="color: #1A8BB3">Set up Slack for my team</span>
+              </div>
+              <span class="card-list-subtitle">Channels and apps tailored to you</span>
+            </div>
+
+            <div class="card card-list-item">
+              <div class="card-list-header">
+                <div class="card-list-icon">
+                  <svg width="17" height="15" viewBox="0 0 16.999 14.9977" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.4307 0.17012C10.9054 -0.0559994 11.4574 -0.0567589 11.9326 0.168167L16.4277 2.29707C16.7766 2.46249 16.9988 2.81436 16.999 3.20039V13.9943C16.9987 14.7422 16.2073 15.2247 15.542 14.883L11.1699 12.6369L6.57422 14.8273C6.10429 15.0513 5.55837 15.0547 5.08594 14.8361L0.580078 12.7512C0.226586 12.5875 6.0592e-05 12.2335 0 11.8439V1.00117C0.000333059 0.253771 0.790798 -0.229267 1.45605 0.111526L5.83887 2.35762L10.4307 0.17012ZM1.5 11.5236L5.13086 13.2033V3.67891L1.5 1.81953V11.5236ZM11.8359 11.2932L15.499 13.174V3.5168L11.8359 1.78145V11.2932ZM6.63086 3.6418V13.1389L10.3359 11.3732V1.87617L6.63086 3.6418Z" fill="#9B3FA4"/></svg>
+                </div>
+                <span class="card-list-title" style="color: #7C2D82">Popular first moves</span>
+              </div>
+              <span class="card-list-subtitle">What do teams like mine do first?</span>
+            </div>
+
+            <div class="card card-list-item">
+              <div class="card-list-header">
+                <div class="card-list-icon">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5ZM9 12C9.55228 12 10 12.4477 10 13C10 13.5523 9.55228 14 9 14C8.44772 14 8 13.5523 8 13C8 12.4477 8.44772 12 9 12ZM9 4.5C9.77585 4.5 10.5764 4.72668 11.1992 5.22852C11.8412 5.74586 12.25 6.52306 12.25 7.5C12.25 8.32705 11.9862 9.01495 11.4434 9.50098C10.9709 9.92386 10.3636 10.1219 9.75 10.2021V11H8.25V10C8.25 9.2913 8.81608 8.78943 9.42871 8.73145L9.61133 8.70898C10.0148 8.64916 10.2796 8.52931 10.4424 8.38379C10.6041 8.23903 10.75 7.9937 10.75 7.5C10.75 6.97707 10.5474 6.62914 10.2588 6.39648C9.95107 6.14849 9.50154 6 9 6C8.50316 6 8.12439 6.14546 7.88281 6.35156C7.65362 6.54715 7.5 6.83562 7.5 7.25C7.5 7.66421 7.16421 8 6.75 8C6.33579 8 6 7.66421 6 7.25C6 6.41439 6.33277 5.70285 6.90918 5.21094C7.47323 4.72959 8.2194 4.5 9 4.5Z" fill="#2EB67D"/></svg>
+                </div>
+                <span class="card-list-title" style="color: #1E8A5C">How to use Slack</span>
+              </div>
+              <span class="card-list-subtitle">Features and shortcuts worth knowing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversation View (inline messages + wrapped composer) -->
+      <div class="conversation-view" id="conversationView">
+        <!-- Messages area -->
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-messages-spacer"></div>
+          <!-- User message -->
+          <div class="msg-row" id="userMsg">
+            <img src="../images/profile.png" alt="User" class="msg-avatar">
+            <div class="msg-content">
+              <div class="msg-header">
+                <span class="msg-sender">Alex Johnson</span>
+                <span class="msg-time">11:33 AM</span>
+              </div>
+              <p class="msg-text" id="userMsgText"></p>
+            </div>
+          </div>
+
+          <!-- Slackbot response -->
+          <div class="msg-row" id="botMsg" style="display: none;">
+            <img src="../images/app-avatar.png" alt="Slackbot" class="msg-avatar">
+            <div class="msg-content">
+              <div class="msg-header">
+                <span class="msg-sender">Slackbot</span>
+                <span class="msg-time">11:33 AM</span>
+              </div>
+              <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+              <p class="msg-text" id="botMsgText" style="display: none;"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Composer (no banner in conversation view) -->
+        <div class="composer-wrapper">
+          <div class="chat-composer" id="chatComposer">
+            <div class="composer-input" id="composerInput" contenteditable="true" data-placeholder="Message Slackbot"></div>
+            <div class="composer-actions">
+              <button class="composer-action-btn" aria-label="Attach">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 5.5v7M5.5 9h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
+              <button class="composer-action-btn" aria-label="Format">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 5h3v8H5.5V7H4V5zM8 5h3.5c1.1 0 2 .7 2 1.7 0 .6-.3 1.1-.8 1.4.7.3 1.1.9 1.1 1.6 0 1.1-.9 1.8-2.1 1.8H8V5z" stroke="currentColor" stroke-width="1.1"/></svg>
+              </button>
+              <button class="composer-action-btn" aria-label="Emoji">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.2"/><circle cx="6.5" cy="7.5" r="1" fill="currentColor"/><circle cx="11.5" cy="7.5" r="1" fill="currentColor"/><path d="M6 11c.8 1.2 2 1.5 3 1.5s2.2-.3 3-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
+              <button class="composer-action-btn" aria-label="Mention">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M11.5 9v1.5a1.5 1.5 0 003 0V9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
+              <button class="composer-action-btn" aria-label="More">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="4.5" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="13.5" cy="9" r="1.2" fill="currentColor"/></svg>
+              </button>
+              <div class="composer-right">
+                <button class="composer-send" id="composerSend" aria-label="Send">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M4 6l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="conversation-disclaimer">This tool uses generative AI, which can produce inaccurate or harmful responses.</div>
+      </div>
+
+      <!-- Home Composer (shown after "New chat" click) -->
+      <div class="home-composer-wrapper" id="homeComposerWrapper">
+        <!-- Congratulations wrapper — wraps around composer, only shown on second visit -->
+        <div class="home-congrats-banner" id="homeCongratsBanner">
+          <div class="home-congrats-banner-bg">
+            <img src="../images/banner-bg-shapes.svg" alt="">
+          </div>
+          <div class="home-congrats-banner-inner">
+            <div class="home-congrats-header">
+              <div class="home-congrats-title">
+                <span class="home-congrats-title-text">&#127881; Try Slackbot Free</span>
+              </div>
+            </div>
+            <div class="home-congrats-body">
+              <p>Ask me anything to get started.</p>
+            </div>
+          </div>
+          <button class="home-congrats-dismiss" id="homeCongratsDismiss" aria-label="Dismiss">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="home-composer">
+          <div class="home-composer-input">
+            <div class="home-composer-input-field" id="homeComposerInput" contenteditable="true" data-placeholder="How should I use Slackbot for my role?"></div>
+          </div>
+          <div class="home-composer-actions">
+            <button class="home-composer-action-btn" aria-label="Attach">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 5.5v7M5.5 9h7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="home-composer-action-btn" aria-label="Document">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="4" y="2" width="10" height="14" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 6h4M7 9h4M7 12h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="home-composer-action-btn" aria-label="Agent">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L3 5.5v4L9 13l6-3.5v-4L9 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 5.5L9 9l6-3.5M9 9v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="home-composer-action-btn" aria-label="Deep research">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M12 12l3.5 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M6 8h4M8 6v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="home-composer-action-btn" aria-label="Plug">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 2v4M11 2v4M5 6h8v2.5c0 2.5-1.5 4.5-4 4.5s-4-2-4-4.5V6zM9 13v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="home-composer-right">
+              <button class="home-composer-action-btn" aria-label="Mic">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="6.5" y="2" width="5" height="9" rx="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 9.5a4.5 4.5 0 009 0M9 14.5v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
+              <button class="home-composer-send" id="homeComposerSend" aria-label="Send">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M4 6l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="home-disclaimer">This tool uses generative AI, which can produce inaccurate or harmful responses.</div>
+      </div>
+    </div>
+
+    <!-- Modal: Team Tools (Apps) -->
+    <div class="modal-overlay" id="modalApps">
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2>Team tools</h2>
+          <button class="modal-close" id="modalAppsClose" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Connect your favorite tools to keep everything in one place.</p>
+          <ul class="modal-app-list">
+            <li><img src="../images/tool-sheets.png" alt="Google Sheets">Google Sheets</li>
+            <li><img src="../images/tool-drive.png" alt="Google Drive">Google Drive</li>
+            <li><img src="../images/tool-gmail.png" alt="Gmail">Gmail</li>
+            <li><img src="../images/tool-zoom.png" alt="Zoom">Zoom</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Invite Team -->
+    <div class="modal-overlay" id="modalInvite">
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2>Invite your team</h2>
+          <button class="modal-close" id="modalInviteClose" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Slack works best with your whole team. Invite members by email.</p>
+          <input type="email" class="modal-invite-input" placeholder="name@company.com">
+          <button class="modal-btn">Send invite</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // When embedded, freeze all transitions until intro is triggered
+    if (window !== window.parent) {
+      document.documentElement.style.setProperty('--intro-transition', 'none');
+    }
+
+    // Intro animation: triggered after onboarding modal closes
+    let introPlayed = false;
+    let homeVisitCount = 0;
+
+    function playIntroAnimation(data) {
+      if (introPlayed) return;
+      introPlayed = true;
+
+      const heroImage = document.getElementById('heroImage');
+      const bodyContent = document.getElementById('bodyContent');
+      const welcomeTitle = document.getElementById('welcomeTitle');
+      const subtitle = document.getElementById('welcomeSubtitle');
+      const cardsGrid = document.querySelector('.cards-grid');
+      const header = document.querySelector('.slackbot-header');
+
+      // Apply personalization first (while cards are still hidden)
+      if (data) applyPersonalization(data);
+
+      const cardsRight = document.querySelector('.cards-right');
+
+      // Re-enable transitions after a frame so the browser doesn't interpolate from stale values
+      requestAnimationFrame(() => {
+        document.documentElement.style.removeProperty('--intro-transition');
+
+        // Phase 1: Title types in after short delay
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            header.classList.add('visible');
+            const titleText = welcomeTitle.textContent;
+            welcomeTitle.textContent = '';
+            welcomeTitle.classList.add('visible');
+            let ti = 0;
+            function typeTitleChar() {
+              if (ti < titleText.length) {
+                welcomeTitle.textContent += titleText[ti];
+                ti++;
+                setTimeout(typeTitleChar, 31 + Math.random() * 23);
+              }
+            }
+            typeTitleChar();
+          });
+        }, 270);
+
+        // Phase 2: Hero settles and content moves to top (after sidebar finishes expanding)
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            heroImage.classList.add('settled');
+            bodyContent.classList.add('settled');
+            // Clean up will-change after transition completes
+            heroImage.addEventListener('transitionend', () => {
+              heroImage.style.willChange = 'auto';
+            }, { once: true });
+          });
+        }, 2700);
+
+        // Phase 3: Subhead fades in after sidebar content has faded in
+        function showSubhead() {
+          subtitle.style.transition = 'opacity 0.6s ease';
+          subtitle.style.opacity = '1';
+          // Phase 4: Left column reveals after subhead finishes
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              cardsGrid.classList.add('visible');
+            });
+            // Phase 5: Right column reveals last
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                cardsRight.classList.add('visible');
+              });
+            }, 450);
+          }, 650);
+        }
+
+        let subheadTriggered = false;
+        function triggerSubhead() {
+          if (subheadTriggered) return;
+          subheadTriggered = true;
+          showSubhead();
+        }
+
+        window.addEventListener('message', (e) => {
+          if (e.data === 'sidebar-content-ready') {
+            triggerSubhead();
+          }
+        });
+
+        // Fallback in case message never arrives (e.g., standalone)
+        setTimeout(triggerSubhead, 4500);
+
+        // Count initial home view as first visit
+        homeVisitCount = 1;
+      }); // end requestAnimationFrame
+    }
+
+    // Personalization data based on onboarding selections
+    // Card 1: "Set up Slack for [use case]" — personalized by use case dimension
+    // Card 2: "Popular first moves" — subtitle personalized by team size dimension
+    // Card 3: "How to use Slack" — static
+    // Responses combine both dimensions (use case + team size)
+    const useCaseLabels = {
+      collab: 'my team',
+      projects: 'project management',
+      customers: 'customer relations',
+      external: 'external teams',
+      integrations: 'your tools',
+      ai: 'AI and agents'
+    };
+
+    const useCaseSubtitles = {
+      collab: 'Channels and apps tailored to you',
+      projects: 'Channels and apps tailored to you',
+      customers: 'Channels and apps tailored to you',
+      external: 'Channels and apps tailored to you',
+      integrations: 'Channels and apps tailored to you',
+      ai: 'Channels and apps tailored to you'
+    };
+
+    const useCaseContent = {
+      collab: {
+        card1: { label: 'Team tools', title: 'Bring in your work' }
+      },
+      projects: {
+        card1: { label: 'Team tools', title: 'Bring in your work' }
+      },
+      customers: {
+        card1: { label: 'Team tools', title: 'Bring in your work' }
+      },
+      external: {
+        card1: { label: 'Team tools', title: 'Bring in your work' }
+      },
+      integrations: {
+        card1: { label: 'Team tools', title: 'Bring in your work' }
+      },
+      ai: {
+        card1: { label: 'Team tools', title: 'Bring in your work' }
+      }
+    };
+
+    const teamSizeLabels = {
+      '1-2': 'small',
+      '3-10': 'small',
+      '10-30': 'mid-size',
+      '30+': 'large'
+    };
+
+    const iconSvgs = {
+      sidebar: '<svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.25 0C15.3211 0 17 1.67893 17 3.75V11.25C17 13.3211 15.3211 15 13.25 15H3.75C1.67893 15 0 13.3211 0 11.25V3.75C0 1.67893 1.67893 0 3.75 0H13.25ZM3.75 1.5C2.50736 1.5 1.5 2.50736 1.5 3.75V11.25C1.5 12.4926 2.50736 13.5 3.75 13.5H6.75V1.5H3.75ZM8.25 1.5V13.5H13.25C14.4926 13.5 15.5 12.4926 15.5 11.25V3.75C15.5 2.50736 14.4926 1.5 13.25 1.5H8.25ZM5 9.25C5.41421 9.25 5.75 9.58579 5.75 10C5.75 10.4142 5.41421 10.75 5 10.75H3.5C3.08579 10.75 2.75 10.4142 2.75 10C2.75 9.58579 3.08579 9.25 3.5 9.25H5ZM5 6.25C5.41421 6.25 5.75 6.58579 5.75 7C5.75 7.41421 5.41421 7.75 5 7.75H3.5C3.08579 7.75 2.75 7.41421 2.75 7C2.75 6.58579 3.08579 6.25 3.5 6.25H5ZM5 3.25C5.41421 3.25 5.75 3.58579 5.75 4C5.75 4.41421 5.41421 4.75 5 4.75H3.5C3.08579 4.75 2.75 4.41421 2.75 4C2.75 3.58579 3.08579 3.25 3.5 3.25H5Z" fill="#36C5F0"/></svg>',
+      map: '<svg width="17" height="15" viewBox="0 0 16.999 14.9977" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.4307 0.17012C10.9054 -0.0559994 11.4574 -0.0567589 11.9326 0.168167L16.4277 2.29707C16.7766 2.46249 16.9988 2.81436 16.999 3.20039V13.9943C16.9987 14.7422 16.2073 15.2247 15.542 14.883L11.1699 12.6369L6.57422 14.8273C6.10429 15.0513 5.55837 15.0547 5.08594 14.8361L0.580078 12.7512C0.226586 12.5875 6.0592e-05 12.2335 0 11.8439V1.00117C0.000333059 0.253771 0.790798 -0.229267 1.45605 0.111526L5.83887 2.35762L10.4307 0.17012ZM1.5 11.5236L5.13086 13.2033V3.67891L1.5 1.81953V11.5236ZM11.8359 11.2932L15.499 13.174V3.5168L11.8359 1.78145V11.2932ZM6.63086 3.6418V13.1389L10.3359 11.3732V1.87617L6.63086 3.6418Z" fill="#9B3FA4"/></svg>',
+      help: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM9 1.5C4.85786 1.5 1.5 4.85786 1.5 9C1.5 13.1421 4.85786 16.5 9 16.5C13.1421 16.5 16.5 13.1421 16.5 9C16.5 4.85786 13.1421 1.5 9 1.5ZM9 12C9.55228 12 10 12.4477 10 13C10 13.5523 9.55228 14 9 14C8.44772 14 8 13.5523 8 13C8 12.4477 8.44772 12 9 12ZM9 4.5C9.77585 4.5 10.5764 4.72668 11.1992 5.22852C11.8412 5.74586 12.25 6.52306 12.25 7.5C12.25 8.32705 11.9862 9.01495 11.4434 9.50098C10.9709 9.92386 10.3636 10.1219 9.75 10.2021V11H8.25V10C8.25 9.2913 8.81608 8.78943 9.42871 8.73145L9.61133 8.70898C10.0148 8.64916 10.2796 8.52931 10.4424 8.38379C10.6041 8.23903 10.75 7.9937 10.75 7.5C10.75 6.97707 10.5474 6.62914 10.2588 6.39648C9.95107 6.14849 9.50154 6 9 6C8.50316 6 8.12439 6.14546 7.88281 6.35156C7.65362 6.54715 7.5 6.83562 7.5 7.25C7.5 7.66421 7.16421 8 6.75 8C6.33579 8 6 7.66421 6 7.25C6 6.41439 6.33277 5.70285 6.90918 5.21094C7.47323 4.72959 8.2194 4.5 9 4.5Z" fill="#2EB67D"/></svg>'
+    };
+
+    const iconColors = {
+      sidebar: '#1A8BB3',
+      map: '#7C2D82',
+      help: '#1E8A5C'
+    };
+
+    // Store current personalization state for response generation
+    let currentTeamSize = '';
+    let currentUseCase = 'collab';
+
+    function applyPersonalization(data) {
+      const { teamSize, useCases } = data;
+
+      // Track if only default use case is selected
+      const nonCollab = (useCases && useCases.length > 0) ? useCases.filter(uc => uc !== 'collab') : [];
+      isDefaultUseCaseOnly = nonCollab.length === 0;
+
+      // Pick primary use case — prioritize non-collab selections
+      let primaryUseCase = 'collab';
+      if (useCases && useCases.length > 0) {
+        primaryUseCase = nonCollab.length > 0 ? nonCollab[0] : useCases[0];
+      }
+      currentUseCase = primaryUseCase;
+      currentTeamSize = teamSize || '';
+
+      const uc = useCaseContent[primaryUseCase] || useCaseContent.collab;
+
+      // Card 1 (left-top): personalize by use case
+      document.getElementById('card1Label').textContent = uc.card1.label;
+      document.getElementById('card1Title').textContent = uc.card1.title;
+
+      // Right column: 3 prompt cards
+      // Card 1: "Set up Slack for [use case]" — use case dimension
+      // Card 2: "Popular first moves" — team size dimension in subtitle
+      // Card 3: "How to use Slack" — static
+      const useCaseLabel = useCaseLabels[primaryUseCase] || 'my team';
+      const teamSizeLabel = teamSize ? teamSizeLabels[teamSize] : '';
+      const teamSizeSubtitle = teamSizeLabel
+        ? `What do ${teamSizeLabel} teams like mine do first?`
+        : 'What do teams like mine do first?';
+
+      const rightCards = [
+        { title: `Set up Slack for ${useCaseLabel}`, subtitle: 'Channels and apps tailored to you', icon: 'sidebar' },
+        { title: 'Popular first moves', subtitle: teamSizeSubtitle, icon: 'map' },
+        { title: 'How to use Slack', subtitle: 'Features and shortcuts worth knowing', icon: 'help' }
+      ];
+
+      const container = document.getElementById('card3Container');
+      container.innerHTML = rightCards.map(item => `
+        <div class="card card-list-item">
+          <div class="card-list-header">
+            <div class="card-list-icon">
+              ${iconSvgs[item.icon]}
+            </div>
+            <span class="card-list-title" style="color: ${iconColors[item.icon]}">${item.title}</span>
+          </div>
+          <span class="card-list-subtitle">${item.subtitle}</span>
+        </div>
+      `).join('');
+    }
+
+    // Listen for onboarding-complete from parent — triggers intro animation
+    // Listen for banner-dismissed — expand hero and body content to fill freed space
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'onboarding-complete') {
+        playIntroAnimation(e.data);
+      }
+      if (e.data === 'banner-dismissed') {
+        const bodyContent = document.getElementById('bodyContent');
+        if (bodyContent) {
+          bodyContent.classList.add('animate-expand');
+          requestAnimationFrame(() => bodyContent.classList.add('expanded'));
+        }
+      }
+      // Handle nav-restore from parent (back/forward navigation)
+      if (e.data && e.data.type === 'nav-restore') {
+        restoreSubstate(e.data.substate);
+      }
+      // Handle full reset from parent (workspace escape hatch)
+      if (e.data && e.data.type === 'nav-full-reset') {
+        fullReset();
+      }
+    });
+
+    function restoreSubstate(substate) {
+      const slackbotBody = document.querySelector('.slackbot-body');
+      const conversationView = document.getElementById('conversationView');
+
+      if (substate === 'home') {
+        // Return to home/cards view
+        conversationView.classList.remove('active');
+        slackbotBody.classList.remove('conversation-active');
+
+        // Reset bot messages
+        const botMsg = document.getElementById('botMsg');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const botMsgText = document.getElementById('botMsgText');
+        botMsg.style.display = 'none';
+        typingIndicator.style.display = 'flex';
+        botMsgText.style.display = 'none';
+        botMsgText.innerHTML = '';
+
+        // Clear extra follow-up messages
+        const chatMessages = document.getElementById('chatMessages');
+        const extraMessages = chatMessages.querySelectorAll('.msg-row:not(#userMsg):not(#botMsg)');
+        extraMessages.forEach(msg => msg.remove());
+      } else if (substate === 'conversation') {
+        // Re-enter conversation mode (show as-is if already there)
+        slackbotBody.classList.add('conversation-active');
+        conversationView.classList.add('active');
+        document.getElementById('slackbotTabs').classList.add('visible');
+      }
+    }
+
+    function fullReset() {
+      const slackbotBody = document.querySelector('.slackbot-body');
+      const conversationView = document.getElementById('conversationView');
+      const chatMessages = document.getElementById('chatMessages');
+      const homeComposerWrapper = document.getElementById('homeComposerWrapper');
+
+      // Exit conversation mode
+      conversationView.classList.remove('active');
+      slackbotBody.classList.remove('conversation-active');
+      document.getElementById('slackbotTabs').classList.remove('visible');
+
+      // Reset bot messages
+      const botMsg = document.getElementById('botMsg');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const botMsgText = document.getElementById('botMsgText');
+      botMsg.style.display = 'none';
+      typingIndicator.style.display = 'flex';
+      botMsgText.style.display = 'none';
+      botMsgText.innerHTML = '';
+
+      // Clear follow-up messages
+      const extraMessages = chatMessages.querySelectorAll('.msg-row:not(#userMsg):not(#botMsg)');
+      extraMessages.forEach(msg => msg.remove());
+
+      // Hide home composer (return to fresh card state)
+      homeComposerWrapper.classList.remove('visible');
+
+      // Reset congrats banner state
+      const homeCongratsBanner = document.getElementById('homeCongratsBanner');
+      if (homeCongratsBanner) {
+        homeCongratsBanner.style.display = 'none';
+        homeCongratsBanner.classList.remove('visible');
+        delete homeCongratsBanner.dataset.dismissed;
+      }
+
+      // Reset visit counter and prompt state
+      homeVisitCount = 0;
+      currentPromptTitle = '';
+      isDefaultUseCaseOnly = true;
+    }
+
+    // Clear any stale localStorage on load so it doesn't trigger prematurely
+    try { localStorage.removeItem('slackbot-onboarding'); } catch(e) {}
+
+    // Check localStorage as fallback (only used if postMessage fails)
+    function checkLocalStorageFallback() {
+      if (introPlayed) return;
+      try {
+        const stored = localStorage.getItem('slackbot-onboarding');
+        if (stored) {
+          const data = JSON.parse(stored);
+          if (data && data.type === 'onboarding-complete') {
+            playIntroAnimation(data);
+          }
+        }
+      } catch(e) {}
+    }
+
+    // Signal to parent that this iframe is ready to receive messages
+    if (window !== window.parent) {
+      window.parent.postMessage('slackbot-dm-view-ready', '*');
+      // Re-signal after a delay in case parent wasn't listening yet
+      setTimeout(() => window.parent.postMessage('slackbot-dm-view-ready', '*'), 500);
+    }
+
+    // Poll localStorage as a late fallback — only if intro hasn't played yet
+    // Uses a longer delay to ensure modal has actually been dismissed
+    setTimeout(checkLocalStorageFallback, 3000);
+    setTimeout(checkLocalStorageFallback, 5000);
+
+    // === Conversation Mode ===
+    // Generate responses that combine both use case + team size dimensions
+    function getSetupResponse(useCase, teamSize) {
+      const sizeLabel = teamSize ? teamSizeLabels[teamSize] : '';
+      const useCaseLabel = useCaseLabels[useCase] || 'collaboration';
+      const sizeContext = sizeLabel ? `a ${sizeLabel} team focused on ${useCaseLabel}` : `a team focused on ${useCaseLabel}`;
+
+      const responses = {
+        collab: `Here\'s a focused setup plan for ${sizeContext}.\n\n**Starter channels to create:**\n| Channel | Purpose |\n|---------|----------|\n| \`#announcements\` | Company-wide updates and announcements |\n| \`#daily-sync\` | Check in on what you\'re working on (standups) |\n| \`#random\` | Non-work chat to keep the team connected |\n\n**Useful integrations:**\n| Tool | Value |\n|------|-------|\n| [Google Calendar](https://slack.com/apps/A0F8149ED) | See events & get reminders right in Slack |\n| [Google Drive](https://slack.com/apps/A6NL8MJ6Q) | Share and preview docs, decks, and sheets inline |\n| [Zoom](https://slack.com/apps/A5GE9BMQC) | Start calls directly from Slack |\n\n---\n\nWant me to help with any of these right now?\n{{CTA:Create channels||Sets up #announcements, #daily-sync, and #random}}\n{{CTA:Set up standup||Builds a daily workflow prompt for your team}}\n{{CTA:Connect an app||I\'ll walk you through linking your tools}}`,
+        projects: `Here\'s a focused setup plan for ${sizeContext}.\n\n**Starter channels to create:**\n| Channel | Purpose |\n|---------|----------|\n| \`#proj-[name]\` | One channel per active project |\n| \`#standup\` | Daily async check-ins and blockers |\n| \`#decisions\` | Key decisions documented on the record |\n| \`#launches\` | Release coordination and go-live |\n\n**Useful integrations:**\n| Tool | Value |\n|------|-------|\n| [Asana](https://slack.com/apps/A01734836JY) / [Jira](https://slack.com/apps/A2RPP3NFR) / [Linear](https://slack.com/apps/A019M09ET0E) | Task updates and project status flow into channels automatically |\n| [Google Drive](https://slack.com/apps/A6NL8MJ6Q) / [Notion](https://slack.com/apps/A01P6V7HK60) | Pin project briefs and specs at the top of each channel |\n| [Outlook Calendar](https://slack.com/apps/AAL6B9B8T) | Meeting reminders so deadlines and syncs don\'t get missed |\n\n---\n\nWant me to help with any of these right now?\n{{CTA:Create project channels||Give me a project name and I\'ll set them up}}\n{{CTA:Build standup workflow||Daily async prompt via Workflow Builder}}\n{{CTA:Connect PM tool||I\'ll walk you through linking Jira, Asana, or Linear}}`,
+        customers: `Here\'s how to set up Slack for client work:\n\n**Channels to create:**\n• \`#client-[name]\` for each client — keeps work, files, and decisions separated\n• \`#leads-and-pipeline\` — track prospective clients and follow-ups\n• \`#support-triage\` — route incoming requests to the right person\n\n**Profile polish:**\n• Set a clear title like your role and company\n• Add a professional profile photo\n• Set your working hours status so clients know when you\'re available\n\n**Useful integrations:**\n• [**Google Calendar / Outlook**](https://slack.com/apps/A0F8149ED) — stay on top of client meetings\n• [**Salesforce**](https://slack.com/apps/A024SU2SA) / **HubSpot** — pipeline and deal updates\n• [**Notion**](https://slack.com/apps/A01P6V7HK60) / **Google Drive** — share deliverables and docs in channels\n• [**Zoom**](https://slack.com/apps/A5GE9BMQC) / **Google Meet** — launch calls right from Slack\n\n---\n\nWant me to help with any of these right now?\n{{CTA:Create client channel||Give me a client name and I\'ll set it up}}\n{{CTA:Update your profile||Add a title, photo, and working hours}}\n{{CTA:Set up #leads channel||Creates a pipeline tracking channel}}`,
+        external: `Here\'s a setup plan for working with external partners (${sizeContext}).\n\n**Channels to create:**\n| Channel | Purpose |\n|---------|----------|\n| \`#ext-[partner]\` | Shared channel per partner via [Slack Connect](https://slack.com/connect) |\n| \`#internal-[partner]\` | Private coordination before responding externally |\n| \`#vendor-updates\` | Centralized vendor communications |\n\n**Useful integrations:**\n| Tool | Value |\n|------|-------|\n| [Google Drive](https://slack.com/apps/A6NL8MJ6Q) | Share deliverables and SOWs inline |\n| [Zoom](https://slack.com/apps/A5GE9BMQC) | Quick syncs with partners, no scheduling |\n| [Salesforce](https://slack.com/apps/A024SU2SA) | Track partner deals and revenue |\n\n---\n\nWant me to help with any of these right now?\n{{CTA:Create Connect channel||Give me a partner name to get started}}\n{{CTA:Pin onboarding resources||Adds response times, contacts, and escalation paths}}\n{{CTA:Set up internal sync||Private channel to coordinate before replying}}`,
+        integrations: `Here are the most valuable integrations for ${sizeContext}:\n\n📊 **Productivity**\n• [**Google Calendar**](https://slack.com/apps/A0F8149ED) — meeting reminders and event updates\n• [**Google Drive**](https://slack.com/apps/A6NL8MJ6Q) — share and preview docs, sheets, and slides inline\n• [**Notion**](https://slack.com/apps/A01P6V7HK60) — link wikis, SOPs, and notes into conversations\n• [**Zoom**](https://slack.com/apps/A5GE9BMQC) — start or join meetings instantly from any channel\n\n💼 **Project & Task Management**\n• [**Asana**](https://slack.com/apps/A01734836JY) / [**Jira**](https://slack.com/apps/A2RPP3NFR) / [**Monday.com**](https://slack.com/apps/A019M09ENFA) — task updates in-channel\n• [**Linear**](https://slack.com/apps/A019M09ET0E) — engineering workflow updates\n\n📈 **CRM & Client Management**\n• [**Salesforce**](https://slack.com/apps/A024SU2SA) — pipeline and account updates\n• [**HubSpot**](https://slack.com/apps/A9RRCCG73) — deal stages, campaign performance\n\n🔔 **Monitoring & Alerts**\n• [**PagerDuty**](https://slack.com/apps/A1L5CTFQ6) / **OpsGenie** — infrastructure alerts\n• [**Datadog**](https://slack.com/apps/A0F7XN0LJ) / **Statuspage** — uptime and performance\n\n---\n\nTell me more so I can narrow it down:\n{{CTA:I use a CRM||I\'ll help connect Salesforce, HubSpot, or similar}}\n{{CTA:I use a PM tool||I\'ll set up Jira, Asana, Linear, or similar}}\n{{CTA:Show me top picks||I\'ll recommend based on your team size}}`,
+        ai: `Here\'s how to set up [Slack AI](https://slack.com/features/ai) for ${sizeContext}:\n\n| Feature | What it does | Best for |\n|---------|--------------|----------|\n| AI Search | Natural language questions, answers from workspace history | Finding past decisions |\n| Channel Recaps | Catch up on days of conversation in seconds | After vacation or joining mid-stream |\n| Thread Summaries | Key points from any long thread, one click | Jumping into 30+ message threads |\n| AI Workflow Steps | Add summarization/categorization to automations | Auto-triage, weekly digests |\n\nEnable from [Admin Settings](https://slack.com/admin/settings) — works immediately with your existing messages.\n\n---\n\nWant me to help get started?\n{{CTA:Enable Slack AI||Turns on AI features for your workspace}}\n{{CTA:Build AI workflow||Auto-summarize threads, triage requests, and more}}\n{{CTA:Show me a recap||See a channel recap in action}}`
+      };
+      return responses[useCase] || responses.collab;
+    }
+
+    function getFirstMovesResponse(useCase, teamSize) {
+      const sizeLabel = teamSize ? teamSizeLabels[teamSize] : '';
+      const useCaseLabel = useCaseLabels[useCase] || 'collaboration';
+
+      const sizeIntros = {
+        '1-2': `Great question! Here\'s what ${sizeLabel} teams focused on ${useCaseLabel} typically do first in Slack:`,
+        '3-10': `Great question! Here\'s what ${sizeLabel} teams (3\u201310 people) focused on ${useCaseLabel} typically do in week one:`,
+        '10-30': `Great question! Here\'s what ${sizeLabel} teams focused on ${useCaseLabel} typically prioritize first:`,
+        '30+': `Great question! Here\'s what ${sizeLabel} organizations focused on ${useCaseLabel} set up first:`
+      };
+
+      const sizeActions = {
+        '1-2': "**1. Create a shared channel**\nKeep work out of DMs — \`#our-project\` gives you history, search, and a place to pin things.\n\n**2. Connect your file-sharing app**\n[Google Drive](https://slack.com/apps/A6NL8MJ6Q) or [OneDrive](https://slack.com/apps/ADCGG9ZEG) — share and preview docs inline.\n\n**3. Set up recurring check-ins**\nUse /remind to prompt a quick status update on your schedule.\n\n---\n\nWant me to help with any of these?\n{{CTA:Create #our-project||Shared channel, ready in seconds}}\n{{CTA:Add weekly reminder||Recurring status prompt for your team}}\n{{CTA:Connect Google Drive||Share and preview docs inline}}",
+        '3-10': "**1. Invite your whole team**\nSlack works best when everyone is here — add structure later.\n\n**2. Create core channels:**\n| Channel | Purpose |\n|---------|----------|\n| \`#general\` | Announcements and team-wide updates |\n| \`#random\` | Non-work chat and bonding |\n| \`#projects\` | Active work coordination |\n| \`#standup\` | Daily async check-ins |\n\n**3. Connect your calendar**\n[Google Calendar](https://slack.com/apps/A0F8149ED) or [Outlook](https://slack.com/apps/AAL6B9B8T) — auto-updates your status when you\'re busy.\n\n**4. Try a huddle**\nInstant audio call — no scheduling needed. Great for quick syncs.\n\n---\n\nWant me to help with any of these?\n{{CTA:Create channels||All four core channels, ready in seconds}}\n{{CTA:Send team invites||Give me emails and I\'ll invite them}}\n{{CTA:Set up daily standup||Automated prompt via Workflow Builder}}",
+        '10-30': "**1. Set naming conventions**\nUse prefixes so channels stay findable as you grow:\n| Prefix | Use for |\n|--------|----------|\n| \`#team-\` | Ongoing team conversations |\n| \`#proj-\` | Time-bound project work |\n| \`#ops-\` | Operational processes |\n| \`#help-\` | Self-service request queues |\n\n**2. Create user groups**\n@-mention whole teams at once (e.g., @design, @engineering) instead of tagging individually.\n\n**3. Assign channel owners**\nGive someone responsibility for each channel\'s topic, pinned resources, and archival.\n\n**4. Automate standups**\n[Workflow Builder](https://slack.com/features/workflow-automation) sends a daily prompt — no one forgets.\n\n---\n\nWant me to help with any of these?\n{{CTA:Set up naming convention||I\'ll create starter channels with prefixes}}\n{{CTA:Create user groups||Tell me your team names}}\n{{CTA:Build standup workflow||Daily prompt, async responses}}",
+        '30+': "**1. Define a channel strategy**\nSet rules for creation, naming, and archival — pays off fast at scale:\n| Rule | Example |\n|------|----------|\n| Naming convention | \`#help-it\`, \`#help-hr\`, \`#proj-rebrand\` |\n| Default channels | Auto-join new members to \`#general\`, \`#announcements\` |\n| Archival policy | Archive inactive channels after 90 days |\n\n**2. Create #help channels with request forms**\nSelf-service forms via [Workflow Builder](https://slack.com/features/workflow-automation) reduce DM overload.\n\n**3. Set default channels**\nAuto-join new members from [Workspace Settings](https://slack.com/admin/settings).\n\n**4. Consider Enterprise Grid**\n[Enterprise Grid](https://slack.com/enterprise) links business units under one org with boundaries.\n\n---\n\nWant me to help with any of these?\n{{CTA:Draft governance policy||Naming, archival, and ownership rules}}\n{{CTA:Set up default channels||Auto-join for new member onboarding}}\n{{CTA:Build #help-it form||Self-service request queue via Workflow Builder}}"
+      };
+
+      const intro = sizeIntros[teamSize] || `Great question! Here\'s what teams like yours typically do first in Slack:`;
+      const actions = sizeActions[teamSize] || sizeActions['3-10'];
+
+      return `${intro}\n\n${actions}`;
+    }
+
+    function getHowToUseResponse(useCase, teamSize) {
+      const sizeLabel = teamSize ? teamSizeLabels[teamSize] : '';
+      const sizeNote = sizeLabel ? ` as a ${sizeLabel} team` : '';
+
+      const useCaseTips = {
+        collab: {
+          intro: `Here are the features worth knowing${sizeNote} for team communication`,
+          tips: '| Feature | What it does | When to use |\n|---------|--------------|-------------|\n| [Huddles](https://slack.com/features/huddles) | Instant audio calls — no calendar invite | Quick \"got a sec?\" syncs |\n| Threads | Reply in-thread, keep channels readable | Detailed discussions |\n| @mentions | @name, @here, or @group to notify | Drawing attention to specific people |\n| Scheduled messages | Write now, deliver later | Respecting time zones |\n\n**Tips:**\n• Create [user groups](https://slack.com/help/articles/212906697) like @design or @eng to notify whole teams\n• ⌘+Shift+M to see all your mentions in one view\n• Set a [notification schedule](https://slack.com/help/articles/214908388) to pause alerts outside work hours'
+        },
+        projects: {
+          intro: `Here are the features worth knowing${sizeNote} for project management`,
+          tips: '| Feature | What it does | When to use |\n|---------|--------------|-------------|\n| [Canvas](https://slack.com/features/canvas) | Living docs inside a channel | Briefs, specs, meeting notes |\n| [Workflow Builder](https://slack.com/features/workflow-automation) | Automate standups, forms, reminders | Daily prompts, request intake |\n| Bookmarks | Pin links at the top of a channel | Specs, dashboards, key docs |\n| Threads | Discuss without cluttering the timeline | Design feedback, PR reviews |\n\n**Tips:**\n• Pin a Canvas brief to every new project channel\n• Workflow Builder triggers: on schedule, on join, or from a button\n• Use \"Also send to channel\" sparingly — only for key conclusions'
+        },
+        customers: {
+          intro: `Here are the features worth knowing${sizeNote} for customer work`,
+          tips: '| Feature | What it does | When to use |\n|---------|--------------|-------------|\n| [Slack Connect](https://slack.com/connect) | Shared channels with clients, fully secure | Real-time client collaboration |\n| [Workflow Builder](https://slack.com/features/workflow-automation) | Automate intake forms and routing | Structured support requests |\n| [Huddles](https://slack.com/features/huddles) | Quick calls with screen sharing | Fast client syncs |\n| /remind | Set follow-up reminders on messages | Never let a request slip |\n\n**Tips:**\n• Slack Connect gives clients the same Slack experience in their own workspace\n• Set reminders on a message — hover and click \"Remind me about this\"\n• Build a welcome workflow to auto-greet new clients'
+        },
+        external: {
+          intro: `Here are the features worth knowing${sizeNote} for external collaboration`,
+          tips: '| Feature | What it does | When to use |\n|---------|--------------|-------------|\n| [Slack Connect](https://slack.com/connect) | Full Slack across orgs — messages, files, huddles | Partner/vendor collaboration |\n| Channel permissions | Control who can post, pin, invite | Announcement-style channels |\n| [Huddles](https://slack.com/features/huddles) | Quick syncs with screen sharing | Reviewing work in real time |\n| Bookmarks | Pin SOWs, contacts, ground rules | Onboarding partners |\n\n**Tips:**\n• Both sides manage their own security policies independently\n• Pin ground rules (response times, escalation paths) in shared channels\n• Use \`#internal-[partner]\` to coordinate before replying externally'
+        },
+        integrations: {
+          intro: `Here are the features worth knowing${sizeNote} for getting the most from your tools`,
+          tips: '| Feature | What it does | When to use |\n|---------|--------------|-------------|\n| Slash commands | /zoom, /jira, /gcal — act without leaving Slack | Starting calls, creating tickets |\n| Channel notifications | Route app updates to specific channels | Keep noise out of \`#general\` |\n| [Workflow Builder](https://slack.com/features/workflow-automation) | Chain apps into automated sequences | Multi-step actions |\n| App Home tabs | Some apps have a dashboard in Slack | Quick access to app views |\n\n**Tips:**\n• Type / in any message box to see available slash commands\n• Route GitHub PRs to \`#eng-prs\`, deploy alerts to \`#ops-deploys\`\n• Browse the [App Directory](https://slack.com/apps) for 2,600+ integrations'
+        },
+        ai: {
+          intro: `Here are the features worth knowing${sizeNote} for working smarter with AI`,
+          tips: '| Feature | What it does | When to use |\n|---------|--------------|-------------|\n| [AI Search](https://slack.com/features/ai) | Natural language questions, answers from history | \"What did we decide about X?\" |\n| Channel Recaps | Summarize days of conversation in seconds | After vacation or joining mid-stream |\n| Thread Summaries | Key points from any long thread, one click | 30+ message threads |\n| AI Workflow Steps | Summarization/categorization in automations | Auto-triage, weekly digests |\n\n**Tips:**\n• AI Search works across all channels and DMs — just ask a question\n• Try a recap now: click channel name → \"Recap\"\n• [Learn more about Slack AI](https://slack.com/features/ai)'
+        }
+      };
+
+      const uc = useCaseTips[useCase] || useCaseTips.collab;
+
+      return `${uc.intro}:\n\n${uc.tips}\n\n---\n\n**Keyboard shortcuts:**\n• ⌘+K — jump to any conversation\n• ⌘+Shift+A — view all unread messages\n• ↑ — edit your last message\n• ⌘+/ — [all shortcuts](https://slack.com/help/articles/201374536)\n\nWant me to walk you through any of these?\n{{CTA:Show me huddles||Quick audio calls, no scheduling}}\n{{CTA:Try Workflow Builder||Automate standups, forms, and more}}\n{{CTA:Explore shortcuts||All keyboard shortcuts in one view}}`;
+    }
+
+    // Track whether user only has default use case selected
+    let isDefaultUseCaseOnly = true;
+    let currentPromptTitle = '';
+
+    // Follow-up questions for default-only segmentation
+    const followUpQuestions = {
+      'setup': "I\'d love to help you set up Slack! Tell me a bit about what you\'re working on.\n\nAre you looking to:\n• **Manage a team project** — tasks, deadlines, and standups\n• **Coordinate across departments** — shared initiatives and cross-team work\n• **Work with external clients** — partners, vendors, or customers\n• **Automate workflows** — AI features and app integrations\n\n---\n\n**What does your team do day-to-day?** The more specific, the more useful I can make this!",
+      'first-moves': "I can give you much more relevant suggestions with a bit more context.\n\nWhat best describes your situation?\n• **Small team getting started** — a few people kicking off something new\n• **Growing team** — adding structure as you scale\n• **Specific workflow** — support, sales, engineering, etc.\n• **Exploring AI and automation** — Slack AI, agents, and integrations\n\n---\n\n**What\'s your team size and primary focus?**",
+      'how-to': "I\'d be happy to help! What kind of work are you focused on?\n\nFor instance:\n• **Real-time collaboration** — communicating within your team\n• **Cross-team coordination** — working across departments\n• **Client communication** — external partners, vendors, or customers\n• **Async work** — collaborating across time zones\n\n---\n\n**What\'s the main thing you want Slack to help with?**"
+    };
+
+    // Determine card type from prompt title
+    function getCardType(promptTitle) {
+      if (promptTitle.startsWith('Set up Slack for')) return 'setup';
+      if (promptTitle === 'Popular first moves') return 'first-moves';
+      if (promptTitle === 'How to use Slack') return 'how-to';
+      return 'setup';
+    }
+
+    function enterConversationMode(promptTitle) {
+      const slackbotBody = document.querySelector('.slackbot-body');
+      const conversationView = document.getElementById('conversationView');
+      const userMsgText = document.getElementById('userMsgText');
+      const botMsg = document.getElementById('botMsg');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const botMsgText = document.getElementById('botMsgText');
+
+      currentPromptTitle = promptTitle;
+
+      // Notify parent of state change for back/forward nav
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'nav-state-push', substate: 'conversation' }, '*');
+      }
+
+      // Show user dimension in the conversation prompt
+      userMsgText.textContent = promptTitle;
+
+      // Reset bot state
+      botMsg.style.display = 'none';
+      typingIndicator.style.display = 'flex';
+      botMsgText.style.display = 'none';
+      botMsgText.innerHTML = '';
+
+      // Activate conversation mode
+      slackbotBody.classList.add('conversation-active');
+      conversationView.classList.add('active');
+      document.getElementById('slackbotTabs').classList.add('visible');
+
+      // Show bot row with typing after a delay
+      setTimeout(() => {
+        botMsg.style.display = 'flex';
+      }, 800);
+
+      // After "thinking", show the response combining both dimensions
+      setTimeout(() => {
+        typingIndicator.style.display = 'none';
+        botMsgText.style.display = 'block';
+
+        let response;
+        const cardType = getCardType(promptTitle);
+
+        if (isDefaultUseCaseOnly) {
+          response = followUpQuestions[cardType] || "I'd love to help! Could you tell me a bit more about what you're trying to accomplish? The more I know, the better I can tailor my suggestions.";
+        } else {
+          if (cardType === 'setup') {
+            response = getSetupResponse(currentUseCase, currentTeamSize);
+          } else if (cardType === 'first-moves') {
+            response = getFirstMovesResponse(currentUseCase, currentTeamSize);
+          } else if (cardType === 'how-to') {
+            response = getHowToUseResponse(currentUseCase, currentTeamSize);
+          } else {
+            response = getSetupResponse(currentUseCase, currentTeamSize);
+          }
+        }
+        typewriterEffect(botMsgText, response);
+      }, 2200);
+    }
+
+    function typewriterEffect(el, text) {
+      // Extract CTA markers {{CTA:label||description}}
+      const ctaRegex = /\{\{CTA:([^|]+)\|\|([^}]+)\}\}/g;
+      const ctas = [];
+      let match;
+      while ((match = ctaRegex.exec(text)) !== null) {
+        ctas.push({ label: match[1], desc: match[2] });
+      }
+      // Remove CTA markers from the text body
+      const cleanText = text.replace(/\n?\{\{CTA:[^}]+\}\}/g, '');
+
+      // Convert markdown to HTML
+      const formatted = markdownToHtml(cleanText);
+
+      const chars = [];
+      let inTag = false;
+      let tagBuffer = '';
+
+      // Parse formatted HTML to handle tags as single units
+      for (let i = 0; i < formatted.length; i++) {
+        if (formatted[i] === '<') {
+          inTag = true;
+          tagBuffer = '<';
+        } else if (formatted[i] === '>' && inTag) {
+          tagBuffer += '>';
+          chars.push(tagBuffer);
+          tagBuffer = '';
+          inTag = false;
+        } else if (inTag) {
+          tagBuffer += formatted[i];
+        } else {
+          chars.push(formatted[i]);
+        }
+      }
+
+      let index = 0;
+      let displayed = '';
+      const speed = 8;
+
+      function type() {
+        if (index < chars.length) {
+          displayed += chars[index];
+          el.innerHTML = displayed;
+          index++;
+          scrollToBottom();
+          // Pause slightly longer at line breaks
+          const delay = chars[index - 1] === '<br>' ? speed * 3 : speed;
+          setTimeout(type, delay);
+        } else if (ctas.length > 0) {
+          // Render CTA button group after typing finishes
+          const group = document.createElement('div');
+          group.className = 'bot-cta-group';
+          ctas.slice(0, 3).forEach(cta => {
+            const item = document.createElement('div');
+            item.className = 'bot-cta-item';
+            const btn = document.createElement('button');
+            btn.className = 'bot-cta-btn';
+            btn.textContent = cta.label;
+            const desc = document.createElement('span');
+            desc.className = 'bot-cta-desc';
+            desc.textContent = cta.desc;
+            item.appendChild(btn);
+            item.appendChild(desc);
+            group.appendChild(item);
+          });
+          el.appendChild(group);
+          scrollToBottom();
+        }
+      }
+      type();
+    }
+
+    function markdownToHtml(text) {
+      const lines = text.split('\n');
+      let html = '';
+      let inTable = false;
+      let tableHeaderDone = false;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+
+        // Table row detection
+        if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+          // Skip separator rows (|---|---|)
+          if (/^\|[\s\-|]+\|$/.test(trimmed)) {
+            tableHeaderDone = true;
+            continue;
+          }
+          if (!inTable) {
+            html += '<table class="bot-table">';
+            inTable = true;
+            tableHeaderDone = false;
+          }
+          const cells = trimmed.split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length - 1).map(c => c.trim());
+          const tag = !tableHeaderDone ? 'th' : 'td';
+          html += '<tr>' + cells.map(c => `<${tag}>${boldify(c)}</${tag}>`).join('') + '</tr>';
+          if (!tableHeaderDone) tableHeaderDone = true;
+          continue;
+        } else if (inTable) {
+          html += '</table>';
+          inTable = false;
+          tableHeaderDone = false;
+        }
+
+        // Horizontal rule / divider
+        if (trimmed === '---') {
+          html += '<hr class="bot-divider">';
+          continue;
+        }
+
+        // Bullet points
+        if (trimmed.startsWith('• ')) {
+          html += '<div class="bot-bullet">' + boldify(trimmed.slice(2)) + '</div>';
+          continue;
+        }
+
+        // Numbered list items (e.g. "1. Some text")
+        if (/^\d+\.\s+/.test(trimmed)) {
+          html += '<div style="margin: 2px 0; padding-left: 4px;">' + boldify(trimmed) + '</div>';
+          continue;
+        }
+
+        // Empty line
+        if (trimmed === '') {
+          html += '<br>';
+          continue;
+        }
+
+        // Regular line with bold conversion
+        html += boldify(trimmed) + '<br>';
+      }
+
+      if (inTable) html += '</table>';
+      return html;
+    }
+
+    function boldify(text) {
+      // Convert markdown links [text](url) to anchor tags
+      text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="bot-link" target="_blank">$1</a>');
+      // Convert backtick channel names to badges
+      text = text.replace(/`(#[^`]+)`/g, '<span class="channel-badge">$1</span>');
+      // Convert remaining backticks to code
+      text = text.replace(/`([^`]+)`/g, '<code style="background:#f4f4f4;padding:1px 4px;border-radius:3px;font-size:12px;">$1</code>');
+      // Bold
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      return text;
+    }
+
+    // Attach click handlers to all cards for focus mode
+    function attachFocusHandlers() {
+      // Right column cards (list items)
+      document.querySelectorAll('#card3Container .card-list-item').forEach(card => {
+        card.addEventListener('click', () => {
+          const title = card.querySelector('.card-list-title');
+          if (title) enterConversationMode(title.textContent);
+        });
+      });
+    }
+
+    // Observe card container for changes (re-attach after personalization)
+    const card3Observer = new MutationObserver(() => attachFocusHandlers());
+    card3Observer.observe(document.getElementById('card3Container'), { childList: true });
+
+    // Initial attach
+    attachFocusHandlers();
+
+    // === Home Congrats Banner ===
+    const homeCongratsBanner = document.getElementById('homeCongratsBanner');
+    const homeCongratsDismiss = document.getElementById('homeCongratsDismiss');
+
+    const homeComposer = document.querySelector('#homeComposerWrapper .home-composer');
+
+    const congratsBannerInner = homeCongratsBanner ? homeCongratsBanner.querySelector('.home-congrats-banner-inner') : null;
+
+    function showCongratsBannerIfSecondVisit() {
+      homeVisitCount++;
+      if (homeVisitCount >= 2 && homeCongratsBanner && !homeCongratsBanner.dataset.dismissed) {
+        // Move composer inside the banner (after the inner wrapper)
+        homeCongratsBanner.appendChild(homeComposer);
+        homeCongratsBanner.style.display = 'block';
+        requestAnimationFrame(() => {
+          homeCongratsBanner.classList.add('visible');
+        });
+      }
+    }
+
+    if (homeCongratsDismiss) {
+      homeCongratsDismiss.addEventListener('click', () => {
+        homeCongratsBanner.dataset.dismissed = 'true';
+        const dismiss = homeCongratsDismiss;
+        // Fade out inner content and dismiss button
+        congratsBannerInner.style.transition = 'opacity 0.3s ease, max-height 0.4s ease 0.1s, padding 0.4s ease 0.1s';
+        congratsBannerInner.style.opacity = '0';
+        congratsBannerInner.style.maxHeight = '0';
+        congratsBannerInner.style.padding = '0';
+        congratsBannerInner.style.overflow = 'hidden';
+        dismiss.style.transition = 'opacity 0.2s ease';
+        dismiss.style.opacity = '0';
+        // Fade out the banner background and shadow
+        homeCongratsBanner.style.transition = 'background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease';
+        homeCongratsBanner.style.background = 'transparent';
+        homeCongratsBanner.style.boxShadow = 'none';
+        homeCongratsBanner.style.padding = '0';
+        // Hide the bg shapes
+        const bgShapes = homeCongratsBanner.querySelector('.home-congrats-banner-bg');
+        if (bgShapes) {
+          bgShapes.style.transition = 'opacity 0.3s ease';
+          bgShapes.style.opacity = '0';
+        }
+        // Smoothly remove composer margin
+        homeComposer.style.transition = 'margin 0.4s ease';
+        homeComposer.style.margin = '0';
+        // After transition, clean up DOM
+        setTimeout(() => {
+          homeComposer.removeAttribute('style');
+          homeCongratsBanner.parentNode.insertBefore(homeComposer, homeCongratsBanner.nextSibling);
+          homeCongratsBanner.style.display = 'none';
+        }, 450);
+      });
+    }
+
+    // === Interactive Composer ===
+    const composerInput = document.getElementById('composerInput');
+    const composerSend = document.getElementById('composerSend');
+    const chatMessages = document.getElementById('chatMessages');
+
+    // Toggle send button active state based on input
+    composerInput.addEventListener('input', () => {
+      const hasText = composerInput.textContent.trim().length > 0;
+      composerSend.classList.toggle('active', hasText);
+    });
+
+    // Send on Enter (without Shift)
+    composerInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendFollowUp();
+      }
+    });
+
+    // Send on button click
+    composerSend.addEventListener('click', sendFollowUp);
+
+    function sendFollowUp() {
+      const text = composerInput.textContent.trim();
+      if (!text) return;
+
+      // Clear composer
+      composerInput.textContent = '';
+      composerSend.classList.remove('active');
+
+      // Add user message to chat
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+      const userRow = document.createElement('div');
+      userRow.className = 'msg-row';
+      userRow.innerHTML = `
+        <img src="../images/profile.png" alt="User" class="msg-avatar">
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-sender">Harry Boone</span>
+            <span class="msg-time">${timeStr}</span>
+          </div>
+          <p class="msg-text">${escapeHtml(text)}</p>
+        </div>
+      `;
+      chatMessages.appendChild(userRow);
+      scrollToBottom();
+
+      // Show Slackbot typing
+      const botRow = document.createElement('div');
+      botRow.className = 'msg-row';
+      botRow.innerHTML = `
+        <img src="../images/app-avatar.png" alt="Slackbot" class="msg-avatar">
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-sender">Slackbot</span>
+            <span class="msg-time">${timeStr}</span>
+          </div>
+          <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+          <p class="msg-text" style="display: none;"></p>
+        </div>
+      `;
+      setTimeout(() => {
+        chatMessages.appendChild(botRow);
+        scrollToBottom();
+      }, 400);
+
+      // Generate and type response
+      setTimeout(() => {
+        const typing = botRow.querySelector('.typing-indicator');
+        const msgText = botRow.querySelector('.msg-text');
+        typing.style.display = 'none';
+        msgText.style.display = 'block';
+
+        const response = generateFollowUpResponse(text);
+        typewriterEffect(msgText, response);
+
+        // Keep scrolling as text types
+        const scrollInterval = setInterval(() => scrollToBottom(), 100);
+        setTimeout(() => clearInterval(scrollInterval), response.length * 15 + 500);
+      }, 2000);
+    }
+
+    // Map user text to a use case key
+    function detectUseCase(text) {
+      const lower = text.toLowerCase();
+      if (lower.includes('project') || lower.includes('task') || lower.includes('deadline') || lower.includes('manage work')) return 'projects';
+      if (lower.includes('customer') || lower.includes('client') || lower.includes('support') || lower.includes('crm') || lower.includes('sales')) return 'customers';
+      if (lower.includes('external') || lower.includes('partner') || lower.includes('vendor') || lower.includes('outside') || lower.includes('contractor')) return 'external';
+      if (lower.includes('integrat') || lower.includes('connect app') || lower.includes('tools')) return 'integrations';
+      if (lower.includes('ai') || lower.includes('agent') || lower.includes('artificial') || lower.includes('machine learning') || lower.includes('automat')) return 'ai';
+      return null;
+    }
+
+    // Generate a response based on the detected use case for follow-up replies
+    function getFollowUpUseCaseResponse(basePrompt, useCase) {
+      const cardType = getCardType(basePrompt);
+      if (cardType === 'setup') return getSetupResponse(useCase, currentTeamSize);
+      if (cardType === 'first-moves') return getFirstMovesResponse(useCase, currentTeamSize);
+      if (cardType === 'how-to') return getHowToUseResponse(useCase, currentTeamSize);
+      return getSetupResponse(useCase, currentTeamSize);
+    }
+
+    function generateFollowUpResponse(userText) {
+      const lower = userText.toLowerCase();
+
+      // Check if the user's reply matches a use case — give the tailored response
+      const detectedUseCase = detectUseCase(lower);
+      if (detectedUseCase && currentPromptTitle) {
+        return getFollowUpUseCaseResponse(currentPromptTitle, detectedUseCase);
+      }
+
+      if (lower.includes('channel') || lower.includes('create')) {
+        return "Let me create those channels for you! Here\'s what I\'d recommend:\n\n| Channel | Type | Purpose |\n|---------|------|----------|\n| \`#team-updates\` | Public | Announcements and coordination |\n| \`#projects\` | Public | Active work discussion |\n| \`#random\` | Public | Non-work chat and bonding |\n\n---\n\nUse prefixes consistently (like \`#team-\`, \`#proj-\`) so channels stay easy to browse as you grow.\n{{CTA:Create these channels||I\'ll set up all three right now}}\n{{CTA:Customize names||Tell me your preferred channel names}}\n{{CTA:Learn more||See channel naming best practices}}";
+      }
+      if (lower.includes('notification') || lower.includes('alert') || lower.includes('mute')) {
+        return "Here\'s how to customize notifications:\n\nClick the channel name → **Notifications**.\n\n**Per-channel options:**\n• **All messages** — high-priority channels\n• **Mentions only** — channels you check async\n• **Nothing** — archived or low-priority\n\n**Global settings:**\n• **Notification schedule** — pause alerts outside work hours (Preferences > Notifications)\n• **Do Not Disturb** — mute everything with /dnd\n• **Keywords** — get notified when specific terms are mentioned\n\n---\n\nWant me to help configure these?\n{{CTA:Set notification schedule||Choose your quiet hours}}\n{{CTA:Add keywords||Get pinged on specific topics}}\n{{CTA:Configure channels||Set per-channel notification levels}}";
+      }
+      if (lower.includes('app') || lower.includes('integration') || lower.includes('connect')) {
+        return "Here are the top integrations:\n\n📅 **Productivity**\n| Tool | Value |\n|------|-------|\n| [Google Calendar](https://slack.com/apps/A0F8149ED) | Meeting reminders and event updates |\n| [Google Drive](https://slack.com/apps/A6NL8MJ6Q) | Share and preview docs inline |\n| [Notion](https://slack.com/apps/A01P6V7HK60) | Link wikis, SOPs, and notes into conversations |\n| [Zoom](https://slack.com/apps/A5GE9BMQC) | Start meetings from any channel |\n\n💼 **CRM & Client Management**\n| Tool | Value |\n|------|-------|\n| [HubSpot](https://slack.com/apps/A9RRCCG73) | Track deals and campaign performance |\n| [Salesforce](https://slack.com/apps/A024SU2SA) | Pipeline and account updates in-channel |\n\n---\n\nClick **Apps** in the sidebar, or browse the [App Directory](https://slack.com/apps).\n{{CTA:Connect Google Calendar||Events and reminders in Slack}}\n{{CTA:Connect Google Drive||Inline doc previews in channels}}\n{{CTA:Browse App Directory||See all 2,600+ integrations}}";
+      }
+      if (lower.includes('huddle') || lower.includes('call') || lower.includes('audio') || lower.includes('video')) {
+        return "Here\'s how huddles work:\n\nClick the **headphones icon** in any channel or DM to start.\n\n**What you can do:**\n• Up to 50 participants on paid plans\n• Screen sharing — one click, no setup\n• Threads — take notes alongside the call\n• Video — toggle camera on or off\n• Recording — available on Business+\n\n**Best practices:**\n• Use huddles for quick syncs instead of scheduling meetings\n• Share your screen to walk through work together\n• Drop a summary message after the huddle ends\n\n---\n\nReady to try it out?\n{{CTA:Start a huddle||Click headphones in any channel}}\n{{CTA:Learn about screen sharing||Walk through work together}}\n{{CTA:See huddle settings||Configure video, recording, and more}}";
+      }
+      if (lower.includes('workflow') || lower.includes('automat')) {
+        return "Here\'s how to use Workflow Builder:\n\nOpen from **Tools > Workflow Builder** in the sidebar.\n\n**Popular workflows:**\n• **Daily standup** — 9am prompt asking: Done / Doing / Blockers\n• **Welcome message** — triggers on channel join, sends intro + resources\n• **Request intake** — shortcut button with structured form\n• **Weekly digest** — Fridays, summarizes channel highlights\n\n**Trigger types:** on a schedule, from a shortcut/button, on channel join, or via webhook.\n\n---\n\nLet me help you build one:\n{{CTA:Build a standup||Daily async prompt for your team}}\n{{CTA:Build a welcome message||Auto-greet new channel members}}\n{{CTA:Build a request form||Structured intake via shortcut button}}";
+      }
+      if (lower.includes('search') || lower.includes('find') || lower.includes('look')) {
+        return "Here\'s how to search like a pro:\n\nPress **⌘+K** for quick switcher, or click the search bar.\n\n**Search modifiers:**\n• **from:** — from:@sarah (messages from a person)\n• **in:** — in:#projects (within a channel)\n• **before: / after:** — filter by date\n• **has:** — has:link (messages with links)\n• **\"quotes\"** — exact phrase matching\n\n**Tips:** Filter by Messages/Files/Channels • Star results to save • ⌘+F for current conversation\n\n---\n\nWant to try it?\n{{CTA:Search messages||Find past conversations fast}}\n{{CTA:Search files||Locate shared docs and images}}\n{{CTA:Save a search||Bookmark frequent queries}}";
+      }
+      if (lower.includes('thread') || lower.includes('reply')) {
+        return "Here\'s how threads work:\n\nHover over a message → click the **reply icon** (speech bubble).\n\n**Best practices:**\n• **Reply in threads** — keeps channels readable\n• **\"Also send to channel\"** — use sparingly, only for key updates\n• **Follow threads** — get notified of new replies\n• **Threads view** — all active discussions in one place (⌘+Shift+T)\n\n**Tips:** Forward threads to other channels • Same formatting as messages • Star important threads\n\n---\n\nWant to go deeper?\n{{CTA:Thread etiquette guide||Best practices for your team}}\n{{CTA:Open Threads view||See all your active discussions}}\n{{CTA:Try forwarding a thread||Share context across channels}}";
+      }
+      if (lower.includes('shortcut') || lower.includes('keyboard') || lower.includes('fast')) {
+        return "Most useful keyboard shortcuts:\n\n**Navigation:**\n• ⌘+K — jump to any conversation\n• ⌘+Shift+K — open DMs\n• ⌘+Shift+A — all unread messages\n• ⌘+[ / ⌘+] — back and forward\n\n**Messaging:**\n• ↑ — edit your last message\n• ⌘+Shift+Enter — code block\n• Shift+Enter — new line without sending\n• ⌘+B / ⌘+I — bold and italic\n\n---\n\nSee all with **⌘+/**.\n{{CTA:Show all shortcuts||Opens the full shortcut reference}}\n{{CTA:Navigation tips||Move faster between conversations}}\n{{CTA:Formatting tricks||Bold, code blocks, lists, and more}}";
+      }
+      if (lower.includes('thank') || lower.includes('great') || lower.includes('perfect') || lower.includes('awesome')) {
+        return "You\'re welcome! Here are a few more things worth setting up:\n\n• **Set your status** — click your profile photo, then Update status\n• **Pin important links** — use bookmarks at the top of channels\n• **Set reminders** — type /remind in any conversation\n• **Customize your sidebar** — drag channels to reorder, star your favorites\n\n---\n\nI\'m always here if you need anything else!\n{{CTA:Set my status||Show your team what you\'re up to}}\n{{CTA:Customize sidebar||Organize your channels and DMs}}\n{{CTA:Set a reminder||Never forget a follow-up}}";
+      }
+      if (lower.includes('help') || lower.includes('what can')) {
+        return "I can help you with lots of things! Here\'s what I know:\n\n• **Channels** — create, organize, manage permissions\n• **Integrations** — connect apps, set up notifications\n• **Notifications** — customize per channel, schedules, DND\n• **Workflows** — automate standups, forms, reminders\n• **Search** — find messages, files, people\n• **Huddles** — audio/video calls, screen sharing\n• **Shortcuts** — keyboard navigation, power-user tips\n\n---\n\nJust ask me anything, or pick a topic:\n{{CTA:Set up channels||Create and organize your workspace}}\n{{CTA:Connect apps||Link your tools to Slack}}\n{{CTA:Build a workflow||Automate a repetitive task}}";
+      }
+
+      // Default response
+      return "Great question! Here\'s what I\'d suggest:\n\n• **Check the Help Center** — search slack.com/help for detailed guides\n• **Try slash commands** — type / in any message box to see what\'s available\n• **Ask your admin** — they can configure workspace-level settings\n\n---\n\nOr I can help you directly:\n{{CTA:Set up channels||Create and organize your workspace}}\n{{CTA:Connect apps||Link your tools to Slack}}\n{{CTA:Show me tips||Features and shortcuts worth knowing}}";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function scrollToBottom() {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // === New Chat Button — revert to home with composer ===
+    const btnNewChat = document.getElementById('btnNewChat');
+    const homeComposerWrapper = document.getElementById('homeComposerWrapper');
+    const homeComposerInput = document.getElementById('homeComposerInput');
+    const homeComposerSend = document.getElementById('homeComposerSend');
+
+    btnNewChat.addEventListener('click', () => {
+      const slackbotBody = document.querySelector('.slackbot-body');
+      const conversationView = document.getElementById('conversationView');
+
+      // Notify parent of state change for back/forward nav
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'nav-state-push', substate: 'home' }, '*');
+      }
+
+      // Exit conversation mode if active
+      conversationView.classList.remove('active');
+      slackbotBody.classList.remove('conversation-active');
+
+      // Reset bot messages for next session
+      const botMsg = document.getElementById('botMsg');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const botMsgText = document.getElementById('botMsgText');
+      botMsg.style.display = 'none';
+      typingIndicator.style.display = 'flex';
+      botMsgText.style.display = 'none';
+      botMsgText.innerHTML = '';
+
+      // Clear extra messages from follow-up chat
+      const extraMessages = chatMessages.querySelectorAll('.msg-row:not(#userMsg):not(#botMsg)');
+      extraMessages.forEach(msg => msg.remove());
+
+      // Show the home composer with slide-up animation
+      requestAnimationFrame(() => {
+        homeComposerWrapper.classList.add('visible');
+        homeComposerInput.focus();
+        showCongratsBannerIfSecondVisit();
+      });
+    });
+
+    // === Close Button — revert to default home state ===
+    const btnClose = document.getElementById('btnClose');
+    btnClose.addEventListener('click', () => {
+      const slackbotBody = document.querySelector('.slackbot-body');
+      const conversationView = document.getElementById('conversationView');
+
+      // Exit conversation mode if active
+      conversationView.classList.remove('active');
+      slackbotBody.classList.remove('conversation-active');
+
+      // Reset bot messages for next session
+      const botMsg = document.getElementById('botMsg');
+      const typingIndicator = document.getElementById('typingIndicator');
+      const botMsgText = document.getElementById('botMsgText');
+      botMsg.style.display = 'none';
+      typingIndicator.style.display = 'flex';
+      botMsgText.style.display = 'none';
+      botMsgText.innerHTML = '';
+
+      // Clear extra messages from follow-up chat
+      const extraMessages = chatMessages.querySelectorAll('.msg-row:not(#userMsg):not(#botMsg)');
+      extraMessages.forEach(msg => msg.remove());
+
+      // Show the home composer
+      requestAnimationFrame(() => {
+        homeComposerWrapper.classList.add('visible');
+        homeComposerInput.focus();
+        showCongratsBannerIfSecondVisit();
+      });
+    });
+
+    // Home composer send interaction
+    homeComposerInput.addEventListener('input', () => {
+      const hasText = homeComposerInput.textContent.trim().length > 0;
+      homeComposerSend.classList.toggle('active', hasText);
+    });
+
+    homeComposerInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendFromHomeComposer();
+      }
+    });
+
+    homeComposerSend.addEventListener('click', sendFromHomeComposer);
+
+    function sendFromHomeComposer() {
+      const text = homeComposerInput.textContent.trim();
+      if (!text) return;
+
+      // Hide home composer
+      homeComposerWrapper.classList.remove('visible');
+      homeComposerInput.textContent = '';
+      homeComposerSend.classList.remove('active');
+
+      // Enter conversation mode with user's text
+      enterConversationMode(text);
+    }
+
+    // === Modal interactions for cards ===
+    const modalApps = document.getElementById('modalApps');
+    const modalInvite = document.getElementById('modalInvite');
+
+    document.getElementById('card1').addEventListener('click', () => {
+      modalApps.classList.add('visible');
+    });
+
+    document.getElementById('card2').addEventListener('click', () => {
+      modalInvite.classList.add('visible');
+    });
+
+    document.getElementById('modalAppsClose').addEventListener('click', () => {
+      modalApps.classList.remove('visible');
+    });
+
+    document.getElementById('modalInviteClose').addEventListener('click', () => {
+      modalInvite.classList.remove('visible');
+    });
+
+    // Close modals on overlay click
+    modalApps.addEventListener('click', (e) => {
+      if (e.target === modalApps) modalApps.classList.remove('visible');
+    });
+
+    modalInvite.addEventListener('click', (e) => {
+      if (e.target === modalInvite) modalInvite.classList.remove('visible');
+    });
+  </script>
+
+</body>
+</html>
