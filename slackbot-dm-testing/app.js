@@ -54,14 +54,22 @@ if (window !== window.parent) {
     }
   }
 } else {
-  // Standalone mode — reveal sidebar after a brief delay
+  // Standalone mode — reveal sidebar and trigger intro animation
   const sidebar = document.querySelector('.sidebar');
   if (sidebar) {
     setTimeout(() => {
       requestAnimationFrame(() => sidebar.classList.add('revealed'));
     }, 300);
 
-    // Trigger intro animation in slackbot-dm-view after sidebar finishes
+    // Trigger intro animation in slackbot-dm-view iframe
+    setTimeout(() => {
+      const slackbotDmIframe = document.querySelector('.slackbot-dm-view-iframe');
+      if (slackbotDmIframe && slackbotDmIframe.contentWindow) {
+        slackbotDmIframe.contentWindow.postMessage({ type: 'onboarding-complete', teamSize: '', useCases: [] }, '*');
+      }
+    }, 500);
+
+    // Send sidebar-content-ready after sidebar reveal finishes
     setTimeout(() => {
       const slackbotDmIframe = document.querySelector('.slackbot-dm-view-iframe');
       if (slackbotDmIframe && slackbotDmIframe.contentWindow) {
