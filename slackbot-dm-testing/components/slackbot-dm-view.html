@@ -1970,21 +1970,25 @@
       isDefaultUseCaseOnly = true;
     }
 
-    // Clear any stale localStorage on load so it doesn't trigger prematurely
-    try { localStorage.removeItem('slackbot-onboarding'); } catch(e) {}
-
-    // Check localStorage as fallback (only used if postMessage fails)
-    function checkLocalStorageFallback() {
-      if (introPlayed) return;
+    // Check localStorage for saved segmentation data from combined-testing
+    function getStoredPersonalization() {
       try {
         const stored = localStorage.getItem('slackbot-onboarding');
         if (stored) {
           const data = JSON.parse(stored);
           if (data && data.type === 'onboarding-complete') {
-            playIntroAnimation(data);
+            return data;
           }
         }
       } catch(e) {}
+      return null;
+    }
+
+    // Used as fallback if postMessage fails
+    function checkLocalStorageFallback() {
+      if (introPlayed) return;
+      const data = getStoredPersonalization();
+      if (data) playIntroAnimation(data);
     }
 
     // Signal to parent that this iframe is ready to receive messages

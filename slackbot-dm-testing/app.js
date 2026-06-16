@@ -60,13 +60,25 @@ if (window !== window.parent) {
     requestAnimationFrame(() => sidebar.classList.add('revealed'));
   }
 
+  // Read saved segmentation data from localStorage (set by combined-testing)
+  let personalizationData = { type: 'onboarding-complete', teamSize: '', useCases: [] };
+  try {
+    const stored = localStorage.getItem('slackbot-onboarding');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed && parsed.type === 'onboarding-complete') {
+        personalizationData = parsed;
+      }
+    }
+  } catch(e) {}
+
   // Wait for iframe ready signal, then trigger intro immediately
   window.addEventListener('message', function standaloneReady(e) {
     if (e.data === 'slackbot-dm-view-ready') {
       window.removeEventListener('message', standaloneReady);
       const slackbotDmIframe = document.querySelector('.slackbot-dm-view-iframe');
       if (slackbotDmIframe && slackbotDmIframe.contentWindow) {
-        slackbotDmIframe.contentWindow.postMessage({ type: 'onboarding-complete', teamSize: '', useCases: [] }, '*');
+        slackbotDmIframe.contentWindow.postMessage(personalizationData, '*');
         // Send sidebar-content-ready after sidebar reveal finishes
         setTimeout(() => {
           slackbotDmIframe.contentWindow.postMessage('sidebar-content-ready', '*');
