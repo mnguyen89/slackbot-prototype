@@ -2096,16 +2096,16 @@
       const cardsGrid = document.querySelector('.cards-grid');
       const header = document.querySelector('.slackbot-header');
 
-      // Apply personalization first (while cards are still hidden)
-      if (data) applyPersonalization(data);
-
-      // Apply saved design choice (sticky across refresh)
+      // Apply saved design choice first (rebuilds card DOM)
       try {
         const savedDesign = localStorage.getItem('slackbot-design');
         if (savedDesign && savedDesign !== 'a') {
           applyDesignLayout(savedDesign);
         }
       } catch(e) {}
+
+      // Apply personalization after layout (fills in personalized content)
+      if (data) applyPersonalization(data);
 
       const cardsRight = document.querySelector('.cards-right');
 
