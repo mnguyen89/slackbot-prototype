@@ -1282,28 +1282,34 @@
       max-width: none;
       width: auto;
       justify-content: center;
+      align-items: start;
     }
 
     .design-b .cards-left {
       display: flex !important;
-      align-self: stretch;
     }
 
-    /* Design B left card: tall card with icons on top, text on bottom */
+    /* Design B left card: stretches to match right column height */
     .design-b .cards-left .card {
-      height: 180px;
       width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 16px 24px 20px;
-      gap: 5px;
+      padding: 28px 24px 24px;
+    }
+
+    .design-b .cards-left .card .designb-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: flex-end;
+      width: 100%;
     }
 
     .design-b .cards-left .card .designb-card-icons {
       display: flex;
       align-items: center;
-      flex: 1;
+      height: 46px;
       padding: 4px 0;
     }
 
@@ -1334,7 +1340,6 @@
       display: flex;
       align-items: center;
       gap: 11px;
-      padding: 10px 0;
     }
 
     .design-b .cards-left .card .designb-card-text-content {
@@ -3140,18 +3145,20 @@
         if (cardsLeft) {
           cardsLeft.innerHTML = `
             <div class="card" id="card1">
-              <div class="designb-card-icons">
-                <div class="designb-card-icon"><img src="../images/tool-sheets.png" alt="Calendar"></div>
-                <div class="designb-card-icon"><img src="../images/tool-drive.png" alt="Drive"></div>
-                <div class="designb-card-icon"><img src="../images/tool-gmail.png" alt="Gmail"></div>
-              </div>
-              <div class="designb-card-text">
-                <div class="designb-card-text-content">
-                  <span class="designb-card-title">Bring in your tools</span>
-                  <span class="designb-card-subtitle">Connect your apps you use it without leaving Slack</span>
+              <div class="designb-card-content">
+                <div class="designb-card-icons">
+                  <div class="designb-card-icon"><img src="../images/icon-outlook-cal.png" alt="Outlook Calendar"></div>
+                  <div class="designb-card-icon"><img src="../images/icon-gdrive.png" alt="Google Drive"></div>
+                  <div class="designb-card-icon"><img src="../images/icon-claude.png" alt="Claude AI"></div>
                 </div>
-                <div class="designb-card-caret">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 4l5.5 6-5.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="designb-card-text">
+                  <div class="designb-card-text-content">
+                    <span class="designb-card-title">Bring in your tools</span>
+                    <span class="designb-card-subtitle">Connect your apps you use it without leaving Slack</span>
+                  </div>
+                  <div class="designb-card-caret">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 4l5.5 6-5.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
                 </div>
               </div>
             </div>
