@@ -2266,39 +2266,66 @@
       currentTeamSize = teamSize || '';
 
       const uc = useCaseContent[primaryUseCase] || useCaseContent.collab;
-
-      // Card 1 (left-top): personalize by use case
-      document.getElementById('card1Label').textContent = uc.card1.label;
-      document.getElementById('card1Title').textContent = uc.card1.title;
-
-      // Right column: 3 prompt cards
-      // Card 1: "Set up Slack for [use case]" — use case dimension
-      // Card 2: "Popular first moves" — team size dimension in subtitle
-      // Card 3: "How to use Slack" — static
       const useCaseLabel = useCaseLabels[primaryUseCase] || 'my team';
       const teamSizeLabel = teamSize ? teamSizeLabels[teamSize] : '';
       const teamSizeSubtitle = teamSizeLabel
         ? `What do ${teamSizeLabel} teams like mine do first?`
         : 'What do teams like mine do first?';
 
-      const rightCards = [
-        { title: `Set up Slack for ${useCaseLabel}`, subtitle: 'Channels and apps tailored to you', icon: 'sidebar' },
-        { title: 'Popular first moves', subtitle: teamSizeSubtitle, icon: 'map' },
-        { title: 'How to use Slack', subtitle: 'Features and shortcuts worth knowing', icon: 'help' }
-      ];
+      if (currentDesign === 'b') {
+        // Design B: left card has no label/title IDs to personalize (static "Bring in your tools")
+        // Right column: 2 prompt cards with Design B markup
+        const rightCards = [
+          { title: `Set up Slack for ${useCaseLabel}`, subtitle: 'Channels and apps tailored to you', icon: 'sidebar' },
+          { title: 'Popular first moves', subtitle: teamSizeSubtitle, icon: 'map' }
+        ];
 
-      const container = document.getElementById('card3Container');
-      container.innerHTML = rightCards.map(item => `
-        <div class="card card-list-item">
-          <div class="card-list-header">
-            <div class="card-list-icon">
-              ${iconSvgs[item.icon]}
+        const container = document.getElementById('card3Container');
+        if (container) {
+          container.innerHTML = rightCards.map(item => `
+            <div class="card">
+              <div class="designb-list-content">
+                <div class="designb-list-header">
+                  <div class="designb-list-icon">
+                    ${iconSvgs[item.icon]}
+                  </div>
+                  <span class="designb-list-title">${item.title}</span>
+                </div>
+                <div class="designb-list-body">
+                  <span class="designb-list-subtitle">${item.subtitle}</span>
+                </div>
+              </div>
             </div>
-            <span class="card-list-title" style="color: ${iconColors[item.icon]}">${item.title}</span>
-          </div>
-          <span class="card-list-subtitle">${item.subtitle}</span>
-        </div>
-      `).join('');
+          `).join('');
+        }
+      } else {
+        // Design A: personalize left card and right column (3 cards)
+        const card1Label = document.getElementById('card1Label');
+        const card1Title = document.getElementById('card1Title');
+        if (card1Label) card1Label.textContent = uc.card1.label;
+        if (card1Title) card1Title.textContent = uc.card1.title;
+
+        const rightCards = [
+          { title: `Set up Slack for ${useCaseLabel}`, subtitle: 'Channels and apps tailored to you', icon: 'sidebar' },
+          { title: 'Popular first moves', subtitle: teamSizeSubtitle, icon: 'map' },
+          { title: 'How to use Slack', subtitle: 'Features and shortcuts worth knowing', icon: 'help' }
+        ];
+
+        const container = document.getElementById('card3Container');
+        if (container) {
+          container.innerHTML = rightCards.map(item => `
+            <div class="card card-list-item">
+              <div class="card-list-header">
+                <div class="card-list-icon">
+                  ${iconSvgs[item.icon]}
+                </div>
+                <span class="card-list-title" style="color: ${iconColors[item.icon]}">${item.title}</span>
+              </div>
+              <span class="card-list-subtitle">${item.subtitle}</span>
+            </div>
+          `).join('');
+        }
+      }
     }
 
     // Listen for onboarding-complete from parent — triggers intro animation
@@ -2748,10 +2775,10 @@
 
     // Attach click handlers to all cards for focus mode
     function attachFocusHandlers() {
-      // Right column cards (list items)
-      document.querySelectorAll('#card3Container .card-list-item').forEach(card => {
+      // Right column cards (Design A: .card-list-item, Design B: .card with .designb-list-title)
+      document.querySelectorAll('#card3Container .card').forEach(card => {
         card.addEventListener('click', () => {
-          const title = card.querySelector('.card-list-title');
+          const title = card.querySelector('.card-list-title') || card.querySelector('.designb-list-title');
           if (title) enterConversationMode(title.textContent);
         });
       });
@@ -3104,13 +3131,22 @@
     const modalApps = document.getElementById('modalApps');
     const modalInvite = document.getElementById('modalInvite');
 
-    document.getElementById('card1').addEventListener('click', () => {
-      modalApps.classList.add('visible');
-    });
+    function attachCardModalHandlers() {
+      const card1 = document.getElementById('card1');
+      const card2 = document.getElementById('card2');
+      if (card1) {
+        card1.addEventListener('click', () => {
+          modalApps.classList.add('visible');
+        });
+      }
+      if (card2) {
+        card2.addEventListener('click', () => {
+          modalInvite.classList.add('visible');
+        });
+      }
+    }
 
-    document.getElementById('card2').addEventListener('click', () => {
-      modalInvite.classList.add('visible');
-    });
+    attachCardModalHandlers();
 
     document.getElementById('modalAppsClose').addEventListener('click', () => {
       modalApps.classList.remove('visible');
@@ -3292,6 +3328,8 @@
     function switchDesign(design) {
       fullReset();
       applyDesignLayout(design);
+      attachCardModalHandlers();
+      attachFocusHandlers();
     }
 
     // === Design B Composer Interactions ===
