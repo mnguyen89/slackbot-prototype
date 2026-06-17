@@ -2272,6 +2272,12 @@
         ? `What do ${teamSizeLabel} teams like mine do first?`
         : 'What do teams like mine do first?';
 
+      // Personalize welcome subtitle for both designs
+      const welcomeSubtitle = document.getElementById('welcomeSubtitle');
+      if (welcomeSubtitle) {
+        welcomeSubtitle.textContent = 'How can Slackbot help you today?';
+      }
+
       if (currentDesign === 'b') {
         // Design B: left card has no label/title IDs to personalize (static "Bring in your tools")
         // Right column: 2 prompt cards with Design B markup
