@@ -60,7 +60,7 @@ if (window !== window.parent) {
     requestAnimationFrame(() => sidebar.classList.add('revealed'));
   }
 
-  // Read saved segmentation data from localStorage (set by combined-testing)
+  // Read saved segmentation data from localStorage (set by testing/combined)
   let personalizationData = { type: 'onboarding-complete', teamSize: '', useCases: [] };
   try {
     const stored = localStorage.getItem('slackbot-onboarding');

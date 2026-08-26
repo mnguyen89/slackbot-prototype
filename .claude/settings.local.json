@@ -9,7 +9,22 @@
       "Bash(git commit -m 'Initial commit: Slackbot onboarding prototypes *)",
       "Bash(git branch *)",
       "Bash(gh repo *)",
-      "Bash(gh api *)"
+      "Bash(gh api *)",
+      "Bash(python3 *)",
+      "WebFetch(domain:www.figma.com)",
+      "mcp__figma__get_design_context",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git commit *)",
+      "mcp__figma__get_screenshot",
+      "Bash(open *)",
+      "Bash(node -e ' *)",
+      "Bash(/usr/sbin/cupsfilter /Users/minh.nguyen/Desktop/Projects/Slackbot/user-testing-plan.html)",
+      "Bash(osascript -e ' *)",
+      "Bash(pip3 install *)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --print-to-pdf=\"/Users/minh.nguyen/Desktop/Projects/Slackbot/user-testing-plan.pdf\" --no-margins \"file:///Users/minh.nguyen/Desktop/Projects/Slackbot/user-testing-plan.html\")",
+      "Bash(node *)",
+      "Bash(git *)"
     ]
   }
 }
