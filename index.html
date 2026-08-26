@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slack Onboarding + DM Prototype</title>
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/slacky/reset.css">
+  <link rel="stylesheet" href="shared/slacky/tokens.css">
+  <link rel="stylesheet" href="shared/slacky/dark.css">
+  <link rel="stylesheet" href="shared/slacky/components.css">
   <style>
     * {
       margin: 0;
@@ -18,13 +22,13 @@
     }
 
     body {
-      font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #000000;
+      font-family: var(--font-family-default, 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+      background: var(--dt_color-constants-black);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      padding: 8px;
+      padding: var(--dt_static_space-050);
     }
 
     /* App window container — the modal is a child of this */
@@ -33,7 +37,7 @@
       width: 100%;
       height: calc(100vh - 16px);
       overflow: hidden;
-      border-radius: 8px;
+      border-radius: var(--dt_static_radius-large);
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
     }
 
@@ -59,9 +63,9 @@
       right: 4px;
       bottom: 0;
       z-index: 10;
-      background: rgba(29, 28, 29, 0.7);
+      background: var(--dt_color-base-modal);
       backdrop-filter: blur(16px);
-      border-radius: 6px;
+      border-radius: var(--dt_static_radius-base);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -95,7 +99,7 @@
     .upsell-modal {
       position: relative;
       background: #fff;
-      border-radius: 12px;
+      border-radius: var(--dt_static_radius-xlarge);
       width: 990px;
       max-width: 90vw;
       min-width: 792px;
@@ -137,14 +141,14 @@
     .upsell-eyebrow {
       font-size: 15px;
       font-weight: 700;
-      color: #83388a;
+      color: var(--dt_color-plt-aubergine-70);
       line-height: 22px;
     }
 
     .upsell-title {
-      font-size: 34px;
+      font-size: var(--dt_static_type-size-headline);
       font-weight: 900;
-      color: #1d1c1d;
+      color: var(--dt_color-content-pry);
       letter-spacing: 0.2px;
       line-height: 1.15;
     }
@@ -153,7 +157,7 @@
     .upsell-features {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: var(--dt_static_space-075);
       width: 380px;
     }
 
@@ -174,9 +178,9 @@
     }
 
     .upsell-feature-label {
-      font-size: 16px;
+      font-size: var(--dt_static_type-size-base);
       font-weight: 400;
-      color: #454447;
+      color: var(--dt_color-content-sec);
       line-height: 22px;
     }
 
@@ -185,7 +189,7 @@
     }
 
     .upsell-feature-desc {
-      font-size: 14px;
+      font-size: var(--dt_static_type-size-caption);
       font-weight: 400;
       color: rgba(29, 28, 29, 0.7);
       line-height: 20px;
@@ -197,9 +201,9 @@
       align-items: center;
       gap: 2px;
       padding-left: 28px;
-      font-size: 14px;
+      font-size: var(--dt_static_type-size-caption);
       font-weight: 400;
-      color: #1264a3;
+      color: var(--dt_color-content-hgl-1);
       cursor: pointer;
       text-decoration: none;
     }
@@ -216,12 +220,12 @@
     .upsell-footer {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: var(--dt_static_space-075);
       width: 320px;
     }
 
     .upsell-promo {
-      background: #f8f8f8;
+      background: var(--dt_color-ctr-sec);
       border-radius: 10px;
       box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.08);
       padding-top: 14px;
@@ -233,8 +237,8 @@
     .upsell-promo-header {
       display: flex;
       align-items: flex-start;
-      gap: 4px;
-      padding: 0 24px;
+      gap: var(--dt_static_space-025);
+      padding: 0 var(--dt_static_space-150);
     }
 
     .upsell-promo-tag {
@@ -256,21 +260,21 @@
     }
 
     .upsell-promo-title {
-      font-size: 16px;
+      font-size: var(--dt_static_type-size-base);
       font-weight: 900;
-      color: #83388a;
+      color: var(--dt_color-plt-aubergine-70);
       line-height: 24px;
     }
 
     .upsell-promo-price {
-      font-size: 14px;
+      font-size: var(--dt_static_type-size-caption);
       font-weight: 700;
-      color: #454447;
+      color: var(--dt_color-content-sec);
       line-height: 20px;
     }
 
     .upsell-promo-price span {
-      font-size: 11px;
+      font-size: var(--dt_static_type-size-micro);
       font-weight: 400;
     }
 
@@ -278,47 +282,11 @@
       padding: 10px 14px 14px;
     }
 
-    .btn-upsell-primary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 40px;
-      background: #007a5a;
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      font-family: 'Lato', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .btn-upsell-primary:hover {
-      background: #005e45;
-    }
-
+    /* Fill/outline color, radius, height, and type now come from
+       c-button--primary/--outline c-button--medium; only full width is custom */
+    .btn-upsell-primary,
     .btn-upsell-secondary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       width: 100%;
-      height: 40px;
-      background: #fff;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      color: #1d1c1d;
-      font-family: 'Lato', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-
-    .btn-upsell-secondary:hover {
-      background: #f8f8f8;
-      border-color: #b0b0b0;
     }
 
     /* Right image area */
@@ -335,7 +303,7 @@
     .upsell-image-bg {
       position: absolute;
       inset: -41px 0 0 0;
-      background: #F9EDFF;
+      background: var(--dt_color-plt-aubergine-0);
     }
 
     .upsell-image-blob {
@@ -392,7 +360,7 @@
     .segmentation-modal {
       position: relative;
       background: #fff;
-      border-radius: 12px;
+      border-radius: var(--dt_static_radius-xlarge);
       width: 900px;
       height: 672px;
       display: flex;
@@ -438,10 +406,10 @@
       position: absolute;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--dt_static_space-050);
       background: #fff;
       border-radius: 305px;
-      padding: 9px 16px;
+      padding: 9px var(--dt_static_space-100);
       box-shadow: 3px 3px 11px rgba(0, 0, 0, 0.25);
       overflow: hidden;
       height: 40px;
@@ -465,7 +433,7 @@
 
     .pill-number {
       font-family: 'Lato', sans-serif;
-      font-size: 19px;
+      font-size: var(--dt_static_type-size-subtitle);
       font-weight: 700;
       color: #000;
       letter-spacing: -0.37px;
@@ -487,7 +455,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px 64px;
+      padding: var(--dt_static_space-300) var(--dt_static_space-400);
     }
 
     .step.enter-right {
@@ -571,24 +539,24 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: var(--dt_static_space-050);
       text-align: center;
     }
 
     .question-container h1 {
       font-family: 'Lato', sans-serif;
-      font-size: 32px;
+      font-size: var(--dt_static_type-size-headline);
       font-weight: 700;
-      color: #1d1c1d;
+      color: var(--dt_color-content-pry);
       letter-spacing: 0.16px;
       white-space: nowrap;
     }
 
     .question-container p {
       font-family: 'Lato', sans-serif;
-      font-size: 18px;
+      font-size: var(--dt_static_type-size-subtitle);
       font-weight: 400;
-      color: #454447;
+      color: var(--dt_color-content-sec);
       line-height: 27px;
       width: 572px;
     }
@@ -603,7 +571,7 @@
     .options-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: var(--dt_static_space-075);
       align-items: center;
       padding: 0 100px;
       width: 100%;
@@ -641,7 +609,7 @@
       align-items: baseline;
       justify-content: center;
       gap: 14px;
-      padding: 28px 32px;
+      padding: var(--dt_static_space-175) var(--dt_static_space-200);
       width: 100%;
       white-space: nowrap;
     }
@@ -663,9 +631,9 @@
 
     .option-label {
       font-family: 'Lato', sans-serif;
-      font-size: 18px;
+      font-size: var(--dt_static_type-size-subtitle);
       font-weight: 700;
-      color: #1d1c1d;
+      color: var(--dt_color-content-pry);
       line-height: 27px;
       text-align: center;
     }
@@ -677,9 +645,9 @@
 
     .checklist-card {
       background: #fff;
-      border-radius: 12px;
+      border-radius: var(--dt_static_radius-xlarge);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 16px 0;
+      padding: var(--dt_static_space-100) 0;
       width: 100%;
       max-width: 492px;
       min-width: 484px;
@@ -689,21 +657,21 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 32px 8px 28px;
+      padding: var(--dt_static_space-050) var(--dt_static_space-200) var(--dt_static_space-050) var(--dt_static_space-175);
       cursor: pointer;
-      gap: 24px;
+      gap: var(--dt_static_space-150);
       height: 43px;
     }
 
     .checklist-item:hover {
-      background: #f8f8f8;
+      background: var(--dt_color-base-sec);
     }
 
     .checklist-item-label {
       font-family: 'Lato', sans-serif;
-      font-size: 18px;
+      font-size: var(--dt_static_type-size-subtitle);
       font-weight: 400;
-      color: #454447;
+      color: var(--dt_color-content-sec);
       line-height: 27px;
       flex: 1;
     }
@@ -719,11 +687,11 @@
 
     .checklist-item.checked .checklist-item-label {
       font-weight: 700;
-      color: #1d1c1d;
+      color: var(--dt_color-content-pry);
     }
 
     .checklist-card.has-selection .checklist-item:not(.checked) .checklist-item-label {
-      color: #7c7a7f;
+      color: var(--dt_color-otl-pry);
     }
 
     .checkbox {
@@ -739,8 +707,8 @@
     }
 
     .checklist-item.checked .checkbox {
-      background: #1264a3;
-      border-color: #1264a3;
+      background: var(--dt_color-otl-hgl-1);
+      border-color: var(--dt_color-otl-hgl-1);
       box-shadow: none;
     }
 
@@ -761,29 +729,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: var(--dt_static_space-075);
     }
 
+    /* Color, radius, height, and type now come from
+       c-button--primary c-button--medium; only the wide-CTA padding is custom
+       (72px has no exact match on the 4px-grid list, kept as-is) */
     .btn-get-started {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       padding: 0 72px;
-      height: 36px;
-      background: #007a5a;
-      border: 1px solid #007a5a;
-      border-radius: 8px;
-      color: #fff;
-      font-family: 'Lato', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 22px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .btn-get-started:hover {
-      background: #005e45;
     }
 
     .btn-explore {
@@ -792,10 +745,10 @@
       font-family: 'Lato', sans-serif;
       font-size: 15px;
       font-weight: 400;
-      color: #454447;
+      color: var(--dt_color-content-sec);
       line-height: 22px;
       cursor: pointer;
-      padding: 6px 12px;
+      padding: 6px var(--dt_static_space-075);
     }
 
     .btn-explore:hover {
@@ -922,10 +875,10 @@
                 </div>
               </div>
               <div class="upsell-promo-btn">
-                <button class="btn-upsell-primary" id="btnStartBizPlus">Start with Business+</button>
+                <button class="btn-upsell-primary c-button c-button--primary c-button--medium" id="btnStartBizPlus">Start with Business+</button>
               </div>
             </div>
-            <button class="btn-upsell-secondary" id="btnContinueFree">Continue with Free</button>
+            <button class="btn-upsell-secondary c-button c-button--outline c-button--medium" id="btnContinueFree">Continue with Free</button>
           </div>
         </div>
 
@@ -1040,7 +993,7 @@
                 </div>
               </div>
               <div class="cta-section">
-                <button class="btn-get-started" id="btnGetStarted">Get started</button>
+                <button class="btn-get-started c-button c-button--primary c-button--medium" id="btnGetStarted">Get started</button>
                 <button class="btn-explore" id="btnExplore">I want to explore</button>
               </div>
             </div>
@@ -1143,5 +1096,6 @@
     document.getElementById('btnGetStarted').addEventListener('click', dismissModal);
     document.getElementById('btnExplore').addEventListener('click', dismissModal);
   </script>
+  <script src="shared/slacky/slacky.js"></script>
 </body>
 </html>

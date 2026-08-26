@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nav Bar Component</title>
+  <link rel="stylesheet" href="../../shared/slacky/reset.css">
+  <link rel="stylesheet" href="../../shared/slacky/tokens.css">
+  <link rel="stylesheet" href="../../shared/slacky/dark.css">
+  <link rel="stylesheet" href="../../shared/slacky/components.css">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     /* ============================================
@@ -15,33 +19,36 @@
        ============================================ */
 
     /* === Design Tokens === */
+    /* Values below are wired to the real Slacky tokens (shared/slacky/tokens.css)
+       wherever an --sk-* value exactly matched a real --dt_... token. Values with
+       no exact token match are left as literal hex/px (see comments below). */
     :root {
       /* Brand */
-      --sk-aubergine: #4A154B;
-      --sk-aubergine-dark: #611F69;
-      --sk-white: #FFFFFF;
+      --sk-aubergine: var(--dt_color-brand-core-aubergine); /* #4A154B */
+      --sk-aubergine-dark: var(--dt_color-plt-aubergine-80); /* #611F69 */
+      --sk-white: var(--dt_color-constants-white); /* #FFFFFF */
 
       /* Purple accents */
-      --sk-purple-bg-25: rgba(249, 237, 255, 0.25);
-      --sk-purple-bg-80: rgba(244, 218, 255, 0.80);
-      --sk-purple-badge: #EABDFB;
+      --sk-purple-bg-25: rgba(249, 237, 255, 0.25); /* no exact token match */
+      --sk-purple-bg-80: rgba(244, 218, 255, 0.80); /* no exact token match */
+      --sk-purple-badge: var(--dt_color-plt-aubergine-20); /* #EABDFB */
 
       /* Typography */
-      --sk-font: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+      --sk-font: var(--font-family-default, 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif);
 
       /* Spacing (4px grid) */
-      --sk-space-4: 4px;
-      --sk-space-8: 8px;
-      --sk-space-12: 12px;
-      --sk-space-16: 16px;
-      --sk-space-20: 20px;
+      --sk-space-4: var(--dt_static_space-025); /* 4px */
+      --sk-space-8: var(--dt_static_space-050); /* 8px */
+      --sk-space-12: var(--dt_static_space-075); /* 12px */
+      --sk-space-16: var(--dt_static_space-100); /* 16px */
+      --sk-space-20: var(--dt_static_space-125); /* 20px */
 
       /* Shape */
-      --sk-radius-lg: 8px;
-      --sk-radius-circle: 50%;
+      --sk-radius-lg: var(--dt_static_radius-large); /* 8px */
+      --sk-radius-circle: 50%; /* not on the px radius scale */
 
       /* Elevation */
-      --sk-shadow-low: 0 1px 3px rgba(0, 0, 0, 0.10);
+      --sk-shadow-low: 0 1px 3px rgba(0, 0, 0, 0.10); /* no exact token match */
 
       /* Motion */
       --sk-ease-productive: cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -142,7 +149,7 @@
     .nav-tab-label {
       position: absolute;
       z-index: 1;
-      font-size: 11px;
+      font-size: var(--dt_static_type-size-micro);
       color: var(--sk-white);
       font-weight: 700;
       line-height: 12px;
@@ -212,7 +219,7 @@
       position: fixed;
       width: 360px;
       background: #fff;
-      border-radius: 12px;
+      border-radius: var(--dt_static_radius-xlarge);
       border: 1px solid rgba(94, 93, 96, 0.13);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
       flex-direction: column;
@@ -231,18 +238,18 @@
     }
 
     .more-menu-header {
-      padding: 8px 16px;
+      padding: var(--dt_static_space-050) var(--dt_static_space-100);
       font-size: 15px;
       font-weight: 900;
-      color: #1D1C1D;
+      color: var(--dt_color-content-pry);
       line-height: 22px;
     }
 
     .more-menu-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
+      gap: var(--dt_static_space-075);
+      padding: var(--dt_static_space-075) var(--dt_static_space-100);
       cursor: pointer;
       transition: background 0.125s ease;
     }
@@ -254,8 +261,8 @@
     .more-menu-icon-wrap {
       width: 36px;
       height: 36px;
-      background: #F9EDFF;
-      border-radius: 8px;
+      background: var(--dt_color-plt-aubergine-0);
+      border-radius: var(--dt_static_radius-large);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -271,7 +278,7 @@
     .more-menu-primary {
       font-size: 15px;
       font-weight: 700;
-      color: #1D1C1D;
+      color: var(--dt_color-content-pry);
       line-height: 22px;
     }
 
@@ -286,25 +293,25 @@
       flex-shrink: 0;
       width: 20px;
       height: 20px;
-      color: #1D1C1D;
+      color: var(--dt_color-content-pry);
     }
 
     .more-menu-divider {
       height: 1px;
       background: rgba(94, 93, 96, 0.13);
-      margin: 0 16px;
+      margin: 0 var(--dt_static_space-100);
     }
 
     .more-menu-footer {
-      padding: 12px 16px;
-      background: #F8F8F8;
+      padding: var(--dt_static_space-075) var(--dt_static_space-100);
+      background: var(--dt_color-ctr-sec);
       border-top: 1px solid rgba(94, 93, 96, 0.13);
     }
 
     .more-menu-customize {
       font-size: 13px;
       font-weight: 400;
-      color: #1264A3;
+      color: var(--dt_color-content-hgl-1);
       cursor: pointer;
       line-height: 18px;
     }
@@ -653,5 +660,6 @@
       });
     }
   </script>
+  <script src="../../shared/slacky/slacky.js"></script>
 </body>
 </html>

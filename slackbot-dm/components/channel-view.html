@@ -5,22 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Channel View Component</title>
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/slacky/reset.css">
+  <link rel="stylesheet" href="../../shared/slacky/tokens.css">
+  <link rel="stylesheet" href="../../shared/slacky/dark.css">
+  <link rel="stylesheet" href="../../shared/slacky/components.css">
   <style>
+    /* Values below are wired to the real Slacky tokens (shared/slacky/tokens.css)
+       wherever an --sk-* value exactly matched a real --dt_... token. Values with
+       no exact token match are left as literal hex/px (see comments below). */
     :root {
-      --sk-font: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-      --sk-primary-text: #1D1C1D;
-      --sk-white: #FFFFFF;
-      --sk-content-secondary: #454447;
-      --sk-content-tertiary: #7C7A7F;
-      --sk-border-subtle: rgba(94, 93, 96, 0.13);
-      --sk-border-medium: rgba(94, 93, 96, 0.45);
-      --sk-surface-hover: #F5F5F5;
-      --sk-theme-base-primary: #F9EDFF;
-      --sk-theme-inverse-secondary: #83388A;
-      --sk-base-tertiary: #EAEAEA;
-      --sk-radius-sm: 4px;
-      --sk-radius-md: 8px;
-      --sk-radius-circle: 50%;
+      --sk-font: var(--font-family-default, 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif);
+      --sk-primary-text: var(--dt_color-content-pry); /* #1D1C1D */
+      --sk-white: var(--dt_color-constants-white); /* #FFFFFF */
+      --sk-content-secondary: var(--dt_color-content-sec); /* #454447 */
+      --sk-content-tertiary: var(--dt_color-plt-gray-50); /* #7C7A7F */
+      --sk-border-subtle: rgba(94, 93, 96, 0.13); /* no exact token match */
+      --sk-border-medium: rgba(94, 93, 96, 0.45); /* no exact token match */
+      --sk-surface-hover: #F5F5F5; /* no exact token match */
+      --sk-theme-base-primary: var(--dt_color-plt-aubergine-0); /* #F9EDFF */
+      --sk-theme-inverse-secondary: var(--dt_color-plt-aubergine-70); /* #83388A */
+      --sk-base-tertiary: var(--dt_color-base-ter); /* #EAEAEA */
+      --sk-radius-sm: 4px; /* no exact token match */
+      --sk-radius-md: var(--dt_static_radius-large); /* 8px */
+      --sk-radius-circle: 50%; /* not on the px radius scale */
       --sk-duration-fast: 0.125s;
       --sk-ease-productive: cubic-bezier(0.165, 0.84, 0.44, 1);
     }
@@ -55,8 +62,8 @@
     .channel-title-bar {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 0 12px;
+      gap: var(--dt_static_space-050);
+      padding: 0 var(--dt_static_space-075);
       height: 50px;
       flex-shrink: 0;
     }
@@ -64,7 +71,7 @@
     .channel-title-left {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: var(--dt_static_space-025);
       flex: 1;
       min-width: 0;
     }
@@ -73,14 +80,14 @@
       display: flex;
       align-items: center;
       height: 32px;
-      padding: 0 4px;
-      border-radius: 8px;
+      padding: 0 var(--dt_static_space-025);
+      border-radius: var(--dt_static_radius-large);
     }
 
     .channel-title-decoration {
       display: flex;
       align-items: center;
-      padding: 4px;
+      padding: var(--dt_static_space-025);
     }
 
     .channel-title-name {
@@ -102,7 +109,7 @@
     .channel-title-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--dt_static_space-050);
     }
 
     /* Huddle button group */
@@ -110,7 +117,7 @@
       display: flex;
       align-items: center;
       border: 1px solid var(--sk-border-subtle);
-      border-radius: 8px;
+      border-radius: var(--dt_static_radius-large);
       overflow: hidden;
       height: 28px;
       background: white;
@@ -119,9 +126,9 @@
     .channel-btn-huddle {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: var(--dt_static_space-025);
       height: 100%;
-      padding: 0 8px;
+      padding: 0 var(--dt_static_space-050);
       border: none;
       background: none;
       cursor: pointer;
@@ -139,7 +146,7 @@
       align-items: center;
       justify-content: center;
       height: 100%;
-      padding: 0 4px;
+      padding: 0 var(--dt_static_space-025);
       border: none;
       background: none;
       cursor: pointer;
@@ -160,11 +167,11 @@
     .channel-btn-invite {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: var(--dt_static_space-025);
       height: 28px;
       padding: 0 10px;
       border: 1px solid var(--sk-border-subtle);
-      border-radius: 8px;
+      border-radius: var(--dt_static_radius-large);
       background: white;
       cursor: pointer;
       font-family: var(--sk-font);
@@ -186,7 +193,7 @@
       justify-content: center;
       width: 28px;
       height: 28px;
-      border-radius: 8px;
+      border-radius: var(--dt_static_radius-large);
       background: none;
       border: none;
       cursor: pointer;
@@ -200,7 +207,7 @@
     .channel-tabs {
       display: flex;
       align-items: center;
-      padding: 0 16px;
+      padding: 0 var(--dt_static_space-100);
       height: 36px;
       flex-shrink: 0;
     }
@@ -208,7 +215,7 @@
     .channel-tabs-inner {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: var(--dt_static_space-075);
       height: 100%;
     }
 
@@ -216,7 +223,7 @@
       display: flex;
       align-items: center;
       gap: 2px;
-      padding: 11px 4px;
+      padding: 11px var(--dt_static_space-025);
       height: 100%;
       font-size: 13px;
       font-weight: 700;
@@ -249,10 +256,10 @@
 
     .channel-conversation-top {
       background: linear-gradient(180deg, #f9edff 0%, #ffffff 60%);
-      padding: 32px 20px;
+      padding: var(--dt_static_space-200) var(--dt_static_space-125);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: var(--dt_static_space-050);
       justify-content: flex-end;
       flex: 1;
       min-height: 0;
@@ -275,8 +282,8 @@
     /* === Action Cards === */
     .channel-action-cards {
       display: flex;
-      gap: 16px;
-      padding: 16px 0;
+      gap: var(--dt_static_space-100);
+      padding: var(--dt_static_space-100) 0;
     }
 
     .channel-action-card {
@@ -326,7 +333,7 @@
       position: relative;
       display: flex;
       align-items: center;
-      padding: 4px 8px 4px 16px;
+      padding: var(--dt_static_space-025) var(--dt_static_space-050) var(--dt_static_space-025) var(--dt_static_space-100);
       font-size: 13px;
       font-weight: 700;
       color: var(--sk-primary-text);
@@ -344,8 +351,8 @@
     /* === Message === */
     .channel-message {
       display: flex;
-      gap: 8px;
-      padding: 8px 20px;
+      gap: var(--dt_static_space-050);
+      padding: var(--dt_static_space-050) var(--dt_static_space-125);
       background: white;
       flex-shrink: 0;
     }
@@ -362,7 +369,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: var(--dt_static_radius-large);
     }
 
     .channel-message-content {
@@ -375,7 +382,7 @@
     .channel-message-header {
       display: flex;
       align-items: flex-end;
-      gap: 8px;
+      gap: var(--dt_static_space-050);
       height: 18px;
     }
 
@@ -404,26 +411,26 @@
 
     /* === Composer === */
     .channel-composer {
-      padding: 0 20px 24px;
+      padding: 0 var(--dt_static_space-125) var(--dt_static_space-150);
       flex-shrink: 0;
     }
 
     .channel-composer-wrapper {
       background: #f9edff;
       border: 1px solid var(--sk-border-subtle);
-      border-radius: 12px;
+      border-radius: var(--dt_static_radius-xlarge);
     }
 
     .channel-composer-inner {
       border: 1px solid var(--sk-border-medium);
-      border-radius: 8px;
+      border-radius: var(--dt_static_radius-large);
       background: var(--sk-white);
       overflow: hidden;
       box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
     }
 
     .channel-composer-input {
-      padding: 9px 12px 7px 12px;
+      padding: 9px var(--dt_static_space-075) 7px var(--dt_static_space-075);
       font-size: 15px;
       line-height: 22px;
       color: var(--sk-primary-text);
@@ -446,8 +453,8 @@
     .composer-actions-left {
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px 4px 4px 8px;
+      gap: var(--dt_static_space-025);
+      padding: var(--dt_static_space-025) var(--dt_static_space-025) var(--dt_static_space-025) var(--dt_static_space-050);
       height: 40px;
     }
 
@@ -525,7 +532,7 @@
       border: none;
       background: none;
       cursor: pointer;
-      padding: 0 8px;
+      padding: 0 var(--dt_static_space-050);
     }
 
     .composer-send-divider {
@@ -724,5 +731,6 @@
       sendGroup.classList.toggle('active', hasText);
     });
   </script>
+  <script src="../../shared/slacky/slacky.js"></script>
 </body>
 </html>
