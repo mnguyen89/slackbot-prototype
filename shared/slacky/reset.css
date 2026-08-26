@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-lato);
+  font-size: var(--dt_static_type-size-base);
+  line-height: var(--dt_static_type-leading-base);
+  color: var(--dt_color-content-pry);
+  background-color: var(--dt_color-base-pry);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}

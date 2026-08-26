@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(./update-viewer.sh:*)",
+      "Bash(ls:*)",
+      "mcp__tinyspeck-design-tokens__*",
+      "mcp__tinyspeck-icons__*",
+      "Bash(git add:*)"
+    ]
+  },
+  "mcpServers": {
+    "tinyspeck-design-tokens": {
+      "command": "npx",
+      "args": ["-y", "@tinyspeck/design-tokens", "mcp"]
+    },
+    "tinyspeck-icons": {
+      "command": "npx",
+      "args": ["-y", "@tinyspeck/icons", "mcp"]
+    }
+  }
+}

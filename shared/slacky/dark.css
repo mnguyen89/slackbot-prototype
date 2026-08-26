@@ -1,0 +1,783 @@
+
+/*
+  Do not edit directly
+  Generated on Fri, 27 Mar 2026 14:56:05 GMT
+
+  For more info: https://slack-github.com/slack/design-tokens
+*/
+
+.sk-client-theme--dark {
+	/* Base/Primary */
+	--dt_color-base-pry: #1a1d21;
+	/* Base/Secondary */
+	--dt_color-base-sec: #1a1d21;
+	/* Base/Tertiary */
+	--dt_color-base-ter: #212428;
+	/* Base/Highlight 1 */
+	--dt_color-base-hgl-1: #001a2d;
+	/* Base/Highlight 2 */
+	--dt_color-base-hgl-2: #05241b;
+	/* Base/Highlight 3 */
+	--dt_color-base-hgl-3: #2f1e00;
+	/* Base/Important */
+	--dt_color-base-imp: #300005;
+	/* Base/Inverse Primary */
+	--dt_color-base-inv-pry: #212428;
+	/* Base/Inverse Highlight 1 */
+	--dt_color-base-inv-hgl-1: #004d76;
+	/* Base/Inverse Highlight 2 */
+	--dt_color-base-inv-hgl-2: #00553d;
+	/* Base/Inverse Highlight 3 */
+	--dt_color-base-inv-hgl-3: #7e5800;
+	/* Base/Inverse Important */
+	--dt_color-base-inv-imp: #b41541;
+	/* Base/Modal */
+	--dt_color-base-modal: #10121499;
+	/* Base/Primary Hover */
+	--dt_color-base-pry-hover: #f8f8f814;
+	/* Base/Primary Pressed */
+	--dt_color-base-pry-pressed: #f8f8f82e;
+	/* Base/Secondary Hover */
+	--dt_color-base-sec-hover: #f8f8f814;
+	/* Base/Secondary Pressed */
+	--dt_color-base-sec-pressed: #f8f8f82e;
+	/* Base/Tertiary Hover */
+	--dt_color-base-ter-hover: #f8f8f814;
+	/* Base/Tertiary Pressed */
+	--dt_color-base-ter-pressed: #f8f8f82e;
+	/* Base/Highlight 1 Hover */
+	--dt_color-base-hgl-1-hover: #d8eef614;
+	/* Base/Highlight 1 Pressed */
+	--dt_color-base-hgl-1-pressed: #d8eef62e;
+	/* Base/Highlight 2 Hover */
+	--dt_color-base-hgl-2-hover: #d8f5e914;
+	/* Base/Highlight 2 Pressed */
+	--dt_color-base-hgl-2-pressed: #d8f5e92e;
+	/* Base/Highlight 3 Hover */
+	--dt_color-base-hgl-3-hover: #f7f0d514;
+	/* Base/Highlight 3 Pressed */
+	--dt_color-base-hgl-3-pressed: #f7f0d52e;
+	/* Base/Important Hover */
+	--dt_color-base-imp-hover: #f7dce414;
+	/* Base/Important Pressed */
+	--dt_color-base-imp-pressed: #f7dce42e;
+	/* Base/Inverse Primary Hover */
+	--dt_color-base-inv-pry-hover: #f8f8f814;
+	/* Base/Inverse Primary Pressed */
+	--dt_color-base-inv-pry-pressed: #f8f8f82e;
+	/* Base/Inverse Highlight 1 Hover */
+	--dt_color-base-inv-hgl-1-hover: #d8eef614;
+	/* Base/Inverse Highlight 1 Pressed */
+	--dt_color-base-inv-hgl-1-pressed: #d8eef62e;
+	/* Base/Inverse Highlight 2 Hover */
+	--dt_color-base-inv-hgl-2-hover: #d8f5e914;
+	/* Base/Inverse Highlight 2 Pressed */
+	--dt_color-base-inv-hgl-2-pressed: #d8f5e92e;
+	/* Base/Inverse Highlight 3 Hover */
+	--dt_color-base-inv-hgl-3-hover: #f7f0d514;
+	/* Base/Inverse Highlight 3 Pressed */
+	--dt_color-base-inv-hgl-3-pressed: #f7f0d52e;
+	/* Base/Inverse Important Hover */
+	--dt_color-base-inv-imp-hover: #f7dce414;
+	/* Base/Inverse Important Pressed */
+	--dt_color-base-inv-imp-pressed: #f7dce42e;
+	/* Base/Modal Hover */
+	--dt_color-base-modal-hover: #f8f8f814;
+	/* Base/Modal Pressed */
+	--dt_color-base-modal-pressed: #f8f8f82e;
+	/* Surface/Primary */
+	--dt_color-surf-pry: #f8f8f80f;
+	/* Surface/Secondary */
+	--dt_color-surf-sec: #f8f8f840;
+	/* Surface/Highlight 1 */
+	--dt_color-surf-hgl-1: #03669640;
+	/* Surface/Highlight 2 */
+	--dt_color-surf-hgl-2: #106f4d54;
+	/* Surface/Highlight 3 */
+	--dt_color-surf-hgl-3: #a073002e;
+	/* Surface/Important */
+	--dt_color-surf-imp: #b4154140;
+	/* Surface/Inverse */
+	--dt_color-surf-inv: #ffffff2e;
+	/* Surface/Inverse Highlight 3 */
+	--dt_color-surf-inv-hgl-3: #a073002e;
+	/* Surface/Primary Hover */
+	--dt_color-surf-pry-hover: #f8f8f814;
+	/* Surface/Primary Pressed */
+	--dt_color-surf-pry-pressed: #f8f8f82e;
+	/* Surface/Secondary Hover */
+	--dt_color-surf-sec-hover: #f8f8f814;
+	/* Surface/Secondary Pressed */
+	--dt_color-surf-sec-pressed: #f8f8f82e;
+	/* Surface/Highlight 1 Hover */
+	--dt_color-surf-hgl-1-hover: #d8eef614;
+	/* Surface/Highlight 1 Pressed */
+	--dt_color-surf-hgl-1-pressed: #d8eef62e;
+	/* Surface/Highlight 2 Hover */
+	--dt_color-surf-hgl-2-hover: #d8f5e914;
+	/* Surface/Highlight 2 Pressed */
+	--dt_color-surf-hgl-2-pressed: #d8f5e92e;
+	/* Surface/Highlight 3 Hover */
+	--dt_color-surf-hgl-3-hover: #f7f0d514;
+	/* Surface/Highlight 3 Pressed */
+	--dt_color-surf-hgl-3-pressed: #f7f0d52e;
+	/* Surface/Important Hover */
+	--dt_color-surf-imp-hover: #f7dce414;
+	/* Surface/Important Pressed */
+	--dt_color-surf-imp-pressed: #f7dce42e;
+	/* Surface/Inverse Hover */
+	--dt_color-surf-inv-hover: #f8f8f814;
+	/* Surface/Inverse Pressed */
+	--dt_color-surf-inv-pressed: #f8f8f82e;
+	/* Surface/Inverse Highlight 3 Hover */
+	--dt_color-surf-inv-hgl-3-hover: #f7f0d514;
+	/* Surface/Inverse Highlight 3 Pressed */
+	--dt_color-surf-inv-hgl-3-pressed: #f7f0d52e;
+	/* Container/Primary */
+	--dt_color-ctr-pry: #212428;
+	/* Container/Secondary */
+	--dt_color-ctr-sec: #212428;
+	/* Container/Primary Hover */
+	--dt_color-ctr-pry-hover: #f8f8f814;
+	/* Container/Primary Pressed */
+	--dt_color-ctr-pry-pressed: #f8f8f82e;
+	/* Container/Secondary Hover */
+	--dt_color-ctr-sec-hover: #f8f8f814;
+	/* Container/Secondary Pressed */
+	--dt_color-ctr-sec-pressed: #f8f8f82e;
+	/* Content/Primary */
+	--dt_color-content-pry: #f8f8f8;
+	/* Content/Secondary */
+	--dt_color-content-sec: #b9babd;
+	/* Content/Tertiary */
+	--dt_color-content-ter: #9a9b9e;
+	/* Content/Highlight 1 */
+	--dt_color-content-hgl-1: #2ba5ce;
+	/* Content/Highlight 2 */
+	--dt_color-content-hgl-2: #3daa7c;
+	/* Content/Highlight 3 */
+	--dt_color-content-hgl-3: #dea700;
+	/* Content/Important */
+	--dt_color-content-imp: #de678a;
+	/* Content/Inverse Primary */
+	--dt_color-content-inv-pry: #f8f8f8;
+	/* Content/Inverse Secondary */
+	--dt_color-content-inv-sec: #b9babd;
+	/* Content/Inverse Highlight 1 */
+	--dt_color-content-inv-hgl-1: #2ba5ce;
+	/* Content/Inverse Highlight 2 */
+	--dt_color-content-inv-hgl-2: #3daa7c;
+	/* Content/Inverse Highlight 3 */
+	--dt_color-content-inv-hgl-3: #dea700;
+	/* Content/Inverse Important */
+	--dt_color-content-inv-imp: #de678a;
+	/* Outline/Primary */
+	--dt_color-otl-pry: #797c81;
+	/* Outline/Secondary */
+	--dt_color-otl-sec: #797c8180;
+	/* Outline/Tertiary */
+	--dt_color-otl-ter: #797c814d;
+	/* Outline/Highlight 1 */
+	--dt_color-otl-hgl-1: #2ba5ce;
+	/* Outline/Highlight 1 Secondary */
+	--dt_color-otl-hgl-1-sec: #307ec033;
+	/* Outline/Highlight 2 */
+	--dt_color-otl-hgl-2: #259b69;
+	/* Outline/Highlight 2 Secondary */
+	--dt_color-otl-hgl-2-sec: #63c29a33;
+	/* Outline/Highlight 3 */
+	--dt_color-otl-hgl-3: #d29c00;
+	/* Outline/Highlight 3 Secondary */
+	--dt_color-otl-hgl-3-sec: #b3820033;
+	/* Outline/Important */
+	--dt_color-otl-imp: #d94c75;
+	/* Outline/Important Secondary */
+	--dt_color-otl-imp-sec: #d94c7540;
+	/* Outline/Inverse Primary */
+	--dt_color-otl-inv-pry: #797c81;
+	/* Outline/Inverse Secondary */
+	--dt_color-otl-inv-sec: #797c8180;
+	/* Outline/Inverse Tertiary */
+	--dt_color-otl-inv-ter: #797c814d;
+	/* Palettes/Gray/0 */
+	--dt_color-plt-gray-0: 16,18,20;
+	/* Palettes/Gray/5 */
+	--dt_color-plt-gray-5: 26,29,33;
+	/* Palettes/Gray/10 */
+	--dt_color-plt-gray-10: 33,36,40;
+	/* Palettes/Gray/20 */
+	--dt_color-plt-gray-20: 50,53,56;
+	/* Palettes/Gray/30 */
+	--dt_color-plt-gray-30: 65,69,73;
+	/* Palettes/Gray/40 */
+	--dt_color-plt-gray-40: 90,94,99;
+	/* Palettes/Gray/50 */
+	--dt_color-plt-gray-50: 121,124,129;
+	/* Palettes/Gray/60 */
+	--dt_color-plt-gray-60: 154,155,158;
+	/* Palettes/Gray/70 */
+	--dt_color-plt-gray-70: 185,186,189;
+	/* Palettes/Gray/80 */
+	--dt_color-plt-gray-80: 209,210,211;
+	/* Palettes/Gray/90 */
+	--dt_color-plt-gray-90: 224,224,224;
+	/* Palettes/Gray/100 */
+	--dt_color-plt-gray-100: 248,248,248;
+	/* Palettes/Gray/Hover */
+	--dt_color-plt-gray-hover: #f8f8f814;
+	/* Palettes/Gray/Pressed */
+	--dt_color-plt-gray-pressed: #f8f8f82e;
+	/* Palettes/Tomato/0 */
+	--dt_color-plt-tomato-0: 53,8,3;
+	/* Palettes/Tomato/5 */
+	--dt_color-plt-tomato-5: 90,16,5;
+	/* Palettes/Tomato/10 */
+	--dt_color-plt-tomato-10: 110,21,7;
+	/* Palettes/Tomato/20 */
+	--dt_color-plt-tomato-20: 130,29,11;
+	/* Palettes/Tomato/30 */
+	--dt_color-plt-tomato-30: 162,43,20;
+	/* Palettes/Tomato/40 */
+	--dt_color-plt-tomato-40: 181,56,30;
+	/* Palettes/Tomato/50 */
+	--dt_color-plt-tomato-50: 208,80,56;
+	/* Palettes/Tomato/60 */
+	--dt_color-plt-tomato-60: 216,101,85;
+	/* Palettes/Tomato/70 */
+	--dt_color-plt-tomato-70: 223,132,124;
+	/* Palettes/Tomato/80 */
+	--dt_color-plt-tomato-80: 231,167,162;
+	/* Palettes/Tomato/90 */
+	--dt_color-plt-tomato-90: 239,194,192;
+	/* Palettes/Tomato/100 */
+	--dt_color-plt-tomato-100: 247,224,224;
+	/* Palettes/Tomato/Hover */
+	--dt_color-plt-tomato-hover: #f7e0e014;
+	/* Palettes/Tomato/Pressed */
+	--dt_color-plt-tomato-pressed: #f7e0e02e;
+	/* Palettes/Paprika/0 */
+	--dt_color-plt-paprika-0: 56,13,0;
+	/* Palettes/Paprika/5 */
+	--dt_color-plt-paprika-5: 87,21,0;
+	/* Palettes/Paprika/10 */
+	--dt_color-plt-paprika-10: 115,29,2;
+	/* Palettes/Paprika/20 */
+	--dt_color-plt-paprika-20: 141,39,7;
+	/* Palettes/Paprika/30 */
+	--dt_color-plt-paprika-30: 166,55,19;
+	/* Palettes/Paprika/40 */
+	--dt_color-plt-paprika-40: 174,68,34;
+	/* Palettes/Paprika/50 */
+	--dt_color-plt-paprika-50: 193,94,60;
+	/* Palettes/Paprika/60 */
+	--dt_color-plt-paprika-60: 208,118,88;
+	/* Palettes/Paprika/70 */
+	--dt_color-plt-paprika-70: 210,146,124;
+	/* Palettes/Paprika/80 */
+	--dt_color-plt-paprika-80: 221,173,158;
+	/* Palettes/Paprika/90 */
+	--dt_color-plt-paprika-90: 235,202,192;
+	/* Palettes/Paprika/100 */
+	--dt_color-plt-paprika-100: 247,229,224;
+	/* Palettes/Paprika/Hover */
+	--dt_color-plt-paprika-hover: #f7e5e014;
+	/* Palettes/Paprika/Pressed */
+	--dt_color-plt-paprika-pressed: #f7e5e02e;
+	/* Palettes/Tangerine/0 */
+	--dt_color-plt-tangerine-0: 56,16,0;
+	/* Palettes/Tangerine/5 */
+	--dt_color-plt-tangerine-5: 92,29,0;
+	/* Palettes/Tangerine/10 */
+	--dt_color-plt-tangerine-10: 122,37,0;
+	/* Palettes/Tangerine/20 */
+	--dt_color-plt-tangerine-20: 152,46,0;
+	/* Palettes/Tangerine/30 */
+	--dt_color-plt-tangerine-30: 180,62,8;
+	/* Palettes/Tangerine/40 */
+	--dt_color-plt-tangerine-40: 191,77,26;
+	/* Palettes/Tangerine/50 */
+	--dt_color-plt-tangerine-50: 213,106,55;
+	/* Palettes/Tangerine/60 */
+	--dt_color-plt-tangerine-60: 218,128,86;
+	/* Palettes/Tangerine/70 */
+	--dt_color-plt-tangerine-70: 228,160,127;
+	/* Palettes/Tangerine/80 */
+	--dt_color-plt-tangerine-80: 231,185,161;
+	/* Palettes/Tangerine/90 */
+	--dt_color-plt-tangerine-90: 240,208,193;
+	/* Palettes/Tangerine/100 */
+	--dt_color-plt-tangerine-100: 247,227,218;
+	/* Palettes/Tangerine/Hover */
+	--dt_color-plt-tangerine-hover: #f7e3da14;
+	/* Palettes/Tangerine/Pressed */
+	--dt_color-plt-tangerine-pressed: #f7e3da2e;
+	/* Palettes/Campfire/0 */
+	--dt_color-plt-campfire-0: 50,22,0;
+	/* Palettes/Campfire/5 */
+	--dt_color-plt-campfire-5: 75,34,0;
+	/* Palettes/Campfire/10 */
+	--dt_color-plt-campfire-10: 97,44,0;
+	/* Palettes/Campfire/20 */
+	--dt_color-plt-campfire-20: 123,58,0;
+	/* Palettes/Campfire/30 */
+	--dt_color-plt-campfire-30: 149,71,0;
+	/* Palettes/Campfire/40 */
+	--dt_color-plt-campfire-40: 164,80,1;
+	/* Palettes/Campfire/50 */
+	--dt_color-plt-campfire-50: 191,101,10;
+	/* Palettes/Campfire/60 */
+	--dt_color-plt-campfire-60: 204,119,31;
+	/* Palettes/Campfire/70 */
+	--dt_color-plt-campfire-70: 220,157,86;
+	/* Palettes/Campfire/80 */
+	--dt_color-plt-campfire-80: 225,178,123;
+	/* Palettes/Campfire/90 */
+	--dt_color-plt-campfire-90: 235,207,171;
+	/* Palettes/Campfire/100 */
+	--dt_color-plt-campfire-100: 246,232,213;
+	/* Palettes/Campfire/Hover */
+	--dt_color-plt-campfire-hover: #f6e8d514;
+	/* Palettes/Campfire/Pressed */
+	--dt_color-plt-campfire-pressed: #f6e8d52e;
+	/* Palettes/Honeycomb/0 */
+	--dt_color-plt-honeycomb-0: 54,30,0;
+	/* Palettes/Honeycomb/5 */
+	--dt_color-plt-honeycomb-5: 77,44,0;
+	/* Palettes/Honeycomb/10 */
+	--dt_color-plt-honeycomb-10: 105,63,0;
+	/* Palettes/Honeycomb/20 */
+	--dt_color-plt-honeycomb-20: 124,76,0;
+	/* Palettes/Honeycomb/30 */
+	--dt_color-plt-honeycomb-30: 155,97,0;
+	/* Palettes/Honeycomb/40 */
+	--dt_color-plt-honeycomb-40: 170,108,0;
+	/* Palettes/Honeycomb/50 */
+	--dt_color-plt-honeycomb-50: 196,131,5;
+	/* Palettes/Honeycomb/60 */
+	--dt_color-plt-honeycomb-60: 205,150,37;
+	/* Palettes/Honeycomb/70 */
+	--dt_color-plt-honeycomb-70: 220,172,82;
+	/* Palettes/Honeycomb/80 */
+	--dt_color-plt-honeycomb-80: 230,188,107;
+	/* Palettes/Honeycomb/90 */
+	--dt_color-plt-honeycomb-90: 237,209,153;
+	/* Palettes/Honeycomb/100 */
+	--dt_color-plt-honeycomb-100: 244,233,206;
+	/* Palettes/Honeycomb/Hover */
+	--dt_color-plt-honeycomb-hover: #f4e9ce14;
+	/* Palettes/Honeycomb/Pressed */
+	--dt_color-plt-honeycomb-pressed: #f4e9ce2e;
+	/* Palettes/Sunflower/0 */
+	--dt_color-plt-sunflower-0: 47,30,0;
+	/* Palettes/Sunflower/5 */
+	--dt_color-plt-sunflower-5: 76,52,0;
+	/* Palettes/Sunflower/10 */
+	--dt_color-plt-sunflower-10: 103,72,0;
+	/* Palettes/Sunflower/20 */
+	--dt_color-plt-sunflower-20: 126,88,0;
+	/* Palettes/Sunflower/30 */
+	--dt_color-plt-sunflower-30: 160,115,0;
+	/* Palettes/Sunflower/40 */
+	--dt_color-plt-sunflower-40: 179,130,0;
+	/* Palettes/Sunflower/50 */
+	--dt_color-plt-sunflower-50: 210,156,0;
+	/* Palettes/Sunflower/60 */
+	--dt_color-plt-sunflower-60: 222,167,0;
+	/* Palettes/Sunflower/70 */
+	--dt_color-plt-sunflower-70: 230,190,48;
+	/* Palettes/Sunflower/80 */
+	--dt_color-plt-sunflower-80: 230,209,110;
+	/* Palettes/Sunflower/90 */
+	--dt_color-plt-sunflower-90: 238,225,166;
+	/* Palettes/Sunflower/100 */
+	--dt_color-plt-sunflower-100: 247,240,213;
+	/* Palettes/Sunflower/Hover */
+	--dt_color-plt-sunflower-hover: #f7f0d514;
+	/* Palettes/Sunflower/Pressed */
+	--dt_color-plt-sunflower-pressed: #f7f0d52e;
+	/* Palettes/Grass/0 */
+	--dt_color-plt-grass-0: 21,34,3;
+	/* Palettes/Grass/5 */
+	--dt_color-plt-grass-5: 33,52,5;
+	/* Palettes/Grass/10 */
+	--dt_color-plt-grass-10: 42,66,6;
+	/* Palettes/Grass/20 */
+	--dt_color-plt-grass-20: 53,80,9;
+	/* Palettes/Grass/30 */
+	--dt_color-plt-grass-30: 71,104,13;
+	/* Palettes/Grass/40 */
+	--dt_color-plt-grass-40: 85,119,18;
+	/* Palettes/Grass/50 */
+	--dt_color-plt-grass-50: 110,148,31;
+	/* Palettes/Grass/60 */
+	--dt_color-plt-grass-60: 128,165,46;
+	/* Palettes/Grass/70 */
+	--dt_color-plt-grass-70: 157,190,75;
+	/* Palettes/Grass/80 */
+	--dt_color-plt-grass-80: 183,207,119;
+	/* Palettes/Grass/90 */
+	--dt_color-plt-grass-90: 209,226,166;
+	/* Palettes/Grass/100 */
+	--dt_color-plt-grass-100: 234,245,208;
+	/* Palettes/Grass/Hover */
+	--dt_color-plt-grass-hover: #eaf5d014;
+	/* Palettes/Grass/Pressed */
+	--dt_color-plt-grass-pressed: #eaf5d02e;
+	/* Palettes/Cilantro/0 */
+	--dt_color-plt-cilantro-0: 16,35,16;
+	/* Palettes/Cilantro/5 */
+	--dt_color-plt-cilantro-5: 18,49,17;
+	/* Palettes/Cilantro/10 */
+	--dt_color-plt-cilantro-10: 22,64,18;
+	/* Palettes/Cilantro/20 */
+	--dt_color-plt-cilantro-20: 15,80,5;
+	/* Palettes/Cilantro/30 */
+	--dt_color-plt-cilantro-30: 29,103,11;
+	/* Palettes/Cilantro/40 */
+	--dt_color-plt-cilantro-40: 43,118,22;
+	/* Palettes/Cilantro/50 */
+	--dt_color-plt-cilantro-50: 69,146,42;
+	/* Palettes/Cilantro/60 */
+	--dt_color-plt-cilantro-60: 93,164,66;
+	/* Palettes/Cilantro/70 */
+	--dt_color-plt-cilantro-70: 129,188,105;
+	/* Palettes/Cilantro/80 */
+	--dt_color-plt-cilantro-80: 165,207,148;
+	/* Palettes/Cilantro/90 */
+	--dt_color-plt-cilantro-90: 195,225,183;
+	/* Palettes/Cilantro/100 */
+	--dt_color-plt-cilantro-100: 229,244,222;
+	/* Palettes/Cilantro/Hover */
+	--dt_color-plt-cilantro-hover: #e5f4de14;
+	/* Palettes/Cilantro/Pressed */
+	--dt_color-plt-cilantro-pressed: #e5f4de2e;
+	/* Palettes/Mojito/0 */
+	--dt_color-plt-mojito-0: 0,36,15;
+	/* Palettes/Mojito/5 */
+	--dt_color-plt-mojito-5: 10,51,25;
+	/* Palettes/Mojito/10 */
+	--dt_color-plt-mojito-10: 13,64,31;
+	/* Palettes/Mojito/20 */
+	--dt_color-plt-mojito-20: 16,93,44;
+	/* Palettes/Mojito/30 */
+	--dt_color-plt-mojito-30: 24,116,57;
+	/* Palettes/Mojito/40 */
+	--dt_color-plt-mojito-40: 33,130,66;
+	/* Palettes/Mojito/50 */
+	--dt_color-plt-mojito-50: 54,157,86;
+	/* Palettes/Mojito/60 */
+	--dt_color-plt-mojito-60: 77,173,104;
+	/* Palettes/Mojito/70 */
+	--dt_color-plt-mojito-70: 115,196,135;
+	/* Palettes/Mojito/80 */
+	--dt_color-plt-mojito-80: 156,212,169;
+	/* Palettes/Mojito/90 */
+	--dt_color-plt-mojito-90: 187,228,196;
+	/* Palettes/Mojito/100 */
+	--dt_color-plt-mojito-100: 221,246,226;
+	/* Palettes/Mojito/Hover */
+	--dt_color-plt-mojito-hover: #ddf6e214;
+	/* Palettes/Mojito/Pressed */
+	--dt_color-plt-mojito-pressed: #ddf6e22e;
+	/* Palettes/Jade/0 */
+	--dt_color-plt-jade-0: 5,36,27;
+	/* Palettes/Jade/5 */
+	--dt_color-plt-jade-5: 6,50,37;
+	/* Palettes/Jade/10 */
+	--dt_color-plt-jade-10: 8,63,46;
+	/* Palettes/Jade/20 */
+	--dt_color-plt-jade-20: 0,85,61;
+	/* Palettes/Jade/30 */
+	--dt_color-plt-jade-30: 16,111,77;
+	/* Palettes/Jade/40 */
+	--dt_color-plt-jade-40: 23,126,86;
+	/* Palettes/Jade/50 */
+	--dt_color-plt-jade-50: 37,155,105;
+	/* Palettes/Jade/60 */
+	--dt_color-plt-jade-60: 61,170,124;
+	/* Palettes/Jade/70 */
+	--dt_color-plt-jade-70: 99,194,154;
+	/* Palettes/Jade/80 */
+	--dt_color-plt-jade-80: 141,210,181;
+	/* Palettes/Jade/90 */
+	--dt_color-plt-jade-90: 176,228,206;
+	/* Palettes/Jade/100 */
+	--dt_color-plt-jade-100: 216,245,233;
+	/* Palettes/Jade/Hover */
+	--dt_color-plt-jade-hover: #d8f5e914;
+	/* Palettes/Jade/Pressed */
+	--dt_color-plt-jade-pressed: #d8f5e92e;
+	/* Palettes/Aquarium/0 */
+	--dt_color-plt-aquarium-0: 1,28,35;
+	/* Palettes/Aquarium/5 */
+	--dt_color-plt-aquarium-5: 3,49,58;
+	/* Palettes/Aquarium/10 */
+	--dt_color-plt-aquarium-10: 5,60,72;
+	/* Palettes/Aquarium/20 */
+	--dt_color-plt-aquarium-20: 8,73,86;
+	/* Palettes/Aquarium/30 */
+	--dt_color-plt-aquarium-30: 15,95,110;
+	/* Palettes/Aquarium/40 */
+	--dt_color-plt-aquarium-40: 25,111,126;
+	/* Palettes/Aquarium/50 */
+	--dt_color-plt-aquarium-50: 44,142,155;
+	/* Palettes/Aquarium/60 */
+	--dt_color-plt-aquarium-60: 67,161,171;
+	/* Palettes/Aquarium/70 */
+	--dt_color-plt-aquarium-70: 102,190,196;
+	/* Palettes/Aquarium/80 */
+	--dt_color-plt-aquarium-80: 144,209,212;
+	/* Palettes/Aquarium/90 */
+	--dt_color-plt-aquarium-90: 178,227,228;
+	/* Palettes/Aquarium/100 */
+	--dt_color-plt-aquarium-100: 216,245,245;
+	/* Palettes/Aquarium/Hover */
+	--dt_color-plt-aquarium-hover: #d8f5f514;
+	/* Palettes/Aquarium/Pressed */
+	--dt_color-plt-aquarium-pressed: #d8f5f52e;
+	/* Palettes/Lagoon/0 */
+	--dt_color-plt-lagoon-0: 0,26,45;
+	/* Palettes/Lagoon/5 */
+	--dt_color-plt-lagoon-5: 0,47,75;
+	/* Palettes/Lagoon/10 */
+	--dt_color-plt-lagoon-10: 0,61,97;
+	/* Palettes/Lagoon/20 */
+	--dt_color-plt-lagoon-20: 0,77,118;
+	/* Palettes/Lagoon/30 */
+	--dt_color-plt-lagoon-30: 3,102,150;
+	/* Palettes/Lagoon/40 */
+	--dt_color-plt-lagoon-40: 10,119,167;
+	/* Palettes/Lagoon/50 */
+	--dt_color-plt-lagoon-50: 22,153,202;
+	/* Palettes/Lagoon/60 */
+	--dt_color-plt-lagoon-60: 43,165,206;
+	/* Palettes/Lagoon/70 */
+	--dt_color-plt-lagoon-70: 88,189,222;
+	/* Palettes/Lagoon/80 */
+	--dt_color-plt-lagoon-80: 135,204,227;
+	/* Palettes/Lagoon/90 */
+	--dt_color-plt-lagoon-90: 174,221,236;
+	/* Palettes/Lagoon/100 */
+	--dt_color-plt-lagoon-100: 216,238,246;
+	/* Palettes/Lagoon/Hover */
+	--dt_color-plt-lagoon-hover: #d8eef614;
+	/* Palettes/Lagoon/Pressed */
+	--dt_color-plt-lagoon-pressed: #d8eef62e;
+	/* Palettes/Ocean/0 */
+	--dt_color-plt-ocean-0: 8,21,54;
+	/* Palettes/Ocean/5 */
+	--dt_color-plt-ocean-5: 6,39,85;
+	/* Palettes/Ocean/10 */
+	--dt_color-plt-ocean-10: 7,51,104;
+	/* Palettes/Ocean/20 */
+	--dt_color-plt-ocean-20: 11,67,121;
+	/* Palettes/Ocean/30 */
+	--dt_color-plt-ocean-30: 19,87,149;
+	/* Palettes/Ocean/40 */
+	--dt_color-plt-ocean-40: 30,100,165;
+	/* Palettes/Ocean/50 */
+	--dt_color-plt-ocean-50: 48,126,192;
+	/* Palettes/Ocean/60 */
+	--dt_color-plt-ocean-60: 68,141,204;
+	/* Palettes/Ocean/70 */
+	--dt_color-plt-ocean-70: 99,165,219;
+	/* Palettes/Ocean/80 */
+	--dt_color-plt-ocean-80: 136,187,226;
+	/* Palettes/Ocean/90 */
+	--dt_color-plt-ocean-90: 176,211,237;
+	/* Palettes/Ocean/100 */
+	--dt_color-plt-ocean-100: 219,235,246;
+	/* Palettes/Ocean/Hover */
+	--dt_color-plt-ocean-hover: #dbebf614;
+	/* Palettes/Ocean/Pressed */
+	--dt_color-plt-ocean-pressed: #dbebf62e;
+	/* Palettes/Indigo/0 */
+	--dt_color-plt-indigo-0: 4,11,61;
+	/* Palettes/Indigo/5 */
+	--dt_color-plt-indigo-5: 10,22,90;
+	/* Palettes/Indigo/10 */
+	--dt_color-plt-indigo-10: 18,32,108;
+	/* Palettes/Indigo/20 */
+	--dt_color-plt-indigo-20: 25,41,127;
+	/* Palettes/Indigo/30 */
+	--dt_color-plt-indigo-30: 38,59,156;
+	/* Palettes/Indigo/40 */
+	--dt_color-plt-indigo-40: 51,73,171;
+	/* Palettes/Indigo/50 */
+	--dt_color-plt-indigo-50: 77,101,197;
+	/* Palettes/Indigo/60 */
+	--dt_color-plt-indigo-60: 101,122,206;
+	/* Palettes/Indigo/70 */
+	--dt_color-plt-indigo-70: 137,155,220;
+	/* Palettes/Indigo/80 */
+	--dt_color-plt-indigo-80: 171,183,225;
+	/* Palettes/Indigo/90 */
+	--dt_color-plt-indigo-90: 199,206,235;
+	/* Palettes/Indigo/100 */
+	--dt_color-plt-indigo-100: 228,232,244;
+	/* Palettes/Indigo/Hover */
+	--dt_color-plt-indigo-hover: #e4e8f414;
+	/* Palettes/Indigo/Pressed */
+	--dt_color-plt-indigo-pressed: #e4e8f42e;
+	/* Palettes/Aubergine/0 */
+	--dt_color-plt-aubergine-0: 32,2,33;
+	/* Palettes/Aubergine/5 */
+	--dt_color-plt-aubergine-5: 48,12,49;
+	/* Palettes/Aubergine/10 */
+	--dt_color-plt-aubergine-10: 67,19,73;
+	/* Palettes/Aubergine/20 */
+	--dt_color-plt-aubergine-20: 95,37,101;
+	/* Palettes/Aubergine/30 */
+	--dt_color-plt-aubergine-30: 125,57,134;
+	/* Palettes/Aubergine/40 */
+	--dt_color-plt-aubergine-40: 150,82,162;
+	/* Palettes/Aubergine/50 */
+	--dt_color-plt-aubergine-50: 178,110,195;
+	/* Palettes/Aubergine/60 */
+	--dt_color-plt-aubergine-60: 188,128,206;
+	/* Palettes/Aubergine/70 */
+	--dt_color-plt-aubergine-70: 207,161,222;
+	/* Palettes/Aubergine/80 */
+	--dt_color-plt-aubergine-80: 216,186,225;
+	/* Palettes/Aubergine/90 */
+	--dt_color-plt-aubergine-90: 227,206,235;
+	/* Palettes/Aubergine/100 */
+	--dt_color-plt-aubergine-100: 239,225,245;
+	/* Palettes/Aubergine/Hover */
+	--dt_color-plt-aubergine-hover: #efe1f514;
+	/* Palettes/Aubergine/Pressed */
+	--dt_color-plt-aubergine-pressed: #efe1f52e;
+	/* Palettes/Sangria/0 */
+	--dt_color-plt-sangria-0: 50,0,21;
+	/* Palettes/Sangria/5 */
+	--dt_color-plt-sangria-5: 68,11,36;
+	/* Palettes/Sangria/10 */
+	--dt_color-plt-sangria-10: 89,24,54;
+	/* Palettes/Sangria/20 */
+	--dt_color-plt-sangria-20: 107,31,66;
+	/* Palettes/Sangria/30 */
+	--dt_color-plt-sangria-30: 142,51,94;
+	/* Palettes/Sangria/40 */
+	--dt_color-plt-sangria-40: 152,64,104;
+	/* Palettes/Sangria/50 */
+	--dt_color-plt-sangria-50: 182,96,135;
+	/* Palettes/Sangria/60 */
+	--dt_color-plt-sangria-60: 194,120,153;
+	/* Palettes/Sangria/70 */
+	--dt_color-plt-sangria-70: 212,153,180;
+	/* Palettes/Sangria/80 */
+	--dt_color-plt-sangria-80: 220,178,197;
+	/* Palettes/Sangria/90 */
+	--dt_color-plt-sangria-90: 233,202,216;
+	/* Palettes/Sangria/100 */
+	--dt_color-plt-sangria-100: 246,228,235;
+	/* Palettes/Sangria/Hover */
+	--dt_color-plt-sangria-hover: #f6e4eb14;
+	/* Palettes/Sangria/Pressed */
+	--dt_color-plt-sangria-pressed: #f6e4eb2e;
+	/* Palettes/Flamingo/0 */
+	--dt_color-plt-flamingo-0: 48,0,5;
+	/* Palettes/Flamingo/5 */
+	--dt_color-plt-flamingo-5: 83,2,15;
+	/* Palettes/Flamingo/10 */
+	--dt_color-plt-flamingo-10: 107,5,24;
+	/* Palettes/Flamingo/20 */
+	--dt_color-plt-flamingo-20: 142,11,42;
+	/* Palettes/Flamingo/30 */
+	--dt_color-plt-flamingo-30: 180,21,65;
+	/* Palettes/Flamingo/40 */
+	--dt_color-plt-flamingo-40: 192,43,84;
+	/* Palettes/Flamingo/50 */
+	--dt_color-plt-flamingo-50: 217,76,117;
+	/* Palettes/Flamingo/60 */
+	--dt_color-plt-flamingo-60: 222,103,138;
+	/* Palettes/Flamingo/70 */
+	--dt_color-plt-flamingo-70: 230,139,167;
+	/* Palettes/Flamingo/80 */
+	--dt_color-plt-flamingo-80: 230,167,186;
+	/* Palettes/Flamingo/90 */
+	--dt_color-plt-flamingo-90: 238,193,207;
+	/* Palettes/Flamingo/100 */
+	--dt_color-plt-flamingo-100: 247,220,228;
+	/* Palettes/Flamingo/Hover */
+	--dt_color-plt-flamingo-hover: #f7dce414;
+	/* Palettes/Flamingo/Pressed */
+	--dt_color-plt-flamingo-pressed: #f7dce42e;
+	/* Palettes/Rose/0 */
+	--dt_color-plt-rose-0: 48,0,0;
+	/* Palettes/Rose/5 */
+	--dt_color-plt-rose-5: 82,5,7;
+	/* Palettes/Rose/10 */
+	--dt_color-plt-rose-10: 108,17,20;
+	/* Palettes/Rose/20 */
+	--dt_color-plt-rose-20: 138,26,31;
+	/* Palettes/Rose/30 */
+	--dt_color-plt-rose-30: 175,48,54;
+	/* Palettes/Rose/40 */
+	--dt_color-plt-rose-40: 195,67,74;
+	/* Palettes/Rose/50 */
+	--dt_color-plt-rose-50: 217,99,107;
+	/* Palettes/Rose/60 */
+	--dt_color-plt-rose-60: 217,126,133;
+	/* Palettes/Rose/70 */
+	--dt_color-plt-rose-70: 230,155,161;
+	/* Palettes/Rose/80 */
+	--dt_color-plt-rose-80: 230,178,182;
+	/* Palettes/Rose/90 */
+	--dt_color-plt-rose-90: 238,199,202;
+	/* Palettes/Rose/100 */
+	--dt_color-plt-rose-100: 247,220,222;
+	/* Palettes/Rose/Hover */
+	--dt_color-plt-rose-hover: #f7dcde14;
+	/* Palettes/Rose/Pressed */
+	--dt_color-plt-rose-pressed: #f7dcde2e;
+	/* Palettes/Horchata/0 */
+	--dt_color-plt-horchata-0: 42,23,7;
+	/* Palettes/Horchata/5 */
+	--dt_color-plt-horchata-5: 56,32,10;
+	/* Palettes/Horchata/10 */
+	--dt_color-plt-horchata-10: 72,42,15;
+	/* Palettes/Horchata/20 */
+	--dt_color-plt-horchata-20: 84,50,19;
+	/* Palettes/Horchata/30 */
+	--dt_color-plt-horchata-30: 107,68,30;
+	/* Palettes/Horchata/40 */
+	--dt_color-plt-horchata-40: 121,81,41;
+	/* Palettes/Horchata/50 */
+	--dt_color-plt-horchata-50: 148,106,62;
+	/* Palettes/Horchata/60 */
+	--dt_color-plt-horchata-60: 163,125,84;
+	/* Palettes/Horchata/70 */
+	--dt_color-plt-horchata-70: 186,155,119;
+	/* Palettes/Horchata/80 */
+	--dt_color-plt-horchata-80: 202,180,155;
+	/* Palettes/Horchata/90 */
+	--dt_color-plt-horchata-90: 219,203,185;
+	/* Palettes/Horchata/100 */
+	--dt_color-plt-horchata-100: 235,227,217;
+	/* Palettes/Horchata/Hover */
+	--dt_color-plt-horchata-hover: #ebe3d914;
+	/* Palettes/Horchata/Pressed */
+	--dt_color-plt-horchata-pressed: #ebe3d92e;
+	--dt_blend-mode-interaction: lighten;
+
+	/* Sidebar — dark mode defaults for Aubergine preset (IA4 system).
+	   bg: standard dark #1A1D21, sel: aubergine-30 (base-hgl-1 dark shade),
+	   badge: aubergine-70 (base-imp dark shade), pres: jade-60 (base-inv-hgl-2 dark shade).
+	   Source: @tinyspeck/design-tokens/src/helpers/ia.ts paletteShadeByVariableAndMode */
+	--sidebar-bg: #1A1D21;
+	--sidebar-text-primary: #D1D2D3;
+	--sidebar-text-secondary: rgba(209,210,211,0.8);
+	--sidebar-hover-bg: rgba(255,255,255,0.08);
+	--sidebar-filter-bg: rgba(255,255,255,0.12);
+	--sidebar-divider: rgba(255,255,255,0.13);
+	--sidebar-muted: rgba(209,210,211,0.4);
+	--sidebar-presence-away: rgba(209,210,211,0.5);
+	--sidebar-mpdm-bg: rgba(255,255,255,0.2);
+	--sidebar-selected-bg: #DF9FF4;
+	--sidebar-selected-color: #FFFFFF;
+	--sidebar-badge-bg: #83388A;
+	--sidebar-badge-color: #FFFFFF;
+	--sidebar-presence-active: #178F65;
+	--sidebar-presence-border: #1A1D21;
+}

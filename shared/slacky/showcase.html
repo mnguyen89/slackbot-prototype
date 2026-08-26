@@ -1,0 +1,2353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slacky Component Showcase</title>
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="dark.css">
+  <link rel="stylesheet" href="components.css">
+  <style>
+    :root {
+      --showcase-sidebar-width: 240px;
+      --showcase-bg: #f8f8fa;
+      --showcase-border: #e0e0e0;
+      --showcase-card-bg: #fff;
+    }
+
+    .sk-client-theme--dark {
+      --showcase-bg: #1a1d21;
+      --showcase-border: #797c814d;
+      --showcase-card-bg: #212428;
+    }
+
+    .sk-client-theme--dark .showcase-sidebar__link:hover {
+      background: #f8f8f80f;
+    }
+
+    .sk-client-theme--dark .showcase-sidebar__search input {
+      background: #212428;
+      border-color: #797c814d;
+      color: #f8f8f8;
+    }
+
+    @font-face {
+      font-family: "Slack Circular";
+      src: url("fonts/circular/lineto-slack-circular-book.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Slack Circular";
+      src: url("fonts/circular/lineto-slack-circular-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    .prototype-breadcrumb {
+      background: #EEF0F3;
+      padding: 10px 20px;
+      font-family: "Slack Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      -webkit-font-smoothing: antialiased;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+    }
+    .prototype-breadcrumb a {
+      color: #1D1C1D;
+      text-decoration: none;
+      font-weight: 400;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .prototype-breadcrumb a:hover { opacity: 1; }
+    .prototype-breadcrumb .breadcrumb-separator {
+      color: #1D1C1D;
+      opacity: 0.4;
+    }
+    .prototype-breadcrumb .breadcrumb-current {
+      color: #1D1C1D;
+      font-weight: 700;
+    }
+
+    .showcase-header {
+      position: fixed;
+      top: 37px;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      background: var(--showcase-card-bg);
+      border-bottom: 1px solid var(--showcase-border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--dt_static_space-100, 16px);
+      gap: var(--dt_static_space-150, 24px);
+      height: 48px;
+    }
+
+    .showcase-header__title {
+      font-size: var(--dt_static_type-size-subtitle, 18px);
+      font-weight: var(--dt_static_type-weight-black, 900);
+      flex-shrink: 0;
+    }
+
+    .showcase-header .c-tabs__tab_menu {
+      box-shadow: none;
+      display: flex;
+      align-items: flex-end;
+      height: 100%;
+    }
+
+    .showcase-header .c-tabs__tab {
+      padding: 14px 0 10px;
+      margin: 0 var(--dt_static_space-075, 12px);
+      font-size: var(--dt_static_type-size-base, 15px);
+      text-decoration: none;
+    }
+
+    .showcase-header .c-tabs__tab:first-child {
+      margin-left: 0;
+    }
+
+    body {
+      font-family: var(--font-family-lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+      background: var(--showcase-bg);
+      color: var(--dt_color-content-pry, #1d1c1d);
+      display: flex;
+      min-height: 100vh;
+      padding-top: 85px;
+    }
+
+    .showcase-sidebar {
+      width: var(--showcase-sidebar-width);
+      background: var(--showcase-card-bg);
+      border-right: 1px solid var(--showcase-border);
+      position: fixed;
+      top: 85px;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      padding: 24px 0;
+      z-index: 10;
+    }
+
+    .showcase-sidebar__title {
+      font-size: 15px;
+      font-weight: 700;
+      padding: 0 20px;
+      margin-bottom: 4px;
+    }
+
+    .showcase-sidebar__subtitle {
+      font-size: 12px;
+      color: var(--dt_color-content-sec, #616061);
+      padding: 0 20px;
+      margin-bottom: 16px;
+    }
+
+    .showcase-sidebar__search {
+      padding: 0 12px;
+      margin-bottom: 12px;
+    }
+
+    .showcase-sidebar__search input {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid var(--showcase-border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      background: var(--showcase-bg);
+    }
+
+    .showcase-sidebar__search input:focus {
+      border-color: var(--dt_color-base-inv-hgl-1, #1264a3);
+    }
+
+    .showcase-sidebar__group-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      padding: 16px 20px 6px;
+    }
+
+    .showcase-sidebar__link {
+      display: block;
+      padding: 5px 20px;
+      font-size: 13px;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      text-decoration: none;
+      border-radius: 0;
+      cursor: pointer;
+    }
+
+    .showcase-sidebar__link:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    .showcase-sidebar__link.is-active {
+      background: var(--dt_color-base-inv-hgl-1, #1264a3);
+      color: #fff;
+    }
+
+    .showcase-sidebar__link[hidden] { display: none; }
+
+    .showcase-main {
+      margin-left: var(--showcase-sidebar-width);
+      flex: 1;
+      padding: 32px 48px 80px;
+      max-width: 900px;
+    }
+
+    .showcase-main h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .showcase-main > p {
+      font-size: 14px;
+      color: var(--dt_color-content-sec, #616061);
+      margin-bottom: 32px;
+    }
+
+    .component-section {
+      margin-bottom: 48px;
+      scroll-margin-top: 24px;
+    }
+
+    .component-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--showcase-border);
+    }
+
+    .component-section h2 span {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--dt_color-content-sec, #616061);
+      margin-left: 8px;
+    }
+
+    .component-desc {
+      font-size: 13px;
+      color: var(--dt_color-content-sec, #616061);
+      margin-bottom: 16px;
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .demo-row--col {
+      flex-direction: column;
+    }
+
+    .demo-box {
+      background: var(--showcase-card-bg);
+      border: 1px solid var(--showcase-border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .demo-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--dt_color-content-sec, #616061);
+      margin-bottom: 8px;
+    }
+
+    .demo-box--message {
+      padding: 16px 0;
+    }
+    .demo-box--message .demo-label {
+      padding-left: 26px;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .component-section[hidden] { display: none; }
+
+    .demo-box .c-message_kit__background {
+      background: inherit;
+    }
+
+    /* Messages (from shell.css) */
+    .p-message {
+      display: flex;
+      gap: 8px;
+      padding: 8px 20px;
+    }
+    .p-message__avatar {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+    .p-message__avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: block;
+      object-fit: cover;
+    }
+    .p-message__body {
+      flex: 1;
+      min-width: 0;
+    }
+    .p-message__header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .p-message__sender {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--dt_color-content-pry, #1d1c1d);
+    }
+    .p-message__time {
+      font-size: 12px;
+      color: var(--dt_color-content-sec, #616061);
+    }
+    .p-message__text {
+      font-size: 15px;
+      line-height: 1.46;
+      color: var(--dt_color-content-pry, #1d1c1d);
+    }
+
+    /* Thread Panel (from shell.css) */
+    .p-flexpane__header {
+      height: 49px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px 0 20px;
+      box-shadow: 0 1px 0 0 var(--dt_color-otl-ter, #5e5d6021);
+      flex-shrink: 0;
+    }
+    .p-flexpane__header_text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .p-flexpane__header_title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      white-space: nowrap;
+    }
+    .p-flexpane__header_channel {
+      font-size: 13px;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .p-flexpane__close_btn {
+      width: 28px;
+      height: 28px;
+      font-size: 18px;
+    }
+    .p-flexpane__reply_count {
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dt_color-content-hgl-1, #1264a3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .p-flexpane__reply_count::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--dt_color-otl-ter, #5e5d6021);
+    }
+    .p-flexpane__composer {
+      padding: 8px 16px 16px;
+    }
+    .p-flexpane__composer .c-wysiwyg_container {
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="prototype-breadcrumb">
+  <a href="https://pages.slack-github.com/muno/prototypes/">Prototypes</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-current">Slacky Component Library</span>
+</nav>
+
+<header class="showcase-header">
+  <span class="showcase-header__title">Slacky</span>
+  <div class="c-tabs__tab_menu" role="tablist">
+    <a class="c-tabs__tab c-tabs__tab--active" href="showcase.html" role="tab" aria-selected="true">Components</a>
+    <a class="c-tabs__tab" href="messagekit.html" role="tab">MessageKit</a>
+    <a class="c-tabs__tab" href="shells.html" role="tab">Shells</a>
+  </div>
+</header>
+
+<nav class="showcase-sidebar">
+  <div class="showcase-sidebar__search">
+    <input type="text" id="sidebar-search" placeholder="Filter components...">
+  </div>
+
+  <div class="showcase-sidebar__group-label">Layout Components</div>
+  <a class="showcase-sidebar__link" href="#channel-sidebar" data-section="channel-sidebar">Channel Sidebar</a>
+  <a class="showcase-sidebar__link" href="#message" data-section="message">Message</a>
+  <a class="showcase-sidebar__link" href="#composer" data-section="composer">Composer</a>
+  <a class="showcase-sidebar__link" href="#thread-panel" data-section="thread-panel">Thread Panel</a>
+
+  <div class="showcase-sidebar__group-label">Form Controls</div>
+  <a class="showcase-sidebar__link" href="#button" data-section="button">Button</a>
+  <a class="showcase-sidebar__link" href="#icon-button" data-section="icon-button">Icon Button</a>
+  <a class="showcase-sidebar__link" href="#text-input" data-section="text-input">Text Input</a>
+  <a class="showcase-sidebar__link" href="#textarea" data-section="textarea">Textarea</a>
+  <a class="showcase-sidebar__link" href="#checkbox" data-section="checkbox">Checkbox</a>
+  <a class="showcase-sidebar__link" href="#radio" data-section="radio">Radio Button</a>
+  <a class="showcase-sidebar__link" href="#switch" data-section="switch">Switch</a>
+  <a class="showcase-sidebar__link" href="#select" data-section="select">Select</a>
+  <a class="showcase-sidebar__link" href="#slider" data-section="slider">Slider</a>
+  <a class="showcase-sidebar__link" href="#label" data-section="label">Label</a>
+  <a class="showcase-sidebar__link" href="#filter-input" data-section="filter-input">Filter Input</a>
+
+  <div class="showcase-sidebar__group-label">Feedback</div>
+  <a class="showcase-sidebar__link" href="#alert" data-section="alert">Alert</a>
+  <a class="showcase-sidebar__link" href="#banner" data-section="banner">Banner</a>
+  <a class="showcase-sidebar__link" href="#callout" data-section="callout">Callout</a>
+  <a class="showcase-sidebar__link" href="#toast" data-section="toast">Toast</a>
+  <a class="showcase-sidebar__link" href="#spinner" data-section="spinner">Spinner</a>
+  <a class="showcase-sidebar__link" href="#empty-state" data-section="empty-state">Empty State</a>
+
+  <div class="showcase-sidebar__group-label">Overlays</div>
+  <a class="showcase-sidebar__link" href="#modal" data-section="modal">Modal</a>
+  <a class="showcase-sidebar__link" href="#popover" data-section="popover">Popover</a>
+  <a class="showcase-sidebar__link" href="#tooltip" data-section="tooltip">Tooltip</a>
+  <a class="showcase-sidebar__link" href="#menu" data-section="menu">Menu</a>
+  <a class="showcase-sidebar__link" href="#context-menu" data-section="context-menu">Context Menu</a>
+  <a class="showcase-sidebar__link" href="#coachmark" data-section="coachmark">Coachmark</a>
+
+  <div class="showcase-sidebar__group-label">Navigation</div>
+  <a class="showcase-sidebar__link" href="#tabs" data-section="tabs">Tabs</a>
+  <a class="showcase-sidebar__link" href="#sidebar-menu" data-section="sidebar-menu">Sidebar Menu</a>
+  <a class="showcase-sidebar__link" href="#pagination" data-section="pagination">Pagination</a>
+
+  <div class="showcase-sidebar__group-label">Data Display</div>
+  <a class="showcase-sidebar__link" href="#card" data-section="card">Card</a>
+  <a class="showcase-sidebar__link" href="#tag" data-section="tag">Tag</a>
+  <a class="showcase-sidebar__link" href="#token" data-section="token">Token (Chip)</a>
+  <a class="showcase-sidebar__link" href="#mention-badge" data-section="mention-badge">Mention Badge</a>
+  <a class="showcase-sidebar__link" href="#dot" data-section="dot">Dot</a>
+  <a class="showcase-sidebar__link" href="#link" data-section="link">Link</a>
+  <a class="showcase-sidebar__link" href="#truncate" data-section="truncate">Truncate</a>
+
+  <div class="showcase-sidebar__group-label">Layout</div>
+  <a class="showcase-sidebar__link" href="#toolbar" data-section="toolbar">Toolbar</a>
+  <a class="showcase-sidebar__link" href="#aspect-box" data-section="aspect-box">Aspect Box</a>
+  <a class="showcase-sidebar__link" href="#keyboard-key" data-section="keyboard-key">Keyboard Key</a>
+
+  <div class="showcase-sidebar__group-label">Pickers</div>
+  <a class="showcase-sidebar__link" href="#calendar" data-section="calendar">Calendar</a>
+  <a class="showcase-sidebar__link" href="#date-picker" data-section="date-picker">Date Picker</a>
+  <a class="showcase-sidebar__link" href="#time-picker" data-section="time-picker">Time Picker</a>
+
+  <div class="showcase-sidebar__group-label">Form Helpers</div>
+  <a class="showcase-sidebar__link" href="#hint" data-section="hint">Hint</a>
+  <a class="showcase-sidebar__link" href="#inline-alert" data-section="inline-alert">Inline Alert</a>
+  <a class="showcase-sidebar__link" href="#char-count" data-section="char-count">Character Count</a>
+  <a class="showcase-sidebar__link" href="#fieldset" data-section="fieldset">Fieldset</a>
+
+</nav>
+
+<main class="showcase-main">
+  <h1>Components</h1>
+  <p>48 Slack design components. Click any in the sidebar to jump to it. Toggle dark mode in the bottom-right corner.</p>
+
+  <!-- ============== CHANNEL SIDEBAR ============== -->
+  <section class="component-section" id="channel-sidebar">
+    <h2>Channel Sidebar <span>p-channel_sidebar</span></h2>
+    <p class="component-desc">Full sidebar layout with workspace header, search, collapsible sections, and channel rows. Supports selected, unread, muted states and presence indicators. Themeable via CSS custom properties.</p>
+    <div class="demo-box" style="margin-bottom:16px">
+      <div class="demo-label">Theme (v2)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px" id="theme-picker"></div>
+    </div>
+    <div class="demo-box" style="padding:0;overflow:hidden;border-radius:8px;display:flex">
+      <div style="background:var(--sidebar-bg);flex-shrink:0" id="sidebar-bg-wrap">
+      <div class="p-channel_sidebar" style="width:270px" id="demo-sidebar">
+
+        <!-- Titlebar -->
+        <div class="p-channel_sidebar__header">
+          <div class="p-channel_sidebar__header_left">
+            <span class="p-channel_sidebar__header_name">Salesforce</span>
+            <span class="p-channel_sidebar__header_caret" id="header-caret"></span>
+          </div>
+          <div class="p-channel_sidebar__header_actions">
+            <button class="p-channel_sidebar__header_btn" aria-label="Settings" id="header-btn-1"></button>
+            <button class="p-channel_sidebar__header_btn" aria-label="Compose" id="header-btn-2"></button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="p-channel_sidebar__filter">
+          <span class="p-channel_sidebar__filter_icon" id="filter-search-icon"></span>
+          <span class="p-channel_sidebar__filter_text">Filter conversations</span>
+        </div>
+
+        <div class="p-channel_sidebar__list">
+          <!-- Page rows -->
+          <div class="p-channel_sidebar__pages">
+            <a class="p-channel_sidebar__page_row" href="javascript:void(0)">
+              <span class="p-channel_sidebar__page_row_icon" id="page-icon-unreads"></span>
+              <span class="p-channel_sidebar__name">Unreads</span>
+            </a>
+            <a class="p-channel_sidebar__page_row p-channel_sidebar__page_row--unread" href="javascript:void(0)">
+              <span class="p-channel_sidebar__page_row_icon" id="page-icon-threads"></span>
+              <span class="p-channel_sidebar__name">Threads</span>
+            </a>
+            <a class="p-channel_sidebar__page_row" href="javascript:void(0)">
+              <span class="p-channel_sidebar__page_row_icon" id="page-icon-huddles"></span>
+              <span class="p-channel_sidebar__name">Huddles</span>
+            </a>
+            <a class="p-channel_sidebar__page_row" href="javascript:void(0)">
+              <span class="p-channel_sidebar__page_row_icon" id="page-icon-recap"></span>
+              <span class="p-channel_sidebar__name">Recap</span>
+            </a>
+            <a class="p-channel_sidebar__page_row" href="javascript:void(0)">
+              <span class="p-channel_sidebar__page_row_icon" id="page-icon-drafts"></span>
+              <span class="p-channel_sidebar__name">Drafts &amp; sent</span>
+              <span class="p-channel_sidebar__channel_suffix" style="opacity:0.6;font-size:13px">38</span>
+            </a>
+            <a class="p-channel_sidebar__page_row" href="javascript:void(0)">
+              <span class="p-channel_sidebar__page_row_icon" id="page-icon-directories"></span>
+              <span class="p-channel_sidebar__name">Directories</span>
+            </a>
+          </div>
+
+          <!-- Divider -->
+          <div class="p-channel_sidebar__divider">
+            <div class="p-channel_sidebar__divider_line"></div>
+          </div>
+
+          <!-- Conversation sections -->
+          <div class="p-channel_sidebar__conversations">
+
+            <!-- Starred -->
+            <div class="p-channel_sidebar__section">
+              <div class="p-channel_sidebar__section_heading" data-section-toggle="starred">
+                <span class="p-channel_sidebar__section_heading_icon" id="sec-icon-starred"></span>
+                <span class="p-channel_sidebar__section_heading_label">Starred</span>
+              </div>
+              <div data-section-content="starred">
+                <a class="p-channel_sidebar__channel p-channel_sidebar__channel--selected" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--hash" id="ch-icon-1"></span>
+                  <span class="p-channel_sidebar__name">general</span>
+                </a>
+                <a class="p-channel_sidebar__channel p-channel_sidebar__channel--unread" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--hash" id="ch-icon-2"></span>
+                  <span class="p-channel_sidebar__name">design-systems</span>
+                  <span class="p-channel_sidebar__channel_suffix">
+                    <span class="p-channel_sidebar__badge">5</span>
+                  </span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--hash" id="ch-icon-3"></span>
+                  <span class="p-channel_sidebar__name">engineering</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--hash" id="ch-icon-4"></span>
+                  <span class="p-channel_sidebar__name">random</span>
+                </a>
+                <a class="p-channel_sidebar__channel p-channel_sidebar__channel--muted" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--hash" id="ch-icon-5"></span>
+                  <span class="p-channel_sidebar__name">social</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--lock" id="ch-icon-6"></span>
+                  <span class="p-channel_sidebar__name">team-leads</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Channels -->
+            <div class="p-channel_sidebar__section">
+              <div class="p-channel_sidebar__section_heading" data-section-toggle="channels">
+                <span class="p-channel_sidebar__section_heading_icon" id="sec-icon-channels"></span>
+                <span class="p-channel_sidebar__section_heading_label">Channels</span>
+              </div>
+              <div data-section-content="channels">
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--hash" id="ch-icon-7"></span>
+                  <span class="p-channel_sidebar__name">product-design</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--lock" id="ch-icon-8"></span>
+                  <span class="p-channel_sidebar__name">sales</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__channel_icon_prefix p-channel_sidebar__channel_icon--hash" id="ch-icon-9"></span>
+                  <span class="p-channel_sidebar__name">support</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Direct messages -->
+            <div class="p-channel_sidebar__section">
+              <div class="p-channel_sidebar__section_heading" data-section-toggle="dms">
+                <span class="p-channel_sidebar__section_heading_icon" id="sec-icon-dms"></span>
+                <span class="p-channel_sidebar__section_heading_label">Direct messages</span>
+              </div>
+              <div data-section-content="dms">
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__dm_avatar">
+                    <img class="p-channel_sidebar__dm_avatar_img" src="avatars/persona-a.png" alt="">
+                    <span class="p-channel_sidebar__presence p-channel_sidebar__presence--active"></span>
+                  </span>
+                  <span class="p-channel_sidebar__name">Aarti Ramani</span>
+                </a>
+                <a class="p-channel_sidebar__channel p-channel_sidebar__channel--unread" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__dm_avatar">
+                    <img class="p-channel_sidebar__dm_avatar_img" src="avatars/persona-b.png" alt="">
+                    <span class="p-channel_sidebar__presence p-channel_sidebar__presence--active"></span>
+                  </span>
+                  <span class="p-channel_sidebar__name">Abhay Agnihotri</span>
+                  <span class="p-channel_sidebar__channel_suffix">
+                    <span class="p-channel_sidebar__badge">2</span>
+                  </span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__mpdm_avatar">6</span>
+                  <span class="p-channel_sidebar__name">Dinner thursday 4_23 ...</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__dm_avatar">
+                    <img class="p-channel_sidebar__dm_avatar_img" src="avatars/persona-d.png" alt="">
+                    <span class="p-channel_sidebar__presence p-channel_sidebar__presence--away"></span>
+                  </span>
+                  <span class="p-channel_sidebar__name">Catherine Ratana-Kelley</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__dm_avatar">
+                    <img class="p-channel_sidebar__dm_avatar_img" src="avatars/persona-c.png" alt="">
+                    <span class="p-channel_sidebar__presence p-channel_sidebar__presence--away"></span>
+                  </span>
+                  <span class="p-channel_sidebar__name">Dave Fearon</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__dm_avatar">
+                    <img class="p-channel_sidebar__dm_avatar_img" src="avatars/persona-e.png" alt="">
+                    <span class="p-channel_sidebar__presence p-channel_sidebar__presence--away"></span>
+                  </span>
+                  <span class="p-channel_sidebar__name">Izzy Ritthaworn</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__dm_avatar">
+                    <img class="p-channel_sidebar__dm_avatar_img" src="avatars/persona-f.png" alt="">
+                    <span class="p-channel_sidebar__presence p-channel_sidebar__presence--away"></span>
+                  </span>
+                  <span class="p-channel_sidebar__name">Janine Baltazar</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <span class="p-channel_sidebar__dm_avatar">
+                    <img class="p-channel_sidebar__dm_avatar_img" src="avatars/persona-h.png" alt="">
+                    <span class="p-channel_sidebar__presence p-channel_sidebar__presence--active"></span>
+                  </span>
+                  <span class="p-channel_sidebar__name">Jon Russell</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Apps -->
+            <div class="p-channel_sidebar__section">
+              <div class="p-channel_sidebar__section_heading" data-section-toggle="apps">
+                <span class="p-channel_sidebar__section_heading_icon" id="sec-icon-apps"></span>
+                <span class="p-channel_sidebar__section_heading_label">Apps</span>
+              </div>
+              <div data-section-content="apps">
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <img class="p-channel_sidebar__dm_avatar_img" src="avatars/app-asana.png" alt="">
+                  <span class="p-channel_sidebar__name">Asana</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <img class="p-channel_sidebar__dm_avatar_img" src="avatars/app-gcalendar.png" alt="">
+                  <span class="p-channel_sidebar__name">Google Calendar</span>
+                </a>
+                <a class="p-channel_sidebar__channel" href="javascript:void(0)">
+                  <img class="p-channel_sidebar__dm_avatar_img" src="avatars/app-polly.png" alt="">
+                  <span class="p-channel_sidebar__name">Polly</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      </div>
+      <div style="flex:1;min-width:120px;background:var(--showcase-card-bg)" id="content-bg-wrap"></div>
+    </div>
+  </section>
+
+  <section class="component-section" id="message">
+    <h2>Message <span>c-message_kit</span></h2>
+    <p class="component-desc">Channel message with avatar, sender, timestamp, body, reactions, reply bar, and hover actions. Matches the real Slack message layout. <a href="messagekit.html" style="color:var(--dt_color-content-hgl-1,#1264a3)">Full MessageKit reference &rarr;</a></p>
+
+    <div class="demo-box demo-box--message">
+      <div class="demo-label">Standard message</div>
+      <div style="max-width:720px">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-a.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Sarah Chen</span>
+                  <span class="c-timestamp">11:42 AM</span>
+                </div>
+                <div class="c-message__body">Hey team, I just pushed the updated designs for the onboarding flow. Let me know if you have any feedback!</div>
+              </div>
+            </div>
+            <div class="c-message_actions__container">
+              <div class="c-message_actions__group">
+                <button class="c-message_actions__button" title="Add reaction" id="ma-emoji1"></button>
+                <button class="c-message_actions__button" title="Reply in thread" id="ma-thread1"></button>
+                <button class="c-message_actions__button" title="Share message" id="ma-share1"></button>
+                <button class="c-message_actions__button" title="Save" id="ma-save1"></button>
+                <button class="c-message_actions__button" title="More actions" id="ma-more1"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-box demo-box--message">
+      <div class="demo-label">Message with reactions</div>
+      <div style="max-width:720px">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-b.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Marcus Johnson</span>
+                  <span class="c-timestamp">11:45 AM</span>
+                </div>
+                <div class="c-message__body">Shipped the new notification settings page. Should be live in staging now 🚀</div>
+                <div class="c-message_kit__reaction_bar">
+                  <button class="c-reaction c-reaction--reacted"><span>🎉</span> <span>3</span></button>
+                  <button class="c-reaction"><span>👀</span> <span>2</span></button>
+                  <button class="c-reaction c-reaction--reacted"><span>🚀</span> <span>5</span></button>
+                  <button class="c-reaction_add" title="Add a reaction" id="ma-add-reaction">😀</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-box demo-box--message">
+      <div class="demo-label">Message with reply bar</div>
+      <div style="max-width:720px">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-c.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Priya Patel</span>
+                  <span class="c-timestamp">10:30 AM</span>
+                </div>
+                <div class="c-message__body">Can we sync on the API changes before the sprint review? I have some questions about the auth flow.</div>
+                <div class="c-message__reply_bar">
+                  <div class="c-message__reply_bar__avatars">
+                    <img src="avatars/persona-a.png" alt="">
+                    <img src="avatars/persona-d.png" alt="">
+                  </div>
+                  <span class="c-message__reply_count">3 replies</span>
+                  <span class="c-message__reply_bar_description">Last reply 2 hours ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-box demo-box--message">
+      <div class="demo-label">Adjacent messages (same user)</div>
+      <div style="max-width:720px">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-e.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Alex Rivera</span>
+                  <span class="c-timestamp">2:15 PM</span>
+                </div>
+                <div class="c-message__body">Just wrapped up the accessibility audit for the settings page.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background c-message_kit__background--adjacent">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <span class="c-timestamp c-timestamp--adjacent">2:15</span>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__body">Found a few contrast issues that we should fix before launch — I'll file tickets for those.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background c-message_kit__background--adjacent">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <span class="c-timestamp c-timestamp--adjacent">2:16</span>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__body">Also, the screen reader navigation for the sidebar is much improved 👍</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="component-section" id="composer">
+    <h2>Composer <span>c-wysiwyg_container</span></h2>
+    <p class="component-desc">Message composer with formatting toolbar, text input area, and action buttons. Matches the real Slack WYSIWYG message input.</p>
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <span style="font-size:13px;font-weight:600;color:var(--dt_color-content-pry,#1d1c1d)">Composer state:</span>
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;color:var(--dt_color-content-sec,#616061)">
+        <input type="radio" name="composer-state" value="empty" checked> Empty
+      </label>
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;color:var(--dt_color-content-sec,#616061)">
+        <input type="radio" name="composer-state" value="text"> With text
+      </label>
+    </div>
+
+    <div class="demo-box">
+      <div class="demo-label">Default (with formatting bar)</div>
+      <div style="max-width:680px">
+        <div class="c-wysiwyg_container" id="demo-composer">
+          <div class="c-wysiwyg_container__body">
+            <div class="c-wysiwyg_container__formatting">
+              <button class="c-wysiwyg_container__button" title="Bold" id="cmp-bold"></button>
+              <button class="c-wysiwyg_container__button" title="Italic" id="cmp-italic"></button>
+              <button class="c-wysiwyg_container__button" title="Underline" id="cmp-underline"></button>
+              <button class="c-wysiwyg_container__button" title="Strikethrough" id="cmp-strike"></button>
+              <div class="c-wysiwyg_container__formatting_divider"></div>
+              <button class="c-wysiwyg_container__button" title="Link" id="cmp-link"></button>
+              <div class="c-wysiwyg_container__formatting_divider"></div>
+              <button class="c-wysiwyg_container__button" title="Numbered list" id="cmp-ol"></button>
+              <button class="c-wysiwyg_container__button" title="Bulleted list" id="cmp-ul"></button>
+              <div class="c-wysiwyg_container__formatting_divider"></div>
+              <button class="c-wysiwyg_container__button" title="Blockquote" id="cmp-quote"></button>
+              <div class="c-wysiwyg_container__formatting_divider"></div>
+              <button class="c-wysiwyg_container__button" title="Code" id="cmp-code"></button>
+              <button class="c-wysiwyg_container__button" title="Code block" id="cmp-codeblock"></button>
+            </div>
+            <div class="c-texty_input" contenteditable="true">
+              <span class="ql-placeholder">Message #general</span>
+            </div>
+            <div class="c-wysiwyg_container__footer">
+              <div class="c-wysiwyg_container__toolbar_buttons">
+                <button class="c-wysiwyg_container__button" title="Add attachment" id="cmp-plus"></button>
+                <button class="c-wysiwyg_container__button" title="Formatting" id="cmp-aa"></button>
+                <button class="c-wysiwyg_container__button" title="Emoji" id="cmp-emoji"></button>
+                <button class="c-wysiwyg_container__button" title="Mention someone" id="cmp-mention"></button>
+                <button class="c-wysiwyg_container__button" title="Record video clip" id="cmp-video"></button>
+                <button class="c-wysiwyg_container__button" title="Record audio clip" id="cmp-mic"></button>
+              </div>
+              <div class="c-wysiwyg_container__suffix">
+                <div class="c-wysiwyg_container__send_button--with_options c-wysiwyg_container__send_button--with_options_disabled">
+                  <button class="c-wysiwyg_container__button--send" title="Send" id="cmp-send"></button>
+                  <button class="c-wysiwyg_container__button--send_options" title="Send options" id="cmp-send-opts"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <div class="demo-label">Without formatting bar</div>
+      <div style="max-width:680px">
+        <div class="c-wysiwyg_container">
+          <div class="c-wysiwyg_container__body" style="grid-template-areas:'input input input' 'footer footer footer';grid-template-rows:minmax(0,1fr) auto">
+            <div class="c-texty_input" contenteditable="true">
+              <span class="ql-placeholder">Message #design-team</span>
+            </div>
+            <div class="c-wysiwyg_container__footer">
+              <div class="c-wysiwyg_container__toolbar_buttons">
+                <button class="c-wysiwyg_container__button" title="Add attachment" id="cmp-plus2"></button>
+                <button class="c-wysiwyg_container__button" title="Formatting" id="cmp-format"></button>
+                <button class="c-wysiwyg_container__button" title="Emoji" id="cmp-emoji2"></button>
+                <button class="c-wysiwyg_container__button" title="Mention someone" id="cmp-mention2"></button>
+                <button class="c-wysiwyg_container__button" title="Record video clip" id="cmp-video2"></button>
+                <button class="c-wysiwyg_container__button" title="Record audio clip" id="cmp-mic2"></button>
+              </div>
+              <div class="c-wysiwyg_container__suffix">
+                <div class="c-wysiwyg_container__send_button--with_options c-wysiwyg_container__send_button--with_options_disabled">
+                  <button class="c-wysiwyg_container__button--send" title="Send" id="cmp-send2"></button>
+                  <button class="c-wysiwyg_container__button--send_options" title="Send options" id="cmp-send-opts2"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== THREAD PANEL ============== -->
+  <section class="component-section" id="thread-panel">
+    <h2>Thread Panel <span>p-flexpane</span></h2>
+    <p class="component-desc">Side panel for threaded conversations. Contains a fixed header with title and close button, a scrollable message body with reply count divider, and an inline composer at the bottom of the message stack.</p>
+
+    <div class="demo-box">
+      <div class="demo-label">Thread Panel (400px wide)</div>
+      <div style="width:400px;height:990px;border:1px solid var(--dt_color-otl-ter, #5e5d6021);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;background:var(--dt_color-base-pry, #fff)">
+        <div class="p-flexpane__header">
+          <div class="p-flexpane__header_text">
+            <span class="p-flexpane__header_title">Thread</span>
+            <a class="p-flexpane__header_channel" href="javascript:void(0)">#feat-media-gallery</a>
+          </div>
+          <button class="c-icon_button p-flexpane__close_btn" aria-label="Close" id="showcase-thread-close"></button>
+        </div>
+        <div style="flex:1;overflow-y:auto;min-height:0;padding:16px 0">
+          <div class="p-message" style="max-width:none">
+            <div class="p-message__avatar"><img src="avatars/persona-a.png" alt=""></div>
+            <div class="p-message__body">
+              <div class="p-message__header">
+                <span class="p-message__sender">Amara Johnson</span>
+                <span class="p-message__time">3:00 PM</span>
+              </div>
+              <div class="p-message__text">Hey team, the new gallery layout is looking great. Can we review the grid spacing before the next sprint?</div>
+            </div>
+          </div>
+          <div class="p-flexpane__reply_count" style="max-width:none">6 replies</div>
+          <div class="p-message" style="max-width:none">
+            <div class="p-message__avatar"><img src="avatars/persona-b.png" alt=""></div>
+            <div class="p-message__body">
+              <div class="p-message__header">
+                <span class="p-message__sender">Marcus Thompson</span>
+                <span class="p-message__time">Apr 2 at 8:45 AM</span>
+              </div>
+              <div class="p-message__text">Grid spacing looks good to me — the 12px gap between thumbnails feels right at current sizes.</div>
+            </div>
+          </div>
+          <div class="p-message" style="max-width:none">
+            <div class="p-message__avatar"><img src="avatars/persona-c.png" alt=""></div>
+            <div class="p-message__body">
+              <div class="p-message__header">
+                <span class="p-message__sender">Ryan Mitchell</span>
+                <span class="p-message__time">Apr 2 at 9:15 AM</span>
+              </div>
+              <div class="p-message__text">Agreed. I'll update the token to use the 12px value so it's consistent across breakpoints.</div>
+            </div>
+          </div>
+          <div class="p-message" style="max-width:none">
+            <div class="p-message__avatar"><img src="avatars/persona-d.png" alt=""></div>
+            <div class="p-message__body">
+              <div class="p-message__header">
+                <span class="p-message__sender">Mei-Lin Chen</span>
+                <span class="p-message__time">Apr 2 at 10:15 AM</span>
+              </div>
+              <div class="p-message__text">+1. Also, should we consider a slightly tighter gap on mobile? 8px might work better at smaller viewports.</div>
+            </div>
+          </div>
+          <div class="p-message" style="max-width:none">
+            <div class="p-message__avatar"><img src="avatars/persona-g.png" alt=""></div>
+            <div class="p-message__body">
+              <div class="p-message__header">
+                <span class="p-message__sender">Carlos Rivera</span>
+                <span class="p-message__time">Apr 2 at 11:30 AM</span>
+              </div>
+              <div class="p-message__text">Good call on mobile. I checked our analytics — 38% of gallery views are on phones. We should definitely optimize for that.</div>
+            </div>
+          </div>
+          <div class="p-message" style="max-width:none">
+            <div class="p-message__avatar"><img src="avatars/persona-f.png" alt=""></div>
+            <div class="p-message__body">
+              <div class="p-message__header">
+                <span class="p-message__sender">Sarah Lindgren</span>
+                <span class="p-message__time">Apr 2 at 1:15 PM</span>
+              </div>
+              <div class="p-message__text">I mocked up both options — 12px and 8px on mobile. The 8px feels too tight when thumbnails have rounded corners. Maybe 10px is the sweet spot?</div>
+            </div>
+          </div>
+          <div class="p-message" style="max-width:none">
+            <div class="p-message__avatar"><img src="avatars/persona-b.png" alt=""></div>
+            <div class="p-message__body">
+              <div class="p-message__header">
+                <span class="p-message__sender">Marcus Thompson</span>
+                <span class="p-message__time">Apr 2 at 3:10 PM</span>
+              </div>
+              <div class="p-message__text">Perfect. Nice teamwork everyone. Shipping this in the next build.</div>
+            </div>
+          </div>
+          <div class="p-flexpane__composer" style="max-width:none">
+            <div class="c-wysiwyg_container">
+              <div class="c-wysiwyg_container__body">
+                <div class="c-texty_input" contenteditable="true">
+                  <span class="ql-placeholder">Reply...</span>
+                </div>
+                <div class="c-wysiwyg_container__footer">
+                  <div class="c-wysiwyg_container__toolbar_buttons">
+                    <button class="c-wysiwyg_container__button js-showcase-thread-cmp" title="Add attachment" data-icon="plus"></button>
+                    <button class="c-wysiwyg_container__button js-showcase-thread-cmp" title="Formatting" data-icon="formatting"></button>
+                    <button class="c-wysiwyg_container__button js-showcase-thread-cmp" title="Emoji" data-icon="emoji"></button>
+                    <button class="c-wysiwyg_container__button js-showcase-thread-cmp" title="Mention someone" data-icon="mentions"></button>
+                  </div>
+                  <div class="c-wysiwyg_container__suffix">
+                    <div class="c-wysiwyg_container__send_button--with_options c-wysiwyg_container__send_button--with_options_disabled">
+                      <button class="c-wysiwyg_container__button--send js-showcase-thread-cmp" title="Send" data-icon="send-filled"></button>
+                      <button class="c-wysiwyg_container__button--send_options js-showcase-thread-cmp" title="Send options" data-icon="caret-down"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== BUTTON ============== -->
+  <section class="component-section" id="button">
+    <h2>Button <span>c-button</span></h2>
+    <p class="component-desc">Primary action buttons with type, size, and state variants.</p>
+    <div class="demo-box">
+      <div class="demo-label">Types</div>
+      <div class="demo-row">
+        <button class="c-button c-button--primary c-button--medium">Primary</button>
+        <button class="c-button c-button--danger c-button--medium">Danger</button>
+        <button class="c-button c-button--outline c-button--medium">Outline</button>
+        <button class="c-button c-button--ghost c-button--medium">Ghost</button>
+      </div>
+      <div class="demo-label">Sizes</div>
+      <div class="demo-row">
+        <button class="c-button c-button--primary c-button--small">Small</button>
+        <button class="c-button c-button--primary c-button--medium">Medium</button>
+        <button class="c-button c-button--primary c-button--large">Large</button>
+      </div>
+      <div class="demo-label">Disabled</div>
+      <div class="demo-row">
+        <button class="c-button c-button--primary c-button--medium c-button--disabled" disabled>Disabled</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ICON BUTTON ============== -->
+  <section class="component-section" id="icon-button">
+    <h2>Icon Button <span>c-icon_button</span></h2>
+    <p class="component-desc">Buttons containing only an icon, with size and background variants.</p>
+    <div class="demo-box">
+      <div class="demo-label">Sizes &amp; Backgrounds</div>
+      <div class="demo-row">
+        <button class="c-icon_button c-icon_button--size_x-small c-icon_button--default" aria-label="Close" id="ib1"></button>
+        <button class="c-icon_button c-icon_button--size_small c-icon_button--default" aria-label="Close" id="ib2"></button>
+        <button class="c-icon_button c-icon_button--size_medium c-icon_button--default" aria-label="Close" id="ib3"></button>
+        <button class="c-icon_button c-icon_button--size_large c-icon_button--light" aria-label="Close" id="ib4"></button>
+        <button class="c-icon_button c-icon_button--size_medium c-icon_button--circle c-icon_button--default" aria-label="Close" id="ib5"></button>
+        <button class="c-icon_button c-icon_button--size_medium c-icon_button--outline" aria-label="Edit" id="ib6"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TEXT INPUT ============== -->
+  <section class="component-section" id="text-input">
+    <h2>Text Input <span>c-input_text</span></h2>
+    <p class="component-desc">Single-line text fields with size and validation states.</p>
+    <div class="demo-box">
+      <div class="demo-label">Sizes</div>
+      <div class="demo-row demo-row--col" style="max-width:360px">
+        <input type="text" class="c-input_text c-input_text--small" placeholder="Small input">
+        <input type="text" class="c-input_text" placeholder="Default (medium) input">
+        <input type="text" class="c-input_text c-input_text--large" placeholder="Large input">
+      </div>
+      <div class="demo-label">With error</div>
+      <div style="max-width:360px">
+        <input type="email" class="c-input_text c-input_text--with_inline_alert" value="not-an-email">
+        <div class="c-inline_alert">
+          <div class="c-inline_alert__icon-wrapper" id="ia-icon-1"></div>
+          <span class="c-inline_alert__text">Please enter a valid email address.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TEXTAREA ============== -->
+  <section class="component-section" id="textarea">
+    <h2>Textarea <span>c-input_textarea</span></h2>
+    <p class="component-desc">Multi-line text areas with resize control.</p>
+    <div class="demo-box">
+      <div style="max-width:360px">
+        <textarea class="c-input_textarea" placeholder="Write a message..." rows="3"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CHECKBOX ============== -->
+  <section class="component-section" id="checkbox">
+    <h2>Checkbox <span>c-input_checkbox</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="gap:24px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <input type="checkbox" class="c-input_checkbox" checked> Checked
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <input type="checkbox" class="c-input_checkbox"> Unchecked
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <input type="checkbox" class="c-input_checkbox c-input_checkbox--disabled" disabled> Disabled
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== RADIO ============== -->
+  <section class="component-section" id="radio">
+    <h2>Radio Button <span>c-input_radio</span></h2>
+    <div class="demo-box">
+      <fieldset class="c-radiogroup" style="display:flex;gap:24px;border:none;padding:0">
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <input type="radio" class="c-input_radio" name="demo-radio" value="a" checked> Option A
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <input type="radio" class="c-input_radio" name="demo-radio" value="b"> Option B
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <input type="radio" class="c-input_radio" name="demo-radio" value="c"> Option C
+        </label>
+      </fieldset>
+    </div>
+  </section>
+
+  <!-- ============== SWITCH ============== -->
+  <section class="component-section" id="switch">
+    <h2>Switch <span>c-switch</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="gap:24px">
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px">
+          <div class="c-switch" role="presentation">
+            <input type="checkbox" class="c-switch__input" role="switch" aria-label="Toggle A" checked>
+            <div class="c-switch__visual" aria-hidden="true" tabindex="-1"></div>
+          </div>
+          Enabled
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:14px">
+          <div class="c-switch" role="presentation">
+            <input type="checkbox" class="c-switch__input" role="switch" aria-label="Toggle B">
+            <div class="c-switch__visual" aria-hidden="true" tabindex="-1"></div>
+          </div>
+          Disabled
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SELECT ============== -->
+  <section class="component-section" id="select">
+    <h2>Select <span>c-select</span></h2>
+    <p class="component-desc">Custom dropdown select with keyboard support.</p>
+    <div class="demo-box">
+      <div style="max-width:280px">
+        <div class="c-select" id="demo-select">
+          <button class="c-select__button" type="button">
+            <span class="c-select__value c-select__value--placeholder">Choose an option...</span>
+            <span id="select-caret"></span>
+          </button>
+          <div class="c-select__dropdown">
+            <button class="c-select__option" data-value="general" type="button"># general</button>
+            <button class="c-select__option" data-value="random" type="button"># random</button>
+            <button class="c-select__option" data-value="design" type="button"># design</button>
+            <button class="c-select__option" data-value="engineering" type="button"># engineering</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SLIDER ============== -->
+  <section class="component-section" id="slider">
+    <h2>Slider <span>c-slider__input</span></h2>
+    <div class="demo-box">
+      <div style="max-width:300px">
+        <input type="range" class="c-slider__input" min="0" max="100" step="1" value="60" aria-label="Volume">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== LABEL ============== -->
+  <section class="component-section" id="label">
+    <h2>Label <span>c-label</span></h2>
+    <div class="demo-box">
+      <div style="max-width:360px">
+        <label class="c-label c-label--block">
+          <span class="c-label__text">Display name <span class="c-label__optional_tag">(optional)</span></span>
+          <span class="c-label__subtext">This is how others will see you</span>
+        </label>
+        <input type="text" class="c-input_text" placeholder="Enter your name">
+        <div class="c-hint">Names can include letters, numbers, and underscores.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FILTER INPUT ============== -->
+  <section class="component-section" id="filter-input">
+    <h2>Filter Input <span>c-search</span></h2>
+    <div class="demo-box">
+      <div style="max-width:360px">
+        <div class="c-search__input_and_close">
+          <div class="c-search__input_box">
+            <span id="search-icon"></span>
+            <input class="c-search__input_box__input" type="text" placeholder="Search channels">
+            <button class="c-search__input_box__clear" id="search-clear"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ALERT ============== -->
+  <section class="component-section" id="alert">
+    <h2>Alert <span>c-alert</span></h2>
+    <p class="component-desc">Contextual feedback messages with five severity levels.</p>
+    <div class="demo-box">
+      <div class="demo-row demo-row--col" style="gap:12px">
+        <div class="c-alert c-alert--boxed c-alert--level_default c-alert--align_left" role="alert">
+          <div class="c-alert__icon" id="alert-icon-default"></div>
+          <span class="c-alert__message">Default alert — informational context.</span>
+        </div>
+        <div class="c-alert c-alert--boxed c-alert--level_info c-alert--align_left" role="alert">
+          <div class="c-alert__icon" id="alert-icon-info"></div>
+          <span class="c-alert__message">Info alert — additional details available.</span>
+        </div>
+        <div class="c-alert c-alert--boxed c-alert--level_success c-alert--align_left" role="alert">
+          <div class="c-alert__icon" id="alert-icon-success"></div>
+          <span class="c-alert__message">Success — your changes have been saved.</span>
+        </div>
+        <div class="c-alert c-alert--boxed c-alert--level_warning c-alert--align_left" role="alert">
+          <div class="c-alert__icon" id="alert-icon-warning"></div>
+          <span class="c-alert__message">Warning — please review before continuing.</span>
+        </div>
+        <div class="c-alert c-alert--boxed c-alert--level_error c-alert--align_left" role="alert">
+          <div class="c-alert__icon" id="alert-icon-error"></div>
+          <span class="c-alert__message">Error — something went wrong.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== BANNER ============== -->
+  <section class="component-section" id="banner">
+    <h2>Banner <span>c-banner</span></h2>
+    <div class="demo-box">
+      <div class="demo-row demo-row--col" style="gap:12px">
+        <div class="c-banner c-banner--info" role="dialog" aria-label="Info" style="position:relative">
+          <div class="c-banner__text">New version available — refresh to update.</div>
+        </div>
+        <div class="c-banner c-banner--warning" role="dialog" aria-label="Warning" style="position:relative">
+          <div class="c-banner__text">Deploy is paused until further notice.</div>
+        </div>
+        <div class="c-banner c-banner--urgent" role="dialog" aria-label="Urgent" style="position:relative">
+          <div class="c-banner__text">Service outage detected — investigating.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CALLOUT ============== -->
+  <section class="component-section" id="callout">
+    <h2>Callout <span>c-callout</span></h2>
+    <div class="demo-box">
+      <div class="demo-row demo-row--col" style="gap:12px">
+        <div class="c-callout" role="group">Default callout — highlights important information.</div>
+        <div class="c-callout c-callout--warning" role="group">Warning callout — proceed with caution.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TOAST ============== -->
+  <section class="component-section" id="toast">
+    <h2>Toast <span>c-toast</span></h2>
+    <p class="component-desc">Temporary notification that auto-dismisses. Click the button to try it.</p>
+    <div class="demo-box">
+      <button class="c-button c-button--outline c-button--medium" id="show-toast-btn">Show Toast</button>
+      <div class="c-toast" id="demo-toast" role="status" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999">
+        <div class="c-toast__wrapper">
+          <span id="toast-icon"></span>
+          Message sent successfully
+        </div>
+        <button class="c-icon_button c-icon_button--size_small c-icon_button--default c-toast__close-button" aria-label="Dismiss" id="toast-close"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SPINNER ============== -->
+  <section class="component-section" id="spinner">
+    <h2>Spinner <span>c-infinite_spinner</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="align-items:center">
+        <div class="c-infinite_spinner c-infinite_spinner--small">
+          <svg viewBox="0 0 100 100" class="c-infinite_spinner__spinner" aria-hidden="true"><circle class="c-infinite_spinner__bg" cx="50%" cy="50%" r="35"/><circle class="c-infinite_spinner__path" cx="50%" cy="50%" r="35"/></svg>
+          <svg viewBox="0 0 100 100" class="c-infinite_spinner__spinner c-infinite_spinner__tail" aria-hidden="true"><circle class="c-infinite_spinner__path" cx="50%" cy="50%" r="35"/></svg>
+        </div>
+        <div class="c-infinite_spinner c-infinite_spinner--medium">
+          <svg viewBox="0 0 100 100" class="c-infinite_spinner__spinner" aria-hidden="true"><circle class="c-infinite_spinner__bg" cx="50%" cy="50%" r="35"/><circle class="c-infinite_spinner__path" cx="50%" cy="50%" r="35"/></svg>
+          <svg viewBox="0 0 100 100" class="c-infinite_spinner__spinner c-infinite_spinner__tail" aria-hidden="true"><circle class="c-infinite_spinner__path" cx="50%" cy="50%" r="35"/></svg>
+        </div>
+        <div class="c-infinite_spinner c-infinite_spinner--large">
+          <svg viewBox="0 0 100 100" class="c-infinite_spinner__spinner" aria-hidden="true"><circle class="c-infinite_spinner__bg" cx="50%" cy="50%" r="35"/><circle class="c-infinite_spinner__path" cx="50%" cy="50%" r="35"/></svg>
+          <svg viewBox="0 0 100 100" class="c-infinite_spinner__spinner c-infinite_spinner__tail" aria-hidden="true"><circle class="c-infinite_spinner__path" cx="50%" cy="50%" r="35"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== EMPTY STATE ============== -->
+  <section class="component-section" id="empty-state">
+    <h2>Empty State <span>c-empty_state</span></h2>
+    <div class="demo-box">
+      <div class="c-empty_state" role="alert">
+        <div class="c-empty_state__title">No results found</div>
+        <div class="c-empty_state__description">Try adjusting your search or filters.</div>
+        <div class="c-empty_state__action">
+          <button class="c-button c-button--outline c-button--medium">Clear filters</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== MODAL ============== -->
+  <section class="component-section" id="modal">
+    <h2>Modal <span>c-sk-modal</span></h2>
+    <p class="component-desc">Dialog overlays with focus trapping and escape-to-close.</p>
+    <div class="demo-box">
+      <button class="c-button c-button--primary c-button--medium" id="open-modal-btn">Open Modal</button>
+      <div class="c-sk-modal_overlay" id="demo-modal" hidden>
+        <div class="c-sk-modal c-sk-modal--medium" role="dialog" aria-modal="true" aria-label="Example modal">
+          <div class="c-sk-modal__header">
+            <h2 class="c-sk-modal__title">Edit channel description</h2>
+            <button class="c-icon_button c-icon_button--size_medium c-icon_button--default" aria-label="Close" id="modal-close"></button>
+          </div>
+          <div class="c-sk-modal__content" style="padding:20px">
+            <label class="c-label c-label--block">
+              <span class="c-label__text">Description</span>
+            </label>
+            <textarea class="c-input_textarea" rows="3" placeholder="What's this channel about?"></textarea>
+            <div class="c-hint">Let people know what this channel is used for.</div>
+            <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:8px">
+              <button class="c-button c-button--outline c-button--medium" id="modal-cancel">Cancel</button>
+              <button class="c-button c-button--primary c-button--medium">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== POPOVER ============== -->
+  <section class="component-section" id="popover">
+    <h2>Popover <span>c-popover</span></h2>
+    <div class="demo-box">
+      <button class="c-button c-button--outline c-button--medium" id="popover-anchor">Show Popover</button>
+      <div class="c-popover" id="demo-popover" style="padding:16px;width:220px;font-size:14px">
+        This is a popover with arbitrary content. It positions itself relative to the anchor element.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TOOLTIP ============== -->
+  <section class="component-section" id="tooltip">
+    <h2>Tooltip <span>via Slacky.tooltip()</span></h2>
+    <div class="demo-box">
+      <div class="demo-row">
+        <button class="c-button c-button--outline c-button--medium" id="tooltip-top">Hover (top)</button>
+        <button class="c-button c-button--outline c-button--medium" id="tooltip-bottom">Hover (bottom)</button>
+        <button class="c-button c-button--outline c-button--medium" id="tooltip-right">Hover (right)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== MENU ============== -->
+  <section class="component-section" id="menu">
+    <h2>Menu <span>c-menu</span></h2>
+    <p class="component-desc">Dropdown menu with keyboard navigation, sections, and danger items.</p>
+    <div class="demo-box">
+      <div class="c-menu" id="demo-menu" style="width:280px;position:relative">
+        <ul class="c-menu__items" role="menu" aria-label="Actions" tabindex="0">
+          <li class="c-menu_item__header" role="presentation" aria-hidden="true">Message actions</li>
+          <li class="c-menu_item__li" role="presentation">
+            <button class="c-menu_item__button" role="menuitem" tabindex="-1">
+              <span class="c-menu_item__icon" id="menu-icon-edit"></span>
+              <span class="c-menu_item__label">Edit message</span>
+              <span class="c-menu_item__shortcut">E</span>
+            </button>
+          </li>
+          <li class="c-menu_item__li" role="presentation">
+            <button class="c-menu_item__button" role="menuitem" tabindex="-1">
+              <span class="c-menu_item__icon" id="menu-icon-pin"></span>
+              <span class="c-menu_item__label c-menu_item__label--with_description">
+                Pin to channel
+                <span class="c-menu_item__description">Everyone in this channel will see this.</span>
+              </span>
+            </button>
+          </li>
+          <li class="c-menu_separator__li" role="separator"><hr class="c-menu_separator__separator"></li>
+          <li class="c-menu_item__li" role="presentation">
+            <button class="c-menu_item__button c-menu_item__button--danger" role="menuitem" tabindex="-1">
+              <span class="c-menu_item__label">Delete message</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CONTEXT MENU ============== -->
+  <section class="component-section" id="context-menu">
+    <h2>Context Menu <span>Slacky.contextMenu()</span></h2>
+    <div class="demo-box">
+      <div id="ctx-trigger" style="padding:32px;border:2px dashed var(--showcase-border);border-radius:8px;text-align:center;font-size:14px;color:var(--dt_color-content-sec, #616061);cursor:context-menu">
+        Right-click anywhere in this box
+      </div>
+      <div class="c-menu" id="ctx-demo-menu" style="width:200px">
+        <ul class="c-menu__items" role="menu" tabindex="0">
+          <li class="c-menu_item__li" role="presentation"><button class="c-menu_item__button" role="menuitem" tabindex="-1"><span class="c-menu_item__label">Copy text</span></button></li>
+          <li class="c-menu_item__li" role="presentation"><button class="c-menu_item__button" role="menuitem" tabindex="-1"><span class="c-menu_item__label">Quote reply</span></button></li>
+          <li class="c-menu_separator__li" role="separator"><hr class="c-menu_separator__separator"></li>
+          <li class="c-menu_item__li" role="presentation"><button class="c-menu_item__button c-menu_item__button--danger" role="menuitem" tabindex="-1"><span class="c-menu_item__label">Report</span></button></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== COACHMARK ============== -->
+  <section class="component-section" id="coachmark">
+    <h2>Coachmark <span>c-coachmark</span></h2>
+    <div class="demo-box">
+      <div style="position:relative;padding:48px 24px 24px">
+        <div class="c-coachmark c-coachmark--bottom" style="position:relative;display:inline-block">
+          <div class="c-coachmark__arrow"></div>
+          <div class="c-coachmark__title">New feature!</div>
+          <div class="c-coachmark__body">Try clicking here to share a message to a channel.</div>
+          <div class="c-coachmark__actions">
+            <button class="c-link c-link--button c-link--inherit-color" type="button">Skip</button>
+            <button class="c-button c-button--primary c-button--small">Got it</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TABS ============== -->
+  <section class="component-section" id="tabs">
+    <h2>Tabs <span>c-tabs</span></h2>
+    <div class="demo-box">
+      <div class="c-tabs__tab_container" id="demo-tabs">
+        <div role="tablist" aria-label="Settings" class="c-tabs__tab_menu">
+          <button role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1" tabindex="0" class="c-tabs__tab c-tabs__tab--active">Messages</button>
+          <button role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" tabindex="-1" class="c-tabs__tab">Files</button>
+          <button role="tab" id="tab-3" aria-selected="false" aria-controls="panel-3" tabindex="-1" class="c-tabs__tab">Channels</button>
+          <button role="tab" id="tab-disabled" aria-disabled="true" tabindex="-1" class="c-tabs__tab c-tabs__tab--disabled">Disabled</button>
+        </div>
+        <div role="tabpanel" id="panel-1" aria-labelledby="tab-1" class="c-tabs__tab_panel c-tabs__tab_panel--active" style="padding:16px;font-size:14px">
+          Messages tab content
+        </div>
+        <div role="tabpanel" id="panel-2" aria-labelledby="tab-2" class="c-tabs__tab_panel" hidden style="padding:16px;font-size:14px">
+          Files tab content
+        </div>
+        <div role="tabpanel" id="panel-3" aria-labelledby="tab-3" class="c-tabs__tab_panel" hidden style="padding:16px;font-size:14px">
+          Channels tab content
+        </div>
+        <div role="tabpanel" id="panel-disabled" aria-labelledby="tab-disabled" class="c-tabs__tab_panel" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SIDEBAR MENU ============== -->
+  <section class="component-section" id="sidebar-menu">
+    <h2>Sidebar Menu <span>c-sidebar_menu</span></h2>
+    <div class="demo-box">
+      <div class="c-sidebar_menu" id="demo-sidebar-menu" style="max-width:240px">
+        <ul class="c-sidebar_menu__list" role="menu">
+          <li role="presentation"><h3 class="c-sidebar_menu__header">Channels</h3></li>
+          <li role="presentation"><button class="c-sidebar_menu__list_item is_active" role="menuitem" data-item-id="general"># general</button></li>
+          <li role="presentation"><button class="c-sidebar_menu__list_item" role="menuitem" data-item-id="random"># random</button></li>
+          <li role="presentation"><button class="c-sidebar_menu__list_item" role="menuitem" data-item-id="design"># design</button></li>
+          <li role="presentation"><hr class="c-sidebar_menu__divider"></li>
+          <li role="presentation"><button class="c-sidebar_menu__list_item is_disabled" role="menuitem" aria-disabled="true"># archived</button></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== PAGINATION ============== -->
+  <section class="component-section" id="pagination">
+    <h2>Pagination <span>c-pagination</span></h2>
+    <div class="demo-box">
+      <nav class="c-pagination_wrapper" aria-label="Pagination">
+        <div class="c-pagination__container">
+          <button class="c-icon_button c-pagination__arrow_btn" disabled aria-label="Previous" id="pag-prev"></button>
+          <button class="c-pagination__page_btn c-pagination__page_btn--active" aria-current="page">1</button>
+          <button class="c-pagination__page_btn">2</button>
+          <button class="c-pagination__page_btn">3</button>
+          <button class="c-pagination__page_btn">4</button>
+          <button class="c-pagination__page_btn">5</button>
+          <button class="c-icon_button c-pagination__arrow_btn" aria-label="Next" id="pag-next"></button>
+        </div>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ============== CARD ============== -->
+  <section class="component-section" id="card">
+    <h2>Card <span>c-card</span></h2>
+    <div class="demo-box">
+      <div class="c-card" style="max-width:360px">
+        <div class="c-card__header">Channel Details</div>
+        <div class="c-card__section">This channel is for team-wide communication and announcements.</div>
+        <div class="c-card__section" style="font-size:13px;color:var(--dt_color-content-sec, #616061)">Created by @muno on Jan 15, 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TAG ============== -->
+  <section class="component-section" id="tag">
+    <h2>Tag <span>c-tag</span></h2>
+    <p class="component-desc">Colored labels for categorization. Available in 11 colors plus micro size.</p>
+    <div class="demo-box">
+      <div class="demo-row">
+        <span class="c-tag c-tag--informative">Informative</span>
+        <span class="c-tag c-tag--gray">Gray</span>
+        <span class="c-tag c-tag--horchata">Horchata</span>
+        <span class="c-tag c-tag--honeycomb">Honeycomb</span>
+        <span class="c-tag c-tag--flamingo">Flamingo</span>
+        <span class="c-tag c-tag--aubergine">Aubergine</span>
+        <span class="c-tag c-tag--indigo">Indigo</span>
+        <span class="c-tag c-tag--lagoon">Lagoon</span>
+        <span class="c-tag c-tag--jade">Jade</span>
+        <span class="c-tag c-tag--grass">Grass</span>
+      </div>
+      <div class="demo-label" style="margin-top:16px">Micro size</div>
+      <div class="demo-row">
+        <span class="c-tag c-tag--aubergine c-tag--micro">Design</span>
+        <span class="c-tag c-tag--lagoon c-tag--micro">Engineering</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TOKEN ============== -->
+  <section class="component-section" id="token">
+    <h2>Token (Chip) <span>c-token</span></h2>
+    <div class="demo-box">
+      <div class="demo-row">
+        <span class="c-token c-token--medium"><span class="c-token__content"><span class="c-token_content__inner">@muno</span></span></span>
+        <span class="c-token c-token--medium c-token--selected"><span class="c-token__content"><span class="c-token_content__inner">@design-team</span></span></span>
+        <span class="c-token c-token--small"><span class="c-token__content"><span class="c-token_content__inner">@here</span></span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== MENTION BADGE ============== -->
+  <section class="component-section" id="mention-badge">
+    <h2>Mention Badge <span>c-mention_badge</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="gap:16px;align-items:center">
+        <span class="c-mention_badge c-mention_badge--pill c-mention_badge--red">3</span>
+        <span class="c-mention_badge c-mention_badge--circle c-mention_badge--red">1</span>
+        <span class="c-mention_badge c-mention_badge--pill c-mention_badge--blue">12</span>
+        <span class="c-mention_badge c-mention_badge--dot c-mention_badge--red"></span>
+        <span class="c-mention_badge c-mention_badge--pill-compact c-mention_badge--red c-mention_badge--max">99+</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== DOT ============== -->
+  <section class="component-section" id="dot">
+    <h2>Dot <span>c-dot</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="gap:48px">
+        <div style="position:relative;width:40px;height:40px;background:var(--showcase-border);border-radius:8px">
+          <div class="c-dot c-dot--size-0 c-dot--sapphire c-dot--top-right c-dot--outward"></div>
+        </div>
+        <div style="position:relative;width:40px;height:40px;background:var(--showcase-border);border-radius:8px">
+          <div class="c-dot c-dot--size-1 c-dot--sapphire c-dot--bottom-right c-dot--outward"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== LINK ============== -->
+  <section class="component-section" id="link">
+    <h2>Link <span>c-link</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="gap:24px;font-size:14px">
+        <a href="#link" class="c-link">Default link</a>
+        <a href="#link" class="c-link c-link--underline">Underlined link</a>
+        <button type="button" class="c-link c-link--button">Button link</button>
+        <button type="button" class="c-link c-link--button c-link--disabled" disabled>Disabled</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TRUNCATE ============== -->
+  <section class="component-section" id="truncate">
+    <h2>Truncate <span>c-truncate</span></h2>
+    <div class="demo-box">
+      <div style="max-width:300px">
+        <div class="demo-label">Single line</div>
+        <span class="c-truncate" style="--lines:1;display:block">This is a really long message that will be truncated after a single line with an ellipsis at the end.</span>
+        <div class="demo-label" style="margin-top:12px">Two lines</div>
+        <span class="c-truncate" style="--lines:2;display:block">This is a really long message that will be truncated after two lines with an ellipsis at the end. It keeps going to show the multi-line behavior.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TOOLBAR ============== -->
+  <section class="component-section" id="toolbar">
+    <h2>Toolbar <span>c-toolbar</span></h2>
+    <div class="demo-box">
+      <div role="toolbar" aria-label="Formatting" aria-orientation="horizontal" class="c-toolbar">
+        <button class="c-icon_button c-icon_button--size_medium c-icon_button--default" tabindex="0" aria-label="Bold" style="font-weight:700">B</button>
+        <button class="c-icon_button c-icon_button--size_medium c-icon_button--default" tabindex="-1" aria-label="Italic" style="font-style:italic">I</button>
+        <button class="c-icon_button c-icon_button--size_medium c-icon_button--default" tabindex="-1" aria-label="Strikethrough" style="text-decoration:line-through">S</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== ASPECT BOX ============== -->
+  <section class="component-section" id="aspect-box">
+    <h2>Aspect Box <span>c-aspect_box</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="gap:24px">
+        <div>
+          <div class="demo-label">16:9</div>
+          <div class="c-aspect_box__outer" style="width:200px">
+            <div class="c-aspect_box__inner" style="padding-top:56.25%">
+              <div class="c-aspect_box__content" style="background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#666">16:9</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="demo-label">1:1</div>
+          <div class="c-aspect_box__outer" style="width:120px">
+            <div class="c-aspect_box__inner" style="padding-top:100%">
+              <div class="c-aspect_box__content" style="background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#666">1:1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== KEYBOARD KEY ============== -->
+  <section class="component-section" id="keyboard-key">
+    <h2>Keyboard Key <span>c-keyboard_key</span></h2>
+    <div class="demo-box">
+      <div class="demo-row" style="align-items:center;gap:16px">
+        <div class="c-keyboard_keys c-keyboard_keys--inline">
+          <div class="c-keyboard_key" role="img" aria-label="Cmd" id="kbd-cmd"></div>
+          <div class="c-keyboard_key" role="img" aria-label="K">K</div>
+        </div>
+        <span style="font-size:14px;color:var(--dt_color-content-sec, #616061)">Quick switcher</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CALENDAR ============== -->
+  <section class="component-section" id="calendar">
+    <h2>Calendar <span>c-calendar</span></h2>
+    <div class="demo-box">
+      <div class="c-calendar" style="max-width:280px">
+        <div class="c-calendar__header">
+          <button class="c-icon_button c-icon_button--size_small c-icon_button--default" aria-label="Previous month" id="cal-prev"></button>
+          <span class="c-calendar__header_month">April 2026</span>
+          <button class="c-icon_button c-icon_button--size_small c-icon_button--default" aria-label="Next month" id="cal-next"></button>
+        </div>
+        <div class="c-calendar__grid">
+          <div class="c-calendar__day-header">Su</div>
+          <div class="c-calendar__day-header">Mo</div>
+          <div class="c-calendar__day-header">Tu</div>
+          <div class="c-calendar__day-header">We</div>
+          <div class="c-calendar__day-header">Th</div>
+          <div class="c-calendar__day-header">Fr</div>
+          <div class="c-calendar__day-header">Sa</div>
+          <button class="c-calendar__day c-calendar__day--outside" disabled>29</button>
+          <button class="c-calendar__day c-calendar__day--outside" disabled>30</button>
+          <button class="c-calendar__day c-calendar__day--outside" disabled>31</button>
+          <button class="c-calendar__day">1</button>
+          <button class="c-calendar__day">2</button>
+          <button class="c-calendar__day">3</button>
+          <button class="c-calendar__day">4</button>
+          <button class="c-calendar__day">5</button>
+          <button class="c-calendar__day">6</button>
+          <button class="c-calendar__day">7</button>
+          <button class="c-calendar__day">8</button>
+          <button class="c-calendar__day">9</button>
+          <button class="c-calendar__day">10</button>
+          <button class="c-calendar__day">11</button>
+          <button class="c-calendar__day">12</button>
+          <button class="c-calendar__day">13</button>
+          <button class="c-calendar__day">14</button>
+          <button class="c-calendar__day">15</button>
+          <button class="c-calendar__day">16</button>
+          <button class="c-calendar__day">17</button>
+          <button class="c-calendar__day">18</button>
+          <button class="c-calendar__day">19</button>
+          <button class="c-calendar__day c-calendar__day--today">20</button>
+          <button class="c-calendar__day">21</button>
+          <button class="c-calendar__day">22</button>
+          <button class="c-calendar__day">23</button>
+          <button class="c-calendar__day">24</button>
+          <button class="c-calendar__day c-calendar__day--selected">25</button>
+          <button class="c-calendar__day">26</button>
+          <button class="c-calendar__day">27</button>
+          <button class="c-calendar__day">28</button>
+          <button class="c-calendar__day">29</button>
+          <button class="c-calendar__day">30</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== DATE PICKER ============== -->
+  <section class="component-section" id="date-picker">
+    <h2>Date Picker <span>c-date_picker</span></h2>
+    <div class="demo-box">
+      <div class="c-date_picker">
+        <button class="c-date_picker__trigger">
+          <span id="dp-icon"></span>
+          <span class="c-date_picker__value c-date_picker__value--placeholder">Select a date</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== TIME PICKER ============== -->
+  <section class="component-section" id="time-picker">
+    <h2>Time Picker <span>c-time_picker</span></h2>
+    <div class="demo-box">
+      <div class="c-time_picker" style="display:inline-block">
+        <button class="c-time_picker__trigger">
+          <span id="tp-icon"></span>
+          <span class="c-time_picker__value">2:30 PM</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== HINT ============== -->
+  <section class="component-section" id="hint">
+    <h2>Hint <span>c-hint</span></h2>
+    <div class="demo-box">
+      <div class="c-hint">This field supports markdown formatting.</div>
+    </div>
+  </section>
+
+  <!-- ============== INLINE ALERT ============== -->
+  <section class="component-section" id="inline-alert">
+    <h2>Inline Alert <span>c-inline_alert</span></h2>
+    <div class="demo-box">
+      <div class="c-inline_alert">
+        <div class="c-inline_alert__icon-wrapper" id="ia-icon-2"></div>
+        <span class="c-inline_alert__text">This channel name is already taken.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== CHARACTER COUNT ============== -->
+  <section class="component-section" id="char-count">
+    <h2>Character Count <span>c-input_character_count</span></h2>
+    <div class="demo-box">
+      <div style="max-width:360px">
+        <div class="c-input_character_count c-input_character_count--large">
+          <input type="text" class="c-input_text c-input_text--large" maxlength="80" value="My awesome channel" id="char-count-input">
+          <span class="c-input_character_count__characters-remaining" id="char-count-remaining">62</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FIELDSET ============== -->
+  <section class="component-section" id="fieldset">
+    <h2>Fieldset <span>c-fieldset / c-legend</span></h2>
+    <div class="demo-box">
+      <fieldset class="c-fieldset" style="max-width:360px">
+        <legend class="c-legend">Notification preferences</legend>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:8px">
+          <input type="checkbox" class="c-input_checkbox" checked> All new messages
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:8px">
+          <input type="checkbox" class="c-input_checkbox"> Mentions &amp; reactions only
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <input type="checkbox" class="c-input_checkbox"> Nothing
+        </label>
+      </fieldset>
+    </div>
+  </section>
+
+</main>
+
+<div class="theme-toggle">
+  <button class="c-button c-button--outline c-button--small" id="dark-mode-toggle">Toggle Dark Mode</button>
+</div>
+
+<script src="slacky.js"></script>
+<script>
+  // Populate icons into elements that need them
+  document.querySelectorAll('#ib1,#ib2,#ib3,#ib4,#ib5').forEach(el => el.innerHTML = Slacky.icon('close'));
+  document.getElementById('ib6').innerHTML = Slacky.icon('edit');
+  document.getElementById('ia-icon-1').innerHTML = Slacky.icon('info-filled', 16);
+  document.getElementById('ia-icon-2').innerHTML = Slacky.icon('info-filled', 16);
+  document.getElementById('select-caret').outerHTML = Slacky.icon('caret-down', 16, 'c-select__icon');
+  document.getElementById('search-icon').outerHTML = Slacky.icon('search', 16, 'c-search__input_box__icon');
+  document.getElementById('search-clear').innerHTML = Slacky.icon('close', 16);
+  document.getElementById('toast-icon').outerHTML = Slacky.icon('check-circle-filled', 20);
+  document.getElementById('toast-close').innerHTML = Slacky.icon('close', 16);
+  document.getElementById('modal-close').innerHTML = Slacky.icon('close');
+  document.getElementById('menu-icon-edit').innerHTML = Slacky.icon('edit', 20);
+  document.getElementById('menu-icon-pin').innerHTML = Slacky.icon('paper-plane', 20);
+  document.getElementById('pag-prev').innerHTML = Slacky.icon('caret-left-filled');
+  document.getElementById('pag-next').innerHTML = Slacky.icon('caret-right-filled');
+  document.getElementById('cal-prev').innerHTML = Slacky.icon('caret-left-filled');
+  document.getElementById('cal-next').innerHTML = Slacky.icon('caret-right-filled');
+  document.getElementById('kbd-cmd').innerHTML = Slacky.icon('command', 14);
+  document.getElementById('dp-icon').outerHTML = Slacky.icon('calendar', 16, 'c-date_picker__icon');
+  document.getElementById('tp-icon').outerHTML = Slacky.icon('clock', 16, 'c-time_picker__icon');
+
+  ['alert-icon-default', 'alert-icon-info'].forEach(id => document.getElementById(id).innerHTML = Slacky.icon('info-filled', 20));
+  document.getElementById('alert-icon-success').innerHTML = Slacky.icon('check-circle-filled', 20);
+  document.getElementById('alert-icon-warning').innerHTML = Slacky.icon('warning-filled', 20);
+  document.getElementById('alert-icon-error').innerHTML = Slacky.icon('close-circle-filled', 20);
+
+  // Composer icons
+  Slacky.addIcon('underline', '<path fill="currentColor" d="M17.25 17.12a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5zM14.5 1.63a.75.75 0 0 1 .75.75v8a5.25 5.25 0 1 1-10.5 0v-8a.75.75 0 0 1 1.5 0v8a3.75 3.75 0 0 0 7.5 0v-8a.75.75 0 0 1 .75-.75"/>');
+  Slacky.addIcon('send', '<path fill="currentColor" fill-rule="evenodd" d="M1.856 1.612a.75.75 0 0 1 .73-.033l15.5 7.75a.75.75 0 0 1 0 1.342l-15.5 7.75A.75.75 0 0 1 1.5 17.75v-6.046c0-.68.302-1.29.78-1.704a2.25 2.25 0 0 1-.78-1.704V2.25a.75.75 0 0 1 .356-.638M3 3.464v4.832a.75.75 0 0 0 .727.75l6.546.204a.75.75 0 0 1 0 1.5l-6.546.204a.75.75 0 0 0-.727.75v4.833L16.073 10z" clip-rule="evenodd"/>');
+  Slacky.addIcon('bold', '<path fill="currentColor" fill-rule="evenodd" d="M4 2.75A.75.75 0 0 1 4.75 2h6.343a3.91 3.91 0 0 1 3.88 3.449A2 2 0 0 1 15 5.84l.001.067a3.9 3.9 0 0 1-1.551 3.118A4.627 4.627 0 0 1 11.875 18H4.75a.75.75 0 0 1-.75-.75V9.5a.8.8 0 0 1 .032-.218A.8.8 0 0 1 4 9.065zm2.5 5.565h3.593a2.157 2.157 0 1 0 0-4.315H6.5zm4.25 1.935H6.5v5.5h4.25a2.75 2.75 0 1 0 0-5.5" clip-rule="evenodd"/>');
+  Slacky.addIcon('italic', '<path fill="currentColor" fill-rule="evenodd" d="M7 2.75A.75.75 0 0 1 7.75 2h7.5a.75.75 0 0 1 0 1.5H12.3l-2.6 13h2.55a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1 0-1.5H7.7l2.6-13H7.75A.75.75 0 0 1 7 2.75" clip-rule="evenodd"/>');
+  Slacky.addIcon('strikethrough', '<path fill="currentColor" fill-rule="evenodd" d="M11.721 3.84c-.91-.334-2.028-.36-3.035-.114-1.51.407-2.379 1.861-2.164 3.15C6.718 8.051 7.939 9.5 11.5 9.5l.027.001h5.723a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1 0-1.5h3.66c-.76-.649-1.216-1.468-1.368-2.377-.347-2.084 1.033-4.253 3.265-4.848l.007-.002.007-.002c1.252-.307 2.68-.292 3.915.16 1.252.457 2.337 1.381 2.738 2.874a.75.75 0 0 1-1.448.39c-.25-.925-.91-1.528-1.805-1.856m2.968 9.114a.75.75 0 1 0-1.378.59c.273.64.186 1.205-.13 1.674-.333.492-.958.925-1.82 1.137-.989.243-1.991.165-3.029-.124-.93-.26-1.613-.935-1.858-1.845a.75.75 0 0 0-1.448.39c.388 1.441 1.483 2.503 2.903 2.9 1.213.338 2.486.456 3.79.135 1.14-.28 2.12-.889 2.704-1.753.6-.888.743-1.992.266-3.104" clip-rule="evenodd"/>');
+  Slacky.addIcon('link', '<path fill="currentColor" fill-rule="evenodd" d="M12.306 3.756a2.75 2.75 0 0 1 3.889 0l.05.05a2.75 2.75 0 0 1 0 3.889l-3.18 3.18a2.75 2.75 0 0 1-3.98-.095l-.03-.034a.75.75 0 0 0-1.11 1.009l.03.034a4.25 4.25 0 0 0 6.15.146l3.18-3.18a4.25 4.25 0 0 0 0-6.01l-.05-.05a4.25 4.25 0 0 0-6.01 0L9.47 4.47a.75.75 0 1 0 1.06 1.06zm-4.611 12.49a2.75 2.75 0 0 1-3.89 0l-.05-.051a2.75 2.75 0 0 1 0-3.89l3.18-3.179a2.75 2.75 0 0 1 3.98.095l.03.034a.75.75 0 1 0 1.11-1.01l-.03-.033a4.25 4.25 0 0 0-6.15-.146l-3.18 3.18a4.25 4.25 0 0 0 0 6.01l.05.05a4.25 4.25 0 0 0 6.01 0l1.775-1.775a.75.75 0 0 0-1.06-1.06z" clip-rule="evenodd"/>');
+  Slacky.addIcon('numbered-list', '<path fill="currentColor" fill-rule="evenodd" d="M3.792 2.094A.5.5 0 0 1 4 2.5V6h1a.5.5 0 1 1 0 1H2a.5.5 0 1 1 0-1h1V3.194l-.842.28a.5.5 0 0 1-.316-.948l1.5-.5a.5.5 0 0 1 .45.068M7.75 3.5a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5zM7 10.75a.75.75 0 0 1 .75-.75h10a.75.75 0 0 1 0 1.5h-10a.75.75 0 0 1-.75-.75m0 6.5a.75.75 0 0 1 .75-.75h10a.75.75 0 0 1 0 1.5h-10a.75.75 0 0 1-.75-.75m-4.293-3.36a1 1 0 0 1 .793-.39c.49 0 .75.38.75.75 0 .064-.033.194-.173.409a5 5 0 0 1-.594.711c-.256.267-.552.548-.87.848l-.088.084a42 42 0 0 0-.879.845A.5.5 0 0 0 2 18h3a.5.5 0 0 0 0-1H3.242l.058-.055c.316-.298.629-.595.904-.882a6 6 0 0 0 .711-.859c.18-.277.335-.604.335-.954 0-.787-.582-1.75-1.75-1.75a2 2 0 0 0-1.81 1.147.5.5 0 1 0 .905.427 1 1 0 0 1 .112-.184" clip-rule="evenodd"/>');
+  Slacky.addIcon('bulleted-list', '<path fill="currentColor" fill-rule="evenodd" d="M4 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 0a.75.75 0 0 1 .75-.75h10a.75.75 0 0 1 0 1.5h-10A.75.75 0 0 1 7 3m.75 6.25a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5zm0 7a.75.75 0 0 0 0 1.5h10a.75.75 0 0 0 0-1.5zM3 11a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2" clip-rule="evenodd"/>');
+  Slacky.addIcon('quote', '<path fill="currentColor" fill-rule="evenodd" d="M3.5 2.75a.75.75 0 0 0-1.5 0v14.5a.75.75 0 0 0 1.5 0zM6.75 3a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5zM6 10.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75a.75.75 0 0 1-.75-.75m.75 5.25a.75.75 0 0 0 0 1.5h7.5a.75.75 0 0 0 0-1.5z" clip-rule="evenodd"/>');
+  Slacky.addIcon('code', '<path fill="currentColor" fill-rule="evenodd" d="M12.058 3.212c.396.12.62.54.5.936L8.87 16.29a.75.75 0 1 1-1.435-.436l3.686-12.143a.75.75 0 0 1 .936-.5M5.472 6.24a.75.75 0 0 1 .005 1.06l-2.67 2.693 2.67 2.691a.75.75 0 1 1-1.065 1.057l-3.194-3.22a.75.75 0 0 1 0-1.056l3.194-3.22a.75.75 0 0 1 1.06-.005m9.044 1.06a.75.75 0 1 1 1.065-1.056l3.194 3.221a.75.75 0 0 1 0 1.057l-3.194 3.219a.75.75 0 0 1-1.065-1.057l2.67-2.69z" clip-rule="evenodd"/>');
+  Slacky.addIcon('code-block', '<path fill="currentColor" fill-rule="evenodd" d="M9.212 2.737a.75.75 0 1 0-1.424-.474l-2.5 7.5a.75.75 0 0 0 1.424.474zm6.038.265a.75.75 0 0 0 0 1.5h2a.25.25 0 0 1 .25.25v11.5a.25.25 0 0 1-.25.25h-13a.25.25 0 0 1-.25-.25v-3.5a.75.75 0 0 0-1.5 0v3.5c0 .966.784 1.75 1.75 1.75h13a1.75 1.75 0 0 0 1.75-1.75v-11.5a1.75 1.75 0 0 0-1.75-1.75zm-3.69.5a.75.75 0 1 0-1.12.996l1.556 1.754-1.556 1.75a.75.75 0 1 0 1.12.997l2-2.249a.75.75 0 0 0 0-.996zM3.999 9.061a.75.75 0 0 1-1.058-.062l-2-2.249a.75.75 0 0 1 0-.996l2-2.252a.75.75 0 1 1 1.12.996L2.504 6.252l1.557 1.75a.75.75 0 0 1-.062 1.059" clip-rule="evenodd"/>');
+  Slacky.addIcon('send-filled', '<path fill="currentColor" d="M1.5 2.106c0-.462.498-.754.901-.528l15.7 7.714a.73.73 0 0 1 .006 1.307L2.501 18.46l-.07.017a.754.754 0 0 1-.931-.733v-4.572c0-1.22.971-2.246 2.213-2.268l6.547-.17c.27-.01.75-.243.75-.797 0-.553-.5-.795-.75-.795l-6.547-.171C2.47 8.95 1.5 7.924 1.5 6.704z"/>');
+  Slacky.addIcon('emoji', '<path fill="currentColor" fill-rule="evenodd" d="M2.5 10a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0M10 1a9 9 0 1 0 0 18 9 9 0 0 0 0-18M7.5 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M14 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-6.385 3.766a.75.75 0 1 0-1.425.468C6.796 14.08 8.428 15 10.027 15s3.23-.92 3.838-2.766a.75.75 0 1 0-1.425-.468c-.38 1.155-1.38 1.734-2.413 1.734s-2.032-.58-2.412-1.734" clip-rule="evenodd"/>');
+  Slacky.addIcon('mentions', '<path fill="currentColor" fill-rule="evenodd" d="M2.5 10a7.5 7.5 0 1 1 15 0v.645c0 1.024-.83 1.855-1.855 1.855a1.145 1.145 0 0 1-1.145-1.145V6.75a.75.75 0 0 0-1.494-.098 4.5 4.5 0 1 0 .465 6.212A2.64 2.64 0 0 0 15.646 14 3.355 3.355 0 0 0 19 10.645V10a9 9 0 1 0-3.815 7.357.75.75 0 1 0-.865-1.225A7.5 7.5 0 0 1 2.5 10m7.5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6" clip-rule="evenodd"/>');
+  Slacky.addIcon('plus', '<path fill="currentColor" fill-rule="evenodd" d="M10.75 3.25a.75.75 0 0 0-1.5 0v6H3.251L3.25 10v-.75a.75.75 0 0 0 0 1.5V10v.75h6v6a.75.75 0 0 0 1.5 0v-6h6a.75.75 0 0 0 0-1.5h-6z" clip-rule="evenodd"/>');
+  Slacky.addIcon('video', '<path fill="currentColor" fill-rule="evenodd" d="M3.75 4.5a.75.75 0 0 0-.75.75v9.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-2.59a.75.75 0 0 1 1.124-.65l3.376 1.943V6.547l-3.376 1.944A.75.75 0 0 1 13 7.84V5.25a.75.75 0 0 0-.75-.75zm-2.25.75A2.25 2.25 0 0 1 3.75 3h8.5a2.25 2.25 0 0 1 2.25 2.25v1.294l2.626-1.512A1.25 1.25 0 0 1 19 6.115v7.77a1.25 1.25 0 0 1-1.874 1.083L14.5 13.456v1.294A2.25 2.25 0 0 1 12.25 17h-8.5a2.25 2.25 0 0 1-2.25-2.25z" clip-rule="evenodd"/>');
+  Slacky.addIcon('microphone', '<path fill="currentColor" fill-rule="evenodd" d="M10 2a3.5 3.5 0 0 0-3.5 3.5v3a3.5 3.5 0 1 0 7 0v-3A3.5 3.5 0 0 0 10 2M8 5.5a2 2 0 1 1 4 0v3a2 2 0 1 1-4 0zM5 8.25a.75.75 0 0 0-1.5 0v.25a6.5 6.5 0 0 0 5.75 6.457V16.5h-1.5a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-1.5v-1.543A6.5 6.5 0 0 0 16.5 8.5v-.25a.75.75 0 0 0-1.5 0v.25a5 5 0 0 1-10 0z" clip-rule="evenodd"/>');
+  Slacky.addIcon('formatting', '<path fill="currentColor" fill-rule="evenodd" d="M6.941 3.952c-.459-1.378-2.414-1.363-2.853.022l-4.053 12.8a.75.75 0 0 0 1.43.452l1.101-3.476h6.06l1.163 3.487a.75.75 0 1 0 1.423-.474zm1.185 8.298L5.518 4.427 3.041 12.25zm6.198-5.537a4.74 4.74 0 0 1 3.037-.081A3.74 3.74 0 0 1 20 10.208V17a.75.75 0 0 1-1.5 0v-.745a8 8 0 0 1-2.847 1.355 3 3 0 0 1-3.15-1.143C10.848 14.192 12.473 11 15.287 11H18.5v-.792c0-.984-.641-1.853-1.581-2.143a3.24 3.24 0 0 0-2.077.056l-.242.089a2.22 2.22 0 0 0-1.34 1.382l-.048.145a.75.75 0 0 1-1.423-.474l.048-.145a3.72 3.72 0 0 1 2.244-2.315zM18.5 12.5h-3.213c-1.587 0-2.504 1.801-1.57 3.085.357.491.98.717 1.572.57a6.5 6.5 0 0 0 2.47-1.223l.741-.593z" clip-rule="evenodd"/>');
+  Slacky.addIcon('schedule-send', '<path fill="currentColor" d="M10 1a9 9 0 0 1 8.852 10.636.75.75 0 0 1-1.476-.272q.123-.664.124-1.364a7.5 7.5 0 1 0-7.045 7.486.75.75 0 0 1 .09 1.497Q10.275 19 10 19a9 9 0 1 1 0-18m3.218 12.068a.46.46 0 0 1 .447-.02l5.081 2.54a.46.46 0 0 1 0 .823l-5.081 2.54A.46.46 0 0 1 13 18.54v-1.587a.46.46 0 0 1 .415-.458l1.587-.155a.341.341 0 0 0 0-.68l-1.587-.155a.46.46 0 0 1-.415-.458V13.46a.46.46 0 0 1 .218-.392M10 5a.75.75 0 0 1 .75.75v4h3a.75.75 0 0 1 0 1.5h-4.5v-5.5A.75.75 0 0 1 10 5"/>');
+
+  // Message action icons
+  Slacky.addIcon('add-reaction', '<path fill="currentColor" fill-rule="evenodd" d="M15.5 1a.75.75 0 0 1 .75.75v2h2a.75.75 0 0 1 0 1.5h-2v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 15.5 1m-13 10a6.5 6.5 0 0 1 7.166-6.466.75.75 0 0 0 .152-1.493 8 8 0 1 0 7.14 7.139.75.75 0 0 0-1.492.152A7 7 0 0 1 15.5 11a6.5 6.5 0 1 1-13 0m4.25-.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5m4.5 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5M9 15c1.277 0 2.553-.724 3.06-2.173.148-.426-.209-.827-.66-.827H6.6c-.452 0-.808.4-.66.827C6.448 14.276 7.724 15 9 15" clip-rule="evenodd"/>');
+  Slacky.addIcon('threads-reply', '<path fill="currentColor" fill-rule="evenodd" d="M10 3a7 7 0 1 0 3.394 13.124.75.75 0 0 1 .542-.074l2.794.68-.68-2.794a.75.75 0 0 1 .073-.542A7 7 0 0 0 10 3m-8.5 7a8.5 8.5 0 1 1 16.075 3.859l.904 3.714a.75.75 0 0 1-.906.906l-3.714-.904A8.5 8.5 0 0 1 1.5 10M6 8.25a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 6 8.25M6.75 11a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5z" clip-rule="evenodd"/>');
+  Slacky.addIcon('share-message', '<path fill="currentColor" fill-rule="evenodd" d="M10.457 2.56a.75.75 0 0 1 .814.15l7 6.75a.75.75 0 0 1 0 1.08l-7 6.75A.75.75 0 0 1 10 16.75V13.5H6c-1.352 0-2.05.389-2.43.832-.4.465-.57 1.133-.57 1.918a.75.75 0 0 1-1.5 0V14c0-2.594.582-4.54 2-5.809C4.898 6.941 6.944 6.5 9.5 6.5h.5V3.25c0-.3.18-.573.457-.69M3.052 12.79C3.777 12.278 4.753 12 6 12h4.75a.75.75 0 0 1 .75.75v2.235L16.67 10 11.5 5.015V7.25a.75.75 0 0 1-.75.75H9.5c-2.444 0-4.023.434-5 1.309-.784.702-1.29 1.788-1.448 3.481" clip-rule="evenodd"/>');
+  Slacky.addIcon('bookmark', '<path fill="currentColor" fill-rule="evenodd" d="M4.25 4.25A2.75 2.75 0 0 1 7 1.5h6a2.75 2.75 0 0 1 2.75 2.75v12.793c0 1.114-1.346 1.671-2.134.884L10 14.31l-3.616 3.616c-.788.787-2.134.23-2.134-.884zM7 3c-.69 0-1.25.56-1.25 1.25v12.19l3.649-3.65a.85.85 0 0 1 1.202 0l3.649 3.65V4.25C14.25 3.56 13.69 3 13 3z" clip-rule="evenodd"/>');
+  Slacky.addIcon('ellipsis-horizontal-filled', '<path fill="currentColor" d="M14.5 10a1.75 1.75 0 1 1 3.5 0 1.75 1.75 0 0 1-3.5 0m-6.25 0a1.75 1.75 0 1 1 3.5 0 1.75 1.75 0 0 1-3.5 0M2 10a1.75 1.75 0 1 1 3.5 0A1.75 1.75 0 0 1 2 10"/>');
+
+  // Wire message action icons
+  document.getElementById('ma-emoji1').innerHTML = Slacky.icon('add-reaction', 18);
+  document.getElementById('ma-thread1').innerHTML = Slacky.icon('threads-reply', 18);
+  document.getElementById('ma-share1').innerHTML = Slacky.icon('share-message', 18);
+  document.getElementById('ma-save1').innerHTML = Slacky.icon('bookmark', 18);
+  document.getElementById('ma-more1').innerHTML = Slacky.icon('ellipsis-horizontal-filled', 18);
+
+  // Wire composer icons — Slacky.icon() returns full <svg class="c-icon">, insert directly
+  document.getElementById('cmp-bold').innerHTML = Slacky.icon('bold', 16);
+  document.getElementById('cmp-italic').innerHTML = Slacky.icon('italic', 16);
+  document.getElementById('cmp-underline').innerHTML = Slacky.icon('underline', 16);
+  document.getElementById('cmp-strike').innerHTML = Slacky.icon('strikethrough', 16);
+  document.getElementById('cmp-link').innerHTML = Slacky.icon('link', 16);
+  document.getElementById('cmp-ol').innerHTML = Slacky.icon('numbered-list', 16);
+  document.getElementById('cmp-ul').innerHTML = Slacky.icon('bulleted-list', 16);
+  document.getElementById('cmp-quote').innerHTML = Slacky.icon('quote', 16);
+  document.getElementById('cmp-code').innerHTML = Slacky.icon('code', 16);
+  document.getElementById('cmp-codeblock').innerHTML = Slacky.icon('code-block', 16);
+  document.getElementById('cmp-plus').innerHTML = Slacky.icon('plus', 20);
+  document.getElementById('cmp-aa').innerHTML = Slacky.icon('formatting', 20);
+  document.getElementById('cmp-emoji').innerHTML = Slacky.icon('emoji', 20);
+  document.getElementById('cmp-mention').innerHTML = Slacky.icon('mentions', 20);
+  document.getElementById('cmp-video').innerHTML = Slacky.icon('video', 20);
+  document.getElementById('cmp-mic').innerHTML = Slacky.icon('microphone', 20);
+  document.getElementById('cmp-send').innerHTML = Slacky.icon('send-filled', 20);
+  document.getElementById('cmp-send-opts').innerHTML = Slacky.icon('caret-down-filled', 16);
+  document.getElementById('cmp-format').innerHTML = Slacky.icon('formatting', 20);
+  document.getElementById('cmp-plus2').innerHTML = Slacky.icon('plus', 20);
+  document.getElementById('cmp-emoji2').innerHTML = Slacky.icon('emoji', 20);
+  document.getElementById('cmp-mention2').innerHTML = Slacky.icon('mentions', 20);
+  document.getElementById('cmp-video2').innerHTML = Slacky.icon('video', 20);
+  document.getElementById('cmp-mic2').innerHTML = Slacky.icon('microphone', 20);
+  document.getElementById('cmp-send2').innerHTML = Slacky.icon('send-filled', 20);
+  document.getElementById('cmp-send-opts2').innerHTML = Slacky.icon('caret-down-filled', 16);
+
+  // Thread panel showcase icons
+  document.getElementById('showcase-thread-close').innerHTML = Slacky.icon('close');
+  document.querySelectorAll('.js-showcase-thread-cmp').forEach(function(btn) {
+    btn.innerHTML = Slacky.icon(btn.getAttribute('data-icon'));
+  });
+
+  // Hide placeholder on focus, show on blur if empty; toggle send button active state
+  const composerEls = [];
+  document.querySelectorAll('.c-texty_input[contenteditable]').forEach(el => {
+    const ph = el.querySelector('.ql-placeholder');
+    const sendWrap = el.closest('.c-wysiwyg_container').querySelector('.c-wysiwyg_container__send_button--with_options');
+    function getUserText() {
+      let text = '';
+      el.childNodes.forEach(n => { if (n !== ph) text += n.textContent; });
+      return text.trim();
+    }
+    function updateState() {
+      const hasText = getUserText().length > 0;
+      if (ph) ph.style.display = hasText ? 'none' : '';
+      if (sendWrap) sendWrap.classList.toggle('c-wysiwyg_container__send_button--with_options_disabled', !hasText);
+    }
+    if (ph) {
+      el.addEventListener('focus', () => { ph.style.display = 'none'; });
+      el.addEventListener('blur', updateState);
+    }
+    el.addEventListener('input', updateState);
+    el.addEventListener('keyup', updateState);
+    composerEls.push({ el, ph, sendWrap, updateState });
+  });
+
+  // Toggle between empty and text-entered states
+  document.querySelectorAll('input[name="composer-state"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const withText = radio.value === 'text';
+      composerEls.forEach(({ el, ph, sendWrap, updateState }) => {
+        if (withText) {
+          if (ph) ph.style.display = 'none';
+          const existing = el.querySelector('.ql-placeholder');
+          let hasUserText = false;
+          el.childNodes.forEach(n => { if (n !== existing && n.textContent.trim()) hasUserText = true; });
+          if (!hasUserText) {
+            const textNode = document.createTextNode('Hey team, here\u2019s the update on the project');
+            if (existing) el.insertBefore(textNode, existing);
+            else el.appendChild(textNode);
+          }
+        } else {
+          const toRemove = [];
+          el.childNodes.forEach(n => { if (n !== ph) toRemove.push(n); });
+          toRemove.forEach(n => el.removeChild(n));
+          if (ph) ph.style.display = '';
+        }
+        updateState();
+      });
+    });
+  });
+
+  // Initialize interactive components
+  Slacky.select('#demo-select');
+  Slacky.tabs('#demo-tabs');
+  Slacky.menu('#demo-menu');
+  Slacky.sidebarMenu('#demo-sidebar-menu');
+  Slacky.contextMenu('#ctx-trigger', '#ctx-demo-menu');
+  Slacky.menu('#ctx-demo-menu');
+
+  // Modal
+  const modal = Slacky.modal('#demo-modal');
+  document.getElementById('open-modal-btn').onclick = () => modal.open();
+  document.getElementById('modal-cancel').onclick = () => modal.close();
+
+  // Popover
+  const pop = Slacky.popover('#demo-popover', '#popover-anchor', { position: 'bottom', align: 'start' });
+  document.getElementById('popover-anchor').onclick = () => pop.toggle();
+
+  // Tooltips
+  Slacky.tooltip('#tooltip-top', { text: 'Tooltip on top', position: 'top' });
+  Slacky.tooltip('#tooltip-bottom', { text: 'Tooltip on bottom', position: 'bottom' });
+  Slacky.tooltip('#tooltip-right', { text: 'Tooltip on right', position: 'right' });
+
+  // Toast
+  const toast = Slacky.toast('#demo-toast', { duration: 3000 });
+  document.getElementById('show-toast-btn').onclick = () => toast.show();
+
+  // Dark mode toggle
+  document.getElementById('dark-mode-toggle').onclick = () => {
+    Slacky.darkMode();
+    applyTheme(activeThemeIdx);
+  };
+
+  // Character count
+  const ccInput = document.getElementById('char-count-input');
+  const ccRemaining = document.getElementById('char-count-remaining');
+  ccInput.addEventListener('input', () => {
+    ccRemaining.textContent = 80 - ccInput.value.length;
+  });
+
+  // Sidebar custom icons
+  Slacky.addIcon('hash', '<path fill="currentColor" fill-rule="evenodd" d="M8.562 2.97a.75.75 0 1 0-1.474-.29L6.46 5.75H3.75a.75.75 0 0 0 0 1.5h2.398l-.75 3.75H3.25a.75.75 0 1 0 0 1.5h1.836l-.648 3.23a.75.75 0 1 0 1.474.29l.708-3.52h3.818l-.648 3.23a.75.75 0 0 0 1.474.29l.708-3.52h2.278a.75.75 0 0 0 0-1.5h-1.966l.75-3.75h2.216a.75.75 0 0 0 0-1.5h-1.904l.616-3.08a.75.75 0 0 0-1.474-.29L11.852 5.75H8.034zM7.722 7.25l-.75 3.75h3.818l.75-3.75z" clip-rule="evenodd"/>');
+  Slacky.addIcon('lock', '<path fill="currentColor" fill-rule="evenodd" d="M10 2.5A3.75 3.75 0 0 0 6.25 6.25V8H5.5A1.5 1.5 0 0 0 4 9.5v7A1.5 1.5 0 0 0 5.5 18h9a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 14.5 8h-.75V6.25A3.75 3.75 0 0 0 10 2.5m2.25 5.5V6.25a2.25 2.25 0 0 0-4.5 0V8zM10 12a1 1 0 0 1 .75.336V14a.75.75 0 0 1-1.5 0v-1.664A1 1 0 0 1 10 12" clip-rule="evenodd"/>');
+  Slacky.addIcon('unreads', '<path fill="currentColor" fill-rule="evenodd" d="M3.75 4h-.5v.5h.5zm0 0h12.5v12.5H3.75zm.75 7V5.5h11v8h-4.086l-.207.207L9 15.914V13.5H4.5zm6 2h1.586L9 16.086V13h3.086z" clip-rule="evenodd"/><path fill="currentColor" d="M7 8.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/>');
+  Slacky.addIcon('threads', '<path fill="currentColor" fill-rule="evenodd" d="M6.194 3.5A2.75 2.75 0 0 0 3.5 6.083v5.334a2.75 2.75 0 0 0 2.694 2.583H8v2.293a.6.6 0 0 0 1.024.424L11.341 14h2.465a2.75 2.75 0 0 0 2.694-2.583V6.083A2.75 2.75 0 0 0 13.806 3.5zM5 6.083C5 5.504 5.457 5 6.194 5h7.612C14.543 5 15 5.504 15 6.083v5.334c0 .579-.457 1.083-1.194 1.083h-2.77L9.5 14.036V12.5H6.194C5.457 12.5 5 11.996 5 11.417z" clip-rule="evenodd"/>');
+  Slacky.addIcon('huddles', '<path fill="currentColor" fill-rule="evenodd" d="M10 3a4.5 4.5 0 0 0-4.092 6.377.75.75 0 0 1 .092.363v1.51a.75.75 0 0 0 .75.75h6.5a.75.75 0 0 0 .75-.75V9.74a.75.75 0 0 1 .092-.363A4.5 4.5 0 0 0 10 3M7 13.5v1a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-1z" clip-rule="evenodd"/>');
+  Slacky.addIcon('recap', '<path fill="currentColor" fill-rule="evenodd" d="M3.75 5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h4.836l1.414 1.414 1.414-1.414h4.836a.75.75 0 0 0 .75-.75v-8.5a.75.75 0 0 0-.75-.75zM7 8.5a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z" clip-rule="evenodd"/>');
+  Slacky.addIcon('drafts', '<path fill="currentColor" fill-rule="evenodd" d="M13.616 3.445a1.25 1.25 0 0 1 1.768 0l1.171 1.171a1.25 1.25 0 0 1 0 1.768L7.22 15.72a.75.75 0 0 1-.333.193l-3.5.954a.75.75 0 0 1-.92-.921l.953-3.5a.75.75 0 0 1 .193-.333z" clip-rule="evenodd"/>');
+  Slacky.addIcon('directories', '<path fill="currentColor" fill-rule="evenodd" d="M6.5 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7M4.5 6.5a2 2 0 1 1 4 0 2 2 0 0 1-4 0m-2.5 7A2.5 2.5 0 0 1 4.5 11h4A2.5 2.5 0 0 1 11 13.5V15a.75.75 0 0 1-1.5 0v-1.5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1V15A.75.75 0 0 1 2 15zm12.25-3.75a.75.75 0 0 0 0 1.5H16a1 1 0 0 1 1 1V15a.75.75 0 0 0 1.5 0v-2.75A2.5 2.5 0 0 0 16 9.75zM13.5 3.25a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-3.5 2a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" clip-rule="evenodd"/>');
+  Slacky.addIcon('filter', '<path fill="currentColor" fill-rule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75m2.5 5A.75.75 0 0 1 5.25 9h9.5a.75.75 0 0 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75m3.25 4.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1-.75-.75" clip-rule="evenodd"/>');
+  Slacky.addIcon('compose', '<path fill="currentColor" fill-rule="evenodd" d="M14.85 2.44a1.5 1.5 0 0 1 2.121 0l.59.59a1.5 1.5 0 0 1 0 2.121L9.56 13.15a.75.75 0 0 1-.36.193l-3 .75a.75.75 0 0 1-.91-.91l.75-3a.75.75 0 0 1 .194-.36zM4.5 4A1.5 1.5 0 0 0 3 5.5v10A1.5 1.5 0 0 0 4.5 17h10a1.5 1.5 0 0 0 1.5-1.5V11a.75.75 0 0 1 1.5 0v4.5a3 3 0 0 1-3 3h-10a3 3 0 0 1-3-3v-10a3 3 0 0 1 3-3H9a.75.75 0 0 1 0 1.5z" clip-rule="evenodd"/>');
+  Slacky.addIcon('gear', '<path fill="currentColor" fill-rule="evenodd" d="M8.61 2.463a1.75 1.75 0 0 1 2.78 0l.673.871c.085.11.21.178.347.189l1.091.09a1.75 1.75 0 0 1 1.39 1.963l-.16 1.085a.5.5 0 0 0 .122.38l.72.83a1.75 1.75 0 0 1 0 2.258l-.72.83a.5.5 0 0 0-.122.38l.16 1.085a1.75 1.75 0 0 1-1.39 1.963l-1.091.09a.5.5 0 0 0-.347.189l-.672.871a1.75 1.75 0 0 1-2.78 0l-.673-.871a.5.5 0 0 0-.347-.19l-1.091-.09a1.75 1.75 0 0 1-1.39-1.962l.16-1.085a.5.5 0 0 0-.122-.38l-.72-.83a1.75 1.75 0 0 1 0-2.258l.72-.83a.5.5 0 0 0 .122-.38l-.16-1.085a1.75 1.75 0 0 1 1.39-1.963l1.091-.09a.5.5 0 0 0 .347-.19zM10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" clip-rule="evenodd"/>');
+
+  // Wire sidebar icons
+  document.getElementById('header-caret').innerHTML = Slacky.icon('caret-down-filled', 16);
+  document.getElementById('header-btn-1').innerHTML = Slacky.icon('gear', 16);
+  document.getElementById('header-btn-2').innerHTML = Slacky.icon('compose', 16);
+  document.getElementById('filter-search-icon').innerHTML = Slacky.icon('search', 14);
+  document.getElementById('page-icon-unreads').innerHTML = Slacky.icon('list-view', 16);
+  document.getElementById('page-icon-threads').innerHTML = Slacky.icon('threads', 16);
+  document.getElementById('page-icon-huddles').innerHTML = Slacky.icon('headphones', 16);
+  document.getElementById('page-icon-recap').innerHTML = Slacky.icon('sparkles', 16);
+  document.getElementById('page-icon-drafts').innerHTML = Slacky.icon('send', 16);
+  document.getElementById('page-icon-directories').innerHTML = Slacky.icon('user-directory', 16);
+  ['starred', 'channels', 'dms', 'apps'].forEach(id => {
+    document.getElementById('sec-icon-' + id).innerHTML = Slacky.icon('caret-down-filled', 12);
+  });
+  for (let i = 1; i <= 9; i++) {
+    const el = document.getElementById('ch-icon-' + i);
+    if (el) {
+      const isLock = el.classList.contains('p-channel_sidebar__channel_icon--lock');
+      el.innerHTML = Slacky.icon(isLock ? 'lock' : 'channel', 16);
+    }
+  }
+
+  // Sidebar theme switcher
+  // IA4 preset themes from @tinyspeck/design-tokens/src/helpers/ia.ts (presetsWithSections).
+  // Palette RGB values from js/lib/slack-kit/src/design-tokens/light-inverted-sidebar.css.
+  // Shade selection follows getConicGradientShadeColor + paletteShadeByVariableAndMode.
+  // Dark mode: all themes use standard dark bg #1A1D21.
+  const sidebarThemes = [
+    // ── Single color ──
+    { name:'Aubergine', section:'single-color', swatch:'#611F69',
+      light: { bg:'linear-gradient(135deg, rgb(97,31,105) 20%, rgb(57,6,58) 80%)', text:'#FFFFFF', sel:'#F9EDFF', selTxt:'#39063A', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#EABDFB' },
+      dark:  { bg:'linear-gradient(135deg, rgb(32,2,33) 20%, rgb(67,19,73) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#CFA1DE' },
+    },
+    { name:'Clementine', section:'single-color', swatch:'#DC540C',
+      light: { bg:'linear-gradient(135deg, rgb(220,84,12) 20%, rgb(172,61,0) 80%)', text:'#662500', sel:'rgba(0,0,0,0.08)', selTxt:'#662500', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#C84600' },
+      dark:  { bg:'linear-gradient(135deg, rgb(56,16,0) 20%, rgb(122,37,0) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#E4A07F' },
+    },
+    { name:'Banana', section:'single-color', swatch:'#FFF4B8',
+      light: { bg:'linear-gradient(135deg, rgb(255,244,184) 20%, rgb(255,215,56) 80%)', text:'#4D3900', sel:'rgba(0,0,0,0.08)', selTxt:'#4D3900', hover:'rgba(0,0,0,0.04)', pres:'#20A271', badge:'#AA8000' },
+      dark:  { bg:'linear-gradient(135deg, rgb(47,30,0) 20%, rgb(103,72,0) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#E6BE30' },
+    },
+    { name:'Jade', section:'single-color', swatch:'#178F65',
+      light: { bg:'linear-gradient(135deg, rgb(23,143,101) 20%, rgb(14,103,77) 80%)', text:'#0A4032', sel:'rgba(0,0,0,0.08)', selTxt:'#0A4032', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#007A5A' },
+      dark:  { bg:'linear-gradient(135deg, rgb(5,36,27) 20%, rgb(8,63,46) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#63C29A' },
+    },
+    { name:'Lagoon', section:'single-color', swatch:'#0071A4',
+      light: { bg:'linear-gradient(135deg, rgb(0,113,164) 20%, rgb(28,64,95) 80%)', text:'#FFFFFF', sel:'#E3F8FF', selTxt:'#0D2E45', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#67D7F8' },
+      dark:  { bg:'linear-gradient(135deg, rgb(0,26,45) 20%, rgb(0,61,97) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#58BDDE' },
+    },
+    { name:'Barbra', section:'single-color', swatch:'#FFC4D9',
+      light: { bg:'linear-gradient(135deg, rgb(255,196,217) 20%, rgb(255,129,170) 80%)', text:'#59000F', sel:'rgba(0,0,0,0.08)', selTxt:'#59000F', hover:'rgba(0,0,0,0.04)', pres:'#20A271', badge:'#C01343' },
+      dark:  { bg:'linear-gradient(135deg, rgb(48,0,5) 20%, rgb(107,5,24) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#E68BA7' },
+    },
+    { name:'Gray', section:'single-color', swatch:'#EAEAEA',
+      light: { bg:'linear-gradient(135deg, rgb(234,234,234) 20%, rgb(203,204,207) 80%)', text:'#1D1C1D', sel:'rgba(0,0,0,0.08)', selTxt:'#1D1C1D', hover:'rgba(0,0,0,0.04)', pres:'#20A271', badge:'#C01343' },
+      dark:  { bg:'linear-gradient(135deg, rgb(16,18,20) 20%, rgb(33,36,40) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#E68BA7' },
+    },
+    { name:'Mood Indigo', section:'single-color', swatch:'#1E328F',
+      light: { bg:'linear-gradient(135deg, rgb(30,50,143) 20%, rgb(9,24,97) 80%)', text:'#FFFFFF', sel:'#F0F3FC', selTxt:'#091861', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#A0B3F3' },
+      dark:  { bg:'linear-gradient(135deg, rgb(4,11,61) 20%, rgb(18,32,108) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#899BDC' },
+    },
+    // ── Vision assistive ──
+    { name:'Tritanopia', section:'vision-assistive', swatch:'#000000',
+      light: { bg:'#000000', text:'#FFFFFF', sel:'#F8F8F8', selTxt:'#1D1C1D', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#EF3E75' },
+      dark:  { bg:'#1A1D21', text:'#D1D2D3', sel:'#F8F8F8', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#EF3E75' },
+    },
+    { name:'Protanopia & Deuteranopia', section:'vision-assistive', swatch:'#2D0033',
+      light: { bg:'#2D0033', text:'#FFFFFF', sel:'#F9EDFF', selTxt:'#1D1C1D', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#EABDFB' },
+      dark:  { bg:'#1A1D21', text:'#D1D2D3', sel:'#F9EDFF', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#EABDFB' },
+    },
+    // ── Fun and new ──
+    { name:'Raspberry Beret', section:'fun-and-new', swatch:'#F4DAFF',
+      light: { bg:'linear-gradient(135deg, rgb(244,218,255) 20%, rgb(255,129,170) 80%)', text:'#39063A', sel:'rgba(0,0,0,0.08)', selTxt:'#39063A', hover:'rgba(0,0,0,0.04)', pres:'#C474D3', badge:'#C01343' },
+      dark:  { bg:'linear-gradient(135deg, rgb(32,2,33) 20%, rgb(107,5,24) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#BC80CE', badge:'#E68BA7' },
+    },
+    { name:'Big Business', section:'fun-and-new', swatch:'#5E5D60',
+      light: { bg:'linear-gradient(135deg, rgb(94,93,96) 20%, rgb(30,50,143) 80%)', text:'#FFFFFF', sel:'#F0F3FC', selTxt:'#091861', hover:'rgba(255,255,255,0.08)', pres:'#4864D2', badge:'#A0B3F3' },
+      dark:  { bg:'linear-gradient(135deg, rgb(16,18,20) 20%, rgb(18,32,108) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#657ACE', badge:'#899BDC' },
+    },
+    { name:'POG', section:'fun-and-new', swatch:'#F6D2E2',
+      light: { bg:'linear-gradient(135deg, rgb(246,210,226) 20%, rgb(236,178,46) 80%)', text:'#FFFFFF', sel:'#FCF2D9', selTxt:'#593900', hover:'rgba(0,0,0,0.04)', pres:'#DEA900', badge:'#FFD738' },
+      dark:  { bg:'linear-gradient(135deg, rgb(50,0,21) 20%, rgb(105,63,0) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#DEA700', badge:'#E6BE30' },
+    },
+    { name:'Mint Chip', section:'fun-and-new', swatch:'#C0ECAA',
+      light: { bg:'linear-gradient(135deg, rgb(192,236,170) 20%, rgb(125,149,235) 80%)', text:'#003D00', sel:'rgba(0,0,0,0.08)', selTxt:'#003D00', hover:'rgba(0,0,0,0.04)', pres:'#4864D2', badge:'#784C1F' },
+      dark:  { bg:'linear-gradient(135deg, rgb(16,35,16) 20%, rgb(18,32,108) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#657ACE', badge:'#BA9B77' },
+    },
+    { name:'PB&J', section:'fun-and-new', swatch:'#E3CEB5',
+      light: { bg:'linear-gradient(135deg, rgb(227,206,181) 20%, rgb(226,150,185) 80%)', text:'#42280D', sel:'rgba(0,0,0,0.08)', selTxt:'#42280D', hover:'rgba(0,0,0,0.04)', pres:'#C05B8C', badge:'#C01343' },
+      dark:  { bg:'linear-gradient(135deg, rgb(42,23,7) 20%, rgb(89,24,54) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#C27899', badge:'#E68BA7' },
+    },
+    { name:'Chill Vibes', section:'fun-and-new', swatch:'#178F65',
+      light: { bg:'linear-gradient(135deg, rgb(23,143,101) 20%, rgb(8,88,103) 80%)', text:'#FFFFFF', sel:'#E3FFFF', selTxt:'#033640', hover:'rgba(255,255,255,0.08)', pres:'#20A271', badge:'#78D7DD' },
+      dark:  { bg:'linear-gradient(135deg, rgb(5,36,27) 20%, rgb(5,60,72) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#3DAA7C', badge:'#66BEC4' },
+    },
+    { name:'Forest Floor', section:'fun-and-new', swatch:'#608813',
+      light: { bg:'linear-gradient(135deg, rgb(96,136,19) 20%, rgb(102,63,24) 80%)', text:'#243806', sel:'rgba(0,0,0,0.08)', selTxt:'#243806', hover:'rgba(255,255,255,0.08)', pres:'#DEA900', badge:'#AA8000' },
+      dark:  { bg:'linear-gradient(135deg, rgb(21,34,3) 20%, rgb(72,42,15) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#DEA700', badge:'#E6BE30' },
+    },
+    { name:'Slackr', section:'fun-and-new', swatch:'#FFC4D9',
+      light: { bg:'linear-gradient(135deg, rgb(255,196,217) 20%, rgb(54,197,240) 80%)', text:'#FFFFFF', sel:'#E3F8FF', selTxt:'#0D2E45', hover:'rgba(0,0,0,0.04)', pres:'#2FA659', badge:'#FFA3C2' },
+      dark:  { bg:'linear-gradient(135deg, rgb(48,0,5) 20%, rgb(0,61,97) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#4DAD68', badge:'#E68BA7' },
+    },
+    { name:'Sea Glass', section:'fun-and-new', swatch:'#A9EDEF',
+      light: { bg:'linear-gradient(135deg, rgb(169,237,239) 20%, rgb(223,159,244) 80%)', text:'#033640', sel:'rgba(0,0,0,0.08)', selTxt:'#033640', hover:'rgba(0,0,0,0.04)', pres:'#2392A2', badge:'#83388A' },
+      dark:  { bg:'linear-gradient(135deg, rgb(1,28,35) 20%, rgb(67,19,73) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#43A1AB', badge:'#CFA1DE' },
+    },
+    { name:'Lemon Lime', section:'fun-and-new', swatch:'#C79600',
+      light: { bg:'linear-gradient(135deg, rgb(199,150,0) 20%, rgb(11,100,0) 80%)', text:'#4D3900', sel:'rgba(0,0,0,0.08)', selTxt:'#4D3900', hover:'rgba(255,255,255,0.08)', pres:'#C474D3', badge:'#137700' },
+      dark:  { bg:'linear-gradient(135deg, rgb(47,30,0) 20%, rgb(22,64,18) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#BC80CE', badge:'#81BC69' },
+    },
+    { name:'Falling Leaves', section:'fun-and-new', swatch:'#8A5B2A',
+      light: { bg:'linear-gradient(135deg, rgb(138,91,42) 20%, rgb(139,104,0) 80%)', text:'#FFFFFF', sel:'#FFFAE0', selTxt:'#4D3900', hover:'rgba(255,255,255,0.08)', pres:'#E96825', badge:'#FE9C92' },
+      dark:  { bg:'linear-gradient(135deg, rgb(42,23,7) 20%, rgb(103,72,0) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#DA8056', badge:'#DF847C' },
+    },
+    { name:'Sunrise', section:'fun-and-new', swatch:'#FFE3D6',
+      light: { bg:'linear-gradient(135deg, rgb(255,227,214) 20%, rgb(255,163,194) 80%)', text:'#662500', sel:'rgba(0,0,0,0.08)', selTxt:'#662500', hover:'rgba(0,0,0,0.04)', pres:'#CF6C02', badge:'#A86E00' },
+      dark:  { bg:'linear-gradient(135deg, rgb(56,16,0) 20%, rgb(107,5,24) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#CC771F', badge:'#DCAC52' },
+    },
+    // ── Updated classics ──
+    { name:'Choco Mint', section:'updated-classics', swatch:'#784C1F',
+      light: { bg:'linear-gradient(135deg, rgb(120,76,31) 20%, rgb(12,83,64) 80%)', text:'#FFFFFF', sel:'#E3FFF3', selTxt:'#0A4032', hover:'rgba(255,255,255,0.08)', pres:'#77757A', badge:'#74DBAF' },
+      dark:  { bg:'linear-gradient(135deg, rgb(42,23,7) 20%, rgb(8,63,46) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#9A9B9E', badge:'#63C29A' },
+    },
+    { name:'CMYK', section:'updated-classics', swatch:'#9FE8FD',
+      light: { bg:'linear-gradient(135deg, rgb(159,232,253) 20%, rgb(255,129,170) 80%)', text:'#0D2E45', sel:'rgba(0,0,0,0.08)', selTxt:'#0D2E45', hover:'rgba(0,0,0,0.04)', pres:'#DEA900', badge:'#0071A4' },
+      dark:  { bg:'linear-gradient(135deg, rgb(0,26,45) 20%, rgb(107,5,24) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#DEA700', badge:'#58BDDE' },
+    },
+    { name:'Haberdashery', section:'updated-classics', swatch:'#0B527B',
+      light: { bg:'linear-gradient(135deg, rgb(11,82,123) 20%, rgb(77,57,0) 80%)', text:'#FFFFFF', sel:'#FFFAE0', selTxt:'#4D3900', hover:'rgba(255,255,255,0.08)', pres:'#379E15', badge:'#FFB6BD' },
+      dark:  { bg:'linear-gradient(135deg, rgb(0,26,45) 20%, rgb(103,72,0) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#5DA442', badge:'#E69BA1' },
+    },
+    { name:'Hoth', section:'updated-classics', swatch:'#F8F8F8',
+      light: { bg:'linear-gradient(135deg, rgb(248,248,248) 20%, rgb(159,232,253) 80%)', text:'#1D1C1D', sel:'rgba(0,0,0,0.08)', selTxt:'#1D1C1D', hover:'rgba(0,0,0,0.04)', pres:'#379E15', badge:'#BB2C33' },
+      dark:  { bg:'linear-gradient(135deg, rgb(16,18,20) 20%, rgb(0,61,97) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#5DA442', badge:'#E69BA1' },
+    },
+    { name:'Ochin', section:'updated-classics', swatch:'#1264A3',
+      light: { bg:'linear-gradient(135deg, rgb(18,100,163) 20%, rgb(9,58,115) 80%)', text:'#122A59', sel:'rgba(0,0,0,0.08)', selTxt:'#122A59', hover:'rgba(255,255,255,0.08)', pres:'#379E15', badge:'#1A8343' },
+      dark:  { bg:'linear-gradient(135deg, rgb(8,21,54) 20%, rgb(7,51,104) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#5DA442', badge:'#73C487' },
+    },
+    { name:'Sweet Treat', section:'updated-classics', swatch:'#FFD6D5',
+      light: { bg:'linear-gradient(135deg, rgb(255,214,213) 20%, rgb(254,156,146) 80%)', text:'#611307', sel:'rgba(0,0,0,0.08)', selTxt:'#611307', hover:'rgba(0,0,0,0.04)', pres:'#9C6C39', badge:'#007A5A' },
+      dark:  { bg:'linear-gradient(135deg, rgb(53,8,3) 20%, rgb(110,21,7) 80%)', text:'#D1D2D3', sel:'rgba(255,255,255,0.1)', selTxt:'#FFFFFF', hover:'rgba(255,255,255,0.08)', pres:'#A37D54', badge:'#63C29A' },
+    },
+  ];
+
+  function hexLum(hex) {
+    const r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
+    const f = c => c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4);
+    return 0.2126*f(r) + 0.7152*f(g) + 0.0722*f(b);
+  }
+  function isDark(hex) { return hexLum(hex) < 0.4; }
+  function isAppDark() { return document.documentElement.classList.contains('sk-client-theme--dark'); }
+
+  function hexToHsl(hex) {
+    const r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
+    const max = Math.max(r,g,b), min = Math.min(r,g,b);
+    let h = 0, s = 0, l = (max+min)/2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+      if (max === r) h = ((g-b)/d + (g<b?6:0))/6;
+      else if (max === g) h = ((b-r)/d+2)/6;
+      else h = ((r-g)/d+4)/6;
+    }
+    return [h*360, s*100, l*100];
+  }
+  function hslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    const a = s * Math.min(l, 1-l);
+    const f = n => { const k = (n+h/30)%12; return Math.round(255*(l - a*Math.max(Math.min(k-3,9-k,1),-1))).toString(16).padStart(2,'0'); };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+  function buttonColor(sw, forDarkBg) {
+    const [h, s, l] = hexToHsl(sw);
+    if (forDarkBg) {
+      return l >= 50 ? sw : hslToHex(h, Math.min(s, 80), Math.max(l, 60));
+    } else {
+      return l <= 50 ? sw : hslToHex(h, Math.min(s + 15, 100), Math.min(l, 42));
+    }
+  }
+
+  let activeThemeIdx = 0;
+
+  function applyTheme(idx) {
+    const theme = sidebarThemes[idx];
+    activeThemeIdx = idx;
+    const t = isAppDark() ? theme.dark : theme.light;
+    const sidebar = document.getElementById('demo-sidebar');
+    const bgWrap = document.getElementById('sidebar-bg-wrap');
+    const textIsLight = !isDark(t.text);
+    bgWrap.style.background = t.bg;
+    sidebar.style.setProperty('--sidebar-bg', 'transparent');
+    sidebar.style.setProperty('--sidebar-text-primary', t.text);
+    sidebar.style.setProperty('--sidebar-text-secondary', textIsLight ? t.text + 'cc' : t.text + 'e6');
+    sidebar.style.setProperty('--sidebar-hover-bg', t.hover);
+    sidebar.style.setProperty('--sidebar-filter-bg', textIsLight ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)');
+    sidebar.style.setProperty('--sidebar-divider', textIsLight ? 'rgba(255,255,255,0.13)' : 'rgba(0,0,0,0.1)');
+    sidebar.style.setProperty('--sidebar-muted', textIsLight ? t.text + '66' : t.text + '88');
+    sidebar.style.setProperty('--sidebar-presence-away', textIsLight ? t.text + '80' : t.text + '99');
+    sidebar.style.setProperty('--sidebar-mpdm-bg', textIsLight ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.08)');
+    sidebar.style.setProperty('--sidebar-selected-bg', t.sel);
+    sidebar.style.setProperty('--sidebar-selected-color', t.selTxt);
+    sidebar.style.setProperty('--sidebar-badge-bg', t.badge);
+    sidebar.style.setProperty('--sidebar-badge-color', '#FFFFFF');
+    sidebar.style.setProperty('--sidebar-presence-active', t.pres);
+    sidebar.style.setProperty('--sidebar-presence-border', theme.swatch);
+    document.querySelectorAll('#theme-picker button').forEach(b => {
+      const isActive = b.dataset.idx === String(idx);
+      const bTheme = sidebarThemes[+b.dataset.idx];
+      const sw = bTheme.swatch;
+      const swLight = !isDark(sw);
+      const appDark = isAppDark();
+      b.className = 'c-button c-button--small c-button--outline';
+      if (isActive) {
+        b.style.cssText = `background:${sw};border-color:${sw};color:${swLight ? '#1d1c1d' : '#ffffff'}`;
+      } else {
+        const bc = buttonColor(sw, appDark);
+        b.style.cssText = `border-color:${bc};color:${bc}`;
+      }
+    });
+  }
+
+  const picker = document.getElementById('theme-picker');
+  let lastSection = '';
+  sidebarThemes.forEach((t, idx) => {
+    if (t.section !== lastSection) {
+      lastSection = t.section;
+      const label = document.createElement('div');
+      label.style.cssText = 'width:100%;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--dt_color-content-ter);margin-top:8px';
+      label.textContent = t.section.replace(/-/g, ' ');
+      picker.appendChild(label);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'c-button c-button--small c-button--outline';
+    btn.textContent = t.name;
+    btn.dataset.idx = String(idx);
+    const sw = t.swatch;
+    const appDark = isAppDark();
+    const bc = buttonColor(sw, appDark);
+    btn.style.cssText = `border-color:${bc};color:${bc}`;
+    btn.onclick = () => applyTheme(idx);
+    picker.appendChild(btn);
+  });
+  applyTheme(0);
+
+  // Sidebar section collapse
+  document.querySelectorAll('[data-section-toggle]').forEach(heading => {
+    heading.addEventListener('click', () => {
+      const name = heading.dataset.sectionToggle;
+      const content = document.querySelector(`[data-section-content="${name}"]`);
+      const isCollapsed = heading.classList.toggle('p-channel_sidebar__section_heading--collapsed');
+      content.hidden = isCollapsed;
+    });
+  });
+
+  // Sidebar channel selection
+  document.querySelectorAll('#demo-sidebar .p-channel_sidebar__channel').forEach(ch => {
+    ch.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('#demo-sidebar .p-channel_sidebar__channel--selected').forEach(s => s.classList.remove('p-channel_sidebar__channel--selected'));
+      ch.classList.add('p-channel_sidebar__channel--selected');
+    });
+  });
+
+  // Sidebar search filter
+  const sidebarSearch = document.getElementById('sidebar-search');
+  const sidebarLinks = document.querySelectorAll('.showcase-sidebar__link');
+  const sections = document.querySelectorAll('.component-section');
+  const groupLabels = document.querySelectorAll('.showcase-sidebar__group-label');
+
+  sidebarSearch.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    sidebarLinks.forEach(link => {
+      const match = !q || link.textContent.toLowerCase().includes(q);
+      link.hidden = !match;
+    });
+    sections.forEach(section => {
+      const heading = section.querySelector('h2').textContent.toLowerCase();
+      section.hidden = q && !heading.includes(q);
+    });
+    groupLabels.forEach(label => {
+      let next = label.nextElementSibling;
+      let anyVisible = false;
+      while (next && !next.classList.contains('showcase-sidebar__group-label')) {
+        if (!next.hidden && next.classList.contains('showcase-sidebar__link')) anyVisible = true;
+        next = next.nextElementSibling;
+      }
+      label.hidden = q && !anyVisible;
+    });
+  });
+
+  // Sidebar active state on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        sidebarLinks.forEach(l => l.classList.remove('is-active'));
+        const active = document.querySelector(`.showcase-sidebar__link[data-section="${entry.target.id}"]`);
+        if (active) active.classList.add('is-active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MessageKit Reference — Slacky</title>
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="dark.css">
+  <style>
+    :root {
+      --mk-bg: #f4f4f4;
+      --mk-card-bg: #fff;
+      --mk-border: rgba(94,93,96,0.13);
+    }
+
+    .sk-client-theme--dark {
+      --mk-bg: #1a1d21;
+      --mk-card-bg: #212428;
+      --mk-border: #797c814d;
+    }
+
+    .sk-client-theme--dark .mk-nav__link:hover {
+      background: #f8f8f80f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    @font-face {
+      font-family: "Slack Circular";
+      src: url("fonts/circular/lineto-slack-circular-book.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Slack Circular";
+      src: url("fonts/circular/lineto-slack-circular-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    .prototype-breadcrumb {
+      background: #EEF0F3;
+      padding: 10px 20px;
+      font-family: "Slack Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      -webkit-font-smoothing: antialiased;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+    }
+    .prototype-breadcrumb a {
+      color: #1D1C1D;
+      text-decoration: none;
+      font-weight: 400;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .prototype-breadcrumb a:hover { opacity: 1; }
+    .prototype-breadcrumb .breadcrumb-separator {
+      color: #1D1C1D;
+      opacity: 0.4;
+    }
+    .prototype-breadcrumb .breadcrumb-current {
+      color: #1D1C1D;
+      font-weight: 700;
+    }
+
+    .showcase-header {
+      position: fixed;
+      top: 37px;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      background: var(--mk-card-bg);
+      border-bottom: 1px solid var(--mk-border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--dt_static_space-100, 16px);
+      gap: var(--dt_static_space-150, 24px);
+      height: 48px;
+    }
+
+    .showcase-header__title {
+      font-size: var(--dt_static_type-size-subtitle, 18px);
+      font-weight: var(--dt_static_type-weight-black, 900);
+      flex-shrink: 0;
+    }
+
+    .showcase-header .c-tabs__tab_menu {
+      box-shadow: none;
+      display: flex;
+      align-items: flex-end;
+      height: 100%;
+    }
+
+    .showcase-header .c-tabs__tab {
+      padding: 14px 0 10px;
+      margin: 0 var(--dt_static_space-075, 12px);
+      font-size: var(--dt_static_type-size-base, 15px);
+      text-decoration: none;
+    }
+
+    .showcase-header .c-tabs__tab:first-child {
+      margin-left: 0;
+    }
+
+    body {
+      font-family: 'Slack-Lato', 'Lato', sans-serif;
+      background: var(--mk-bg);
+      color: var(--dt_color-content-pry, #1d1c1d);
+      display: flex;
+      min-height: 100vh;
+      padding-top: 85px;
+    }
+
+    /* Sidebar nav */
+    .mk-nav {
+      width: 240px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--mk-border);
+      padding: 24px 0;
+      position: fixed;
+      top: 85px;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      background: var(--mk-card-bg);
+    }
+
+    .mk-nav__group {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      padding: 16px 20px 6px;
+    }
+
+    .mk-nav__link {
+      display: block;
+      font-size: 13px;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      text-decoration: none;
+      padding: 5px 20px;
+      cursor: pointer;
+    }
+
+    .mk-nav__link:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    .mk-nav__link--active {
+      background: var(--dt_color-base-inv-hgl-1, #1264a3);
+      color: #fff;
+    }
+
+    /* Main content */
+    .mk-main {
+      flex: 1;
+      min-width: 0;
+      margin-left: 240px;
+      padding: 32px 48px 80px;
+      max-width: 840px;
+    }
+
+    .mk-main h1 {
+      font-size: 28px;
+      font-weight: var(--dt_static_type-weight-black, 900);
+      margin: 0 0 8px;
+    }
+
+    .mk-main > p.mk-intro {
+      font-size: 15px;
+      color: var(--dt_color-content-sec, #616061);
+      margin: 0 0 32px;
+      line-height: 1.5;
+    }
+
+    /* Sections */
+    .mk-section {
+      margin-bottom: 48px;
+    }
+
+    .mk-section h2 {
+      font-size: 20px;
+      font-weight: var(--dt_static_type-weight-black, 900);
+      margin: 0 0 4px;
+      padding-top: 8px;
+    }
+
+    .mk-section h2 span {
+      font-size: 13px;
+      font-weight: normal;
+      color: var(--dt_color-content-sec, #616061);
+      font-family: 'SF Mono', Monaco, Menlo, monospace;
+    }
+
+    .mk-section > p {
+      font-size: 14px;
+      color: var(--dt_color-content-sec, #616061);
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
+
+    .mk-section h3 {
+      font-size: 15px;
+      font-weight: var(--dt_static_type-weight-bold, 700);
+      margin: 24px 0 8px;
+    }
+
+    /* Demo blocks — matches showcase.html .demo-box / .demo-label pattern */
+    .mk-demo {
+      background: var(--mk-card-bg);
+      border: 1px solid var(--mk-border);
+      border-radius: 8px;
+      padding: 16px 0;
+      margin-bottom: 16px;
+    }
+
+    .mk-demo__label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--dt_color-content-sec, #616061);
+      margin-bottom: 8px;
+      padding-left: 26px;
+    }
+
+    .mk-demo__body {
+      padding: 0;
+    }
+
+    .mk-demo__body--padded {
+      padding: 0;
+    }
+
+    .mk-demo .c-message_kit__background {
+      background: inherit;
+    }
+
+    /* Anatomy diagram */
+    .mk-anatomy {
+      position: relative;
+      padding: 24px 16px;
+    }
+
+    .mk-anatomy__label {
+      position: absolute;
+      font-size: 11px;
+      font-weight: var(--dt_static_type-weight-bold, 700);
+      color: var(--dt_color-content-hgl-1, #1264a3);
+      background: var(--dt_color-base-hgl-1, #e8f5fa);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* Parts list */
+    .mk-parts {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 4px 16px;
+      font-size: 13px;
+      margin: 12px 0;
+    }
+
+    .mk-parts dt {
+      font-weight: var(--dt_static_type-weight-bold, 700);
+      font-family: 'SF Mono', Monaco, Menlo, monospace;
+      font-size: 12px;
+      color: var(--dt_color-content-hgl-1, #1264a3);
+      padding: 2px 0;
+    }
+
+    .mk-parts dd {
+      margin: 0;
+      padding: 2px 0;
+      color: var(--dt_color-content-sec, #616061);
+    }
+
+    /* Theme toggle */
+    .mk-theme-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="prototype-breadcrumb">
+  <a href="https://pages.slack-github.com/muno/prototypes/">Prototypes</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-current">Slacky Component Library</span>
+</nav>
+
+<header class="showcase-header">
+  <span class="showcase-header__title">Slacky</span>
+  <div class="c-tabs__tab_menu" role="tablist">
+    <a class="c-tabs__tab" href="showcase.html" role="tab">Components</a>
+    <a class="c-tabs__tab c-tabs__tab--active" href="messagekit.html" role="tab" aria-selected="true">MessageKit</a>
+    <a class="c-tabs__tab" href="shells.html" role="tab">Shells</a>
+  </div>
+</header>
+
+<nav class="mk-nav">
+  <div class="mk-nav__group">Structure</div>
+  <a class="mk-nav__link" href="#anatomy">Anatomy</a>
+  <a class="mk-nav__link" href="#core-layout">Core Layout</a>
+  <a class="mk-nav__link" href="#adjacent">Adjacent Messages</a>
+
+  <div class="mk-nav__group">States</div>
+  <a class="mk-nav__link" href="#hover">Hover</a>
+  <a class="mk-nav__link" href="#highlighted">Highlighted</a>
+  <a class="mk-nav__link" href="#pinned">Pinned</a>
+  <a class="mk-nav__link" href="#ephemeral">Ephemeral</a>
+  <a class="mk-nav__link" href="#tombstone">Tombstone (deleted)</a>
+
+  <div class="mk-nav__group">Labels</div>
+  <a class="mk-nav__link" href="#labels">Message Labels</a>
+
+  <div class="mk-nav__group">Engagement</div>
+  <a class="mk-nav__link" href="#reactions">Reactions</a>
+  <a class="mk-nav__link" href="#reply-bar">Reply Bar</a>
+  <a class="mk-nav__link" href="#actions-toolbar">Actions Toolbar</a>
+</nav>
+
+<main class="mk-main">
+  <h1>MessageKit Reference</h1>
+  <p class="mk-intro">Component reference for the Slack message system. Each section shows the real markup patterns and CSS classes used in the webapp. Values sourced from <code>_tools.global_message.less</code>, <code>message-kit/</code> atoms and containers.</p>
+
+  <!-- ===== ANATOMY ===== -->
+  <section class="mk-section" id="anatomy">
+    <h2>Anatomy</h2>
+    <p>A standard Slack message is composed of nested layers. The outermost container handles background/hover, inside that a flex gutter splits the avatar from the content area.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Message structure</div>
+      <div class="mk-demo__body">
+        <div class="mk-anatomy">
+          <div class="c-message_kit__message">
+            <div class="c-message_kit__background" style="outline:2px dashed rgba(18,100,163,0.25);outline-offset:-2px">
+              <div class="c-message_kit__gutter">
+                <div class="c-message_kit__gutter__left" style="outline:2px dashed rgba(18,100,163,0.2);outline-offset:-2px">
+                  <div class="c-message_kit__avatar"><img src="avatars/persona-a.png" alt=""></div>
+                </div>
+                <div class="c-message_kit__gutter__right" style="outline:2px dashed rgba(18,100,163,0.2);outline-offset:-2px">
+                  <div class="c-message_kit__content_header">
+                    <span class="c-message__sender">Sarah Chen</span>
+                    <span class="c-timestamp">11:42 AM</span>
+                  </div>
+                  <div class="c-message__body">Hey team, I just pushed the updated designs for the onboarding flow. Let me know if you have any feedback!</div>
+                  <div class="c-message_kit__reaction_bar">
+                    <button class="c-reaction c-reaction--reacted"><span>🎉</span> <span>3</span></button>
+                    <button class="c-reaction"><span>👀</span> <span>2</span></button>
+                    <button class="c-reaction_add" title="Add a reaction" aria-label="Add reaction…" data-qa="add_reaction_button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="1em" height="1em" fill="none"><path class="c-reaction_add__bg" fill="currentColor" d="M10.28 4.117a7 7 0 1 0 5.604 5.604A2.5 2.5 0 0 1 13 7.25v-.251h-.251a2.5 2.5 0 0 1-2.47-2.883Z"/><path class="c-reaction_add__fg" fill="currentColor" fill-rule="evenodd" d="M15.5 1a.75.75 0 0 1 .75.75v2h2a.75.75 0 0 1 0 1.5h-2v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 15.5 1Zm-13 10a6.5 6.5 0 0 1 7.166-6.466.75.75 0 0 0 .152-1.493 8 8 0 1 0 7.14 7.139.75.75 0 0 0-1.492.152A6.525 6.525 0 0 1 15.5 11a6.5 6.5 0 1 1-13 0Zm4.25-.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Zm4.5 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5ZM9 15c1.277 0 2.553-.724 3.06-2.173.148-.426-.209-.827-.66-.827H6.6c-.452 0-.808.4-.66.827C6.448 14.276 7.724 15 9 15Z" clip-rule="evenodd"/></svg></button>
+                  </div>
+                </div>
+              </div>
+              <div class="mk-anatomy__label" style="top:6px;left:80px">background</div>
+              <div class="mk-anatomy__label" style="top:10px;right:16px">actions (on hover)</div>
+              <div class="mk-anatomy__label" style="top:32px;left:8px">gutter_left</div>
+              <div class="mk-anatomy__label" style="top:32px;left:180px">gutter_right</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Parts</h3>
+    <dl class="mk-parts">
+      <dt>background</dt>
+      <dd>Outermost painted layer. Handles hover highlight, pinned/starred/ephemeral backgrounds. 6px vertical padding.</dd>
+      <dt>gutter</dt>
+      <dd>Flex row. Left side is 70px wide (avatar + 8px padding-right). Right side is flex:1.</dd>
+      <dt>avatar</dt>
+      <dd>36&times;36px, border-radius 6px. Hidden on adjacent messages (opacity:0, shown on hover).</dd>
+      <dt>sender</dt>
+      <dd>Font-weight 900 (<code>--dt_static_type-weight-black</code>). Primary text color. Underlines on hover.</dd>
+      <dt>timestamp</dt>
+      <dd>12px micro text, secondary color. Non-selectable (<code>user-select:none</code>).</dd>
+      <dt>body</dt>
+      <dd>15px, line-height 1.46667, inline-block, full width. Supports mrkdwn formatting.</dd>
+      <dt>reaction_bar</dt>
+      <dd>Pill-shaped reaction buttons + add button. 4px margins between items.</dd>
+      <dt>reply_bar</dt>
+      <dd>34px tall flex row with avatar stack, reply count, and timestamp.</dd>
+      <dt>actions</dt>
+      <dd>Absolutely positioned toolbar, appears on message hover. Elevation shadow, rounded pill shape.</dd>
+    </dl>
+  </section>
+
+  <!-- ===== CORE LAYOUT ===== -->
+  <section class="mk-section" id="core-layout">
+    <h2>Core Layout <span>c-message_kit__message</span></h2>
+    <p>The standard message layout. Avatar in the left gutter, sender + timestamp header, then body text. Source: <code>_tools.global_message.less</code> — light theme with 70px gutter, 8px gap, 26px right padding.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Standard message</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-a.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Sarah Chen</span>
+                  <span class="c-timestamp">11:42 AM</span>
+                </div>
+                <div class="c-message__body">Hey team, I just pushed the updated designs for the onboarding flow. Let me know if you have any feedback!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Short message</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-b.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Marcus Johnson</span>
+                  <span class="c-timestamp">11:45 AM</span>
+                </div>
+                <div class="c-message__body">Sounds good!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Multi-paragraph message</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-c.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Priya Patel</span>
+                  <span class="c-timestamp">10:30 AM</span>
+                </div>
+                <div class="c-message__body">
+                  I've been looking at the performance metrics from last week's release and wanted to share some observations.<br><br>
+                  The page load time improved by 18% across all markets, which is great. However, I noticed the API response time for the search endpoint regressed slightly — from ~120ms to ~180ms p95.<br><br>
+                  I think it's related to the new indexing change. Can we chat about it in standup tomorrow?
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Bot / app message</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/app-slackbot.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Slackbot</span>
+                  <span class="c-timestamp">9:00 AM</span>
+                </div>
+                <div class="c-message__body">You have 3 reminders coming up today. Type <code>/remind list</code> to see them all.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ADJACENT MESSAGES ===== -->
+  <section class="mk-section" id="adjacent">
+    <h2>Adjacent Messages <span>c-message_kit__background--adjacent</span></h2>
+    <p>Messages from the same user within 5 minutes collapse the avatar and header. The gutter shows a timestamp on hover (opacity transition). Top padding shrinks to 2px.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Same user, consecutive</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-e.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Alex Rivera</span>
+                  <span class="c-timestamp">2:15 PM</span>
+                </div>
+                <div class="c-message__body">Just wrapped up the accessibility audit for the settings page.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background c-message_kit__background--adjacent">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <span class="c-timestamp c-timestamp--adjacent">2:15</span>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__body">Found a few contrast issues that we should fix before launch — I'll file tickets for those.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background c-message_kit__background--adjacent">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <span class="c-timestamp c-timestamp--adjacent">2:16</span>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__body">Also, the screen reader navigation for the sidebar is much improved.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Multi-user conversation flow</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-d.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Jordan Kim</span>
+                  <span class="c-timestamp">3:01 PM</span>
+                </div>
+                <div class="c-message__body">Has anyone tested the new notification settings on mobile?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-f.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Taylor Brooks</span>
+                  <span class="c-timestamp">3:03 PM</span>
+                </div>
+                <div class="c-message__body">I tested on iOS yesterday. Worked fine for me.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background c-message_kit__background--adjacent">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <span class="c-timestamp c-timestamp--adjacent">3:03</span>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__body">Haven't tried Android though — <span style="color:var(--dt_color-content-hgl-1,#1264a3);cursor:pointer">@Jordan Kim</span> do you have a device handy?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-d.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Jordan Kim</span>
+                  <span class="c-timestamp">3:05 PM</span>
+                </div>
+                <div class="c-message__body">Yeah I'll check now, give me 5 min.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOVER ===== -->
+  <section class="mk-section" id="hover">
+    <h2>Hover State</h2>
+    <p>On hover, the message background changes to <code>var(--dt_color-surf-sec)</code> and the actions toolbar appears above the message. The toolbar uses elevation shadow and rounded pill shape.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Hover state shown statically — background + actions toolbar</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background c-message_kit__background--hovered">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-a.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Sarah Chen</span>
+                  <span class="c-timestamp">11:42 AM</span>
+                </div>
+                <div class="c-message__body">The new designs are ready for review. I added some notes in the Figma file about the interaction patterns.</div>
+              </div>
+            </div>
+            <div class="c-message_actions__container c-message__actions" role="group">
+              <div class="c-message_actions__group c-message-actions--hover-actions" role="group" aria-label="Message actions">
+                <div class="c-message_actions__overflow_item">
+                  <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with eyes">👀</button>
+                  <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with thank you">🙌</button>
+                  <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with yes">✅</button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Add reaction" data-qa="add_reaction"></button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Reply in thread" data-qa="start_thread"></button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Forward message" data-qa="share_message"></button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Save for later" data-qa="add_to_later_todos"></button>
+                </div>
+                <div class="c-message_actions__overflow_item">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="More actions" data-qa="more_message_actions"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background c-message_kit__background--hovered">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-g.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Riley Morgan</span>
+                  <span class="c-timestamp">11:44 AM</span>
+                </div>
+                <div class="c-message__body">Nice work! I'll take a look this afternoon.</div>
+              </div>
+            </div>
+            <div class="c-message_actions__container c-message__actions" role="group">
+              <div class="c-message_actions__group c-message-actions--hover-actions" role="group" aria-label="Message actions">
+                <div class="c-message_actions__overflow_item">
+                  <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with eyes">👀</button>
+                  <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with thank you">🙌</button>
+                  <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with yes">✅</button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Add reaction" data-qa="add_reaction"></button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Reply in thread" data-qa="start_thread"></button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Forward message" data-qa="share_message"></button>
+                </div>
+                <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Save for later" data-qa="add_to_later_todos"></button>
+                </div>
+                <div class="c-message_actions__overflow_item">
+                  <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="More actions" data-qa="more_message_actions"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HIGHLIGHTED ===== -->
+  <section class="mk-section" id="highlighted">
+    <h2>Highlighted <span>c-message--highlight</span></h2>
+    <p>When you click a link to a specific message or search result, the message briefly highlights with a yellow background that fades out over 4 seconds.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Highlight (static preview — real version animates)</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background" style="background:var(--dt_color-base-hgl-2, #faf3dd)">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-c.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Priya Patel</span>
+                  <span class="c-timestamp">Yesterday at 4:30 PM</span>
+                </div>
+                <div class="c-message__body">Here's the link to the API spec: <span style="color:var(--dt_color-content-hgl-1,#1264a3);cursor:pointer">design-api-v2.md</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PINNED ===== -->
+  <section class="mk-section" id="pinned">
+    <h2>Pinned <span>c-message--pinned</span></h2>
+    <p>Pinned messages have a subtle highlight background and a label above the message content showing who pinned it.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Pinned message with label</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background" style="background:rgba(255,179,18,0.1)">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left"></div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__label" style="font-size:12px;color:var(--dt_color-content-sec,#616061);margin-bottom:4px;display:flex;align-items:center;gap:4px">
+                  <span id="mk-pin-icon" style="color:#e8912d"></span> Pinned by Sarah Chen
+                </div>
+              </div>
+            </div>
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-b.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Marcus Johnson</span>
+                  <span class="c-timestamp">Monday at 2:00 PM</span>
+                </div>
+                <div class="c-message__body">Sprint goals for this week: 1) Finish onboarding redesign 2) Ship notification settings 3) Start accessibility audit</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EPHEMERAL ===== -->
+  <section class="mk-section" id="ephemeral">
+    <h2>Ephemeral <span>c-message--ephemeral</span></h2>
+    <p>Ephemeral messages are temporary and only visible to the current user. They have a persistent subtle background (same as hover color) and a "Only visible to you" label.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Ephemeral message</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background" style="background:var(--dt_color-surf-sec, #f8f8f8)">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left"></div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__label" style="font-size:12px;color:var(--dt_color-content-sec,#616061);margin-bottom:4px">Only visible to you</div>
+              </div>
+            </div>
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/app-polly.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Polly</span>
+                  <span class="c-tag c-tag--app" style="font-size:10px;padding:1px 4px;margin-left:4px;vertical-align:middle">APP</span>
+                  <span class="c-timestamp">Just now</span>
+                </div>
+                <div class="c-message__body">Your response has been recorded. Thanks for participating!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TOMBSTONE ===== -->
+  <section class="mk-section" id="tombstone">
+    <h2>Tombstone (Deleted) <span>c-message--tombstone</span></h2>
+    <p>Deleted messages show a muted placeholder. The body text is replaced with a system message and styled in secondary color.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Deleted message</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left" style="opacity:0.5">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-h.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message__body" style="color:var(--dt_color-content-sec,#616061);font-style:italic">This message was deleted.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LABELS ===== -->
+  <section class="mk-section" id="labels">
+    <h2>Message Labels <span>c-message__label</span></h2>
+    <p>Labels appear inline after the message body to indicate state. Source: <code>message-kit/containers/subcomponents/</code>.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Edited label</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-a.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Sarah Chen</span>
+                  <span class="c-timestamp">11:42 AM</span>
+                </div>
+                <div class="c-message__body">The meeting is at 3pm in the main conference room. <span style="font-size:12px;color:var(--dt_color-content-sec,#616061)">(edited)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REACTIONS ===== -->
+  <section class="mk-section" id="reactions">
+    <h2>Reactions <span>c-reaction</span></h2>
+    <p>Pill-shaped buttons below the message body. Reacted state uses blue highlight. Source: <code>_common.reaction.source.less</code> — height 24px, rounded-full radius, 8px inline padding.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Reaction states</div>
+      <div class="mk-demo__body mk-demo__body--padded">
+        <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center">
+          <button class="c-reaction"><span>👍</span> <span>1</span></button>
+          <button class="c-reaction"><span>❤️</span> <span>4</span></button>
+          <button class="c-reaction c-reaction--reacted"><span>🎉</span> <span>3</span></button>
+          <button class="c-reaction c-reaction--reacted"><span>🚀</span> <span>12</span></button>
+          <button class="c-reaction"><span>👀</span> <span>2</span></button>
+          <button class="c-reaction_add" title="Add a reaction" aria-label="Add reaction…" data-qa="add_reaction_button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="1em" height="1em" fill="none"><path class="c-reaction_add__bg" fill="currentColor" d="M10.28 4.117a7 7 0 1 0 5.604 5.604A2.5 2.5 0 0 1 13 7.25v-.251h-.251a2.5 2.5 0 0 1-2.47-2.883Z"/><path class="c-reaction_add__fg" fill="currentColor" fill-rule="evenodd" d="M15.5 1a.75.75 0 0 1 .75.75v2h2a.75.75 0 0 1 0 1.5h-2v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 15.5 1Zm-13 10a6.5 6.5 0 0 1 7.166-6.466.75.75 0 0 0 .152-1.493 8 8 0 1 0 7.14 7.139.75.75 0 0 0-1.492.152A6.525 6.525 0 0 1 15.5 11a6.5 6.5 0 1 1-13 0Zm4.25-.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Zm4.5 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5ZM9 15c1.277 0 2.553-.724 3.06-2.173.148-.426-.209-.827-.66-.827H6.6c-.452 0-.808.4-.66.827C6.448 14.276 7.724 15 9 15Z" clip-rule="evenodd"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">In context — message with reactions</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-b.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Marcus Johnson</span>
+                  <span class="c-timestamp">11:45 AM</span>
+                </div>
+                <div class="c-message__body">Shipped the new notification settings page. Should be live in staging now.</div>
+                <div class="c-message_kit__reaction_bar">
+                  <button class="c-reaction c-reaction--reacted"><span>🎉</span> <span>3</span></button>
+                  <button class="c-reaction"><span>👀</span> <span>2</span></button>
+                  <button class="c-reaction c-reaction--reacted"><span>🚀</span> <span>5</span></button>
+                  <button class="c-reaction_add" title="Add a reaction" aria-label="Add reaction…" data-qa="add_reaction_button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="1em" height="1em" fill="none"><path class="c-reaction_add__bg" fill="currentColor" d="M10.28 4.117a7 7 0 1 0 5.604 5.604A2.5 2.5 0 0 1 13 7.25v-.251h-.251a2.5 2.5 0 0 1-2.47-2.883Z"/><path class="c-reaction_add__fg" fill="currentColor" fill-rule="evenodd" d="M15.5 1a.75.75 0 0 1 .75.75v2h2a.75.75 0 0 1 0 1.5h-2v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 15.5 1Zm-13 10a6.5 6.5 0 0 1 7.166-6.466.75.75 0 0 0 .152-1.493 8 8 0 1 0 7.14 7.139.75.75 0 0 0-1.492.152A6.525 6.525 0 0 1 15.5 11a6.5 6.5 0 1 1-13 0Zm4.25-.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Zm4.5 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5ZM9 15c1.277 0 2.553-.724 3.06-2.173.148-.426-.209-.827-.66-.827H6.6c-.452 0-.808.4-.66.827C6.448 14.276 7.724 15 9 15Z" clip-rule="evenodd"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>CSS details</h3>
+    <dl class="mk-parts">
+      <dt>.c-reaction</dt>
+      <dd>Height 24px, border-radius rounded, 8px inline padding, 4px gap between emoji and count.</dd>
+      <dt>--reacted</dt>
+      <dd>Blue highlight: <code>--dt_color-content-hgl-1</code> text, <code>--dt_color-base-hgl-1</code> bg, 1px blue border.</dd>
+      <dt>:hover</dt>
+      <dd>1px border via box-shadow, transparent background.</dd>
+      <dt>.c-reaction_add</dt>
+      <dd>Same shape as reaction, shows smiley face. Subtitle font-size (18px).</dd>
+    </dl>
+  </section>
+
+  <!-- ===== REPLY BAR ===== -->
+  <section class="mk-section" id="reply-bar">
+    <h2>Reply Bar <span>c-message__reply_bar</span></h2>
+    <p>Thread indicator below a message. Shows reply avatars, count, and last reply time. 34px height, 6px border-radius. On hover shows border and "View thread" text. Source: <code>_common.message.source.less</code>.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Reply bar variants</div>
+      <div class="mk-demo__body">
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-c.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Priya Patel</span>
+                  <span class="c-timestamp">10:30 AM</span>
+                </div>
+                <div class="c-message__body">Can we sync on the API changes before the sprint review?</div>
+                <div class="c-message__reply_bar">
+                  <div class="c-message__reply_bar__avatars">
+                    <img src="avatars/persona-a.png" alt="">
+                    <img src="avatars/persona-d.png" alt="">
+                  </div>
+                  <span class="c-message__reply_count">3 replies</span>
+                  <div class="c-message__reply_bar_description">
+                    <span class="c-message__reply_bar_last_reply">Last reply 2 hours ago</span>
+                    <span class="c-message__reply_bar_view_thread">View thread</span>
+                  </div>
+                  <div class="c-message__reply_bar_arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7.72 5.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 0 1-1.06-1.06L10.94 10 7.72 6.78a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/></svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="c-message_kit__message">
+          <div class="c-message_kit__background">
+            <div class="c-message_kit__gutter">
+              <div class="c-message_kit__gutter__left">
+                <div class="c-message_kit__avatar"><img src="avatars/persona-f.png" alt=""></div>
+              </div>
+              <div class="c-message_kit__gutter__right">
+                <div class="c-message_kit__content_header">
+                  <span class="c-message__sender">Taylor Brooks</span>
+                  <span class="c-timestamp">9:15 AM</span>
+                </div>
+                <div class="c-message__body">Who's handling the deploy today?</div>
+                <div class="c-message__reply_bar">
+                  <div class="c-message__reply_bar__avatars">
+                    <img src="avatars/persona-b.png" alt="">
+                    <img src="avatars/persona-e.png" alt="">
+                    <img src="avatars/persona-g.png" alt="">
+                  </div>
+                  <span class="c-message__reply_count">8 replies</span>
+                  <div class="c-message__reply_bar_description">
+                    <span class="c-message__reply_bar_last_reply">Last reply 45 minutes ago</span>
+                    <span class="c-message__reply_bar_view_thread">View thread</span>
+                  </div>
+                  <div class="c-message__reply_bar_arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M7.72 5.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 0 1-1.06-1.06L10.94 10 7.72 6.78a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/></svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACTIONS TOOLBAR ===== -->
+  <section class="mk-section" id="actions-toolbar">
+    <h2>Actions Toolbar <span>c-message_actions__group</span></h2>
+    <p>Floating toolbar that appears on message hover. Positioned absolutely above-right. Uses elevation shadow and xlarge border-radius. Each button is 32px square with large radius. Source: <code>_common.message_actions.source.less</code>.</p>
+
+    <div class="mk-demo">
+      <div class="mk-demo__label">Toolbar (static preview)</div>
+      <div class="mk-demo__body mk-demo__body--padded">
+        <div style="display:inline-flex">
+          <div class="c-message_actions__group c-message-actions--hover-actions" role="group" aria-label="Message actions">
+            <div class="c-message_actions__overflow_item">
+              <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with eyes">👀</button>
+              <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with thank you">🙌</button>
+              <button class="c-button-unstyled c-message_actions__button c-message_actions__emoji_button" title="React with yes">✅</button>
+            </div>
+            <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+              <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Add reaction" data-qa="add_reaction"></button>
+            </div>
+            <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+              <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Reply in thread" data-qa="start_thread"></button>
+            </div>
+            <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+              <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Forward message" data-qa="share_message"></button>
+            </div>
+            <div class="c-message_actions__overflow_item c-message_actions__overflow_item--button">
+              <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="Save for later" data-qa="add_to_later_todos"></button>
+            </div>
+            <div class="c-message_actions__overflow_item">
+              <button class="c-button-unstyled c-icon_button c-icon_button--size_smedium c-message_actions__button c-icon_button--default" title="More actions" data-qa="more_message_actions"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>CSS details</h3>
+    <dl class="mk-parts">
+      <dt>.c-message_actions<br>__group</dt>
+      <dd>Flex row, 4px padding, xlarge border-radius (12px), elevation-2 shadow. White background.</dd>
+      <dt>.c-message_actions<br>__button</dt>
+      <dd>32&times;32px, large radius (8px), secondary color. On hover: surf-sec background, primary color. Icon size 18px.</dd>
+      <dt>positioning</dt>
+      <dd>Absolute, top: -16px, right: 17px. Display: none by default, inline-flex on parent hover.</dd>
+    </dl>
+  </section>
+
+</main>
+
+<div class="mk-theme-toggle">
+  <button class="c-button c-button--outline c-button--small" id="mk-dark-mode">Toggle Dark Mode</button>
+</div>
+
+<script src="slacky.js"></script>
+<script>
+  // Register message action icons
+  Slacky.addIcon('add-reaction', '<path fill="currentColor" fill-rule="evenodd" d="M15.5 1a.75.75 0 0 1 .75.75v2h2a.75.75 0 0 1 0 1.5h-2v2a.75.75 0 0 1-1.5 0v-2h-2a.75.75 0 0 1 0-1.5h2v-2A.75.75 0 0 1 15.5 1m-13 10a6.5 6.5 0 0 1 7.166-6.466.75.75 0 0 0 .152-1.493 8 8 0 1 0 7.14 7.139.75.75 0 0 0-1.492.152A7 7 0 0 1 15.5 11a6.5 6.5 0 1 1-13 0m4.25-.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5m4.5 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5M9 15c1.277 0 2.553-.724 3.06-2.173.148-.426-.209-.827-.66-.827H6.6c-.452 0-.808.4-.66.827C6.448 14.276 7.724 15 9 15" clip-rule="evenodd"/>');
+  Slacky.addIcon('threads-reply', '<path fill="currentColor" fill-rule="evenodd" d="M10 3a7 7 0 1 0 3.394 13.124.75.75 0 0 1 .542-.074l2.794.68-.68-2.794a.75.75 0 0 1 .073-.542A7 7 0 0 0 10 3m-8.5 7a8.5 8.5 0 1 1 16.075 3.859l.904 3.714a.75.75 0 0 1-.906.906l-3.714-.904A8.5 8.5 0 0 1 1.5 10M6 8.25a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 6 8.25M6.75 11a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5z" clip-rule="evenodd"/>');
+  Slacky.addIcon('share-message', '<path fill="currentColor" fill-rule="evenodd" d="M10.457 2.56a.75.75 0 0 1 .814.15l7 6.75a.75.75 0 0 1 0 1.08l-7 6.75A.75.75 0 0 1 10 16.75V13.5H6c-1.352 0-2.05.389-2.43.832-.4.465-.57 1.133-.57 1.918a.75.75 0 0 1-1.5 0V14c0-2.594.582-4.54 2-5.809C4.898 6.941 6.944 6.5 9.5 6.5h.5V3.25c0-.3.18-.573.457-.69M3.052 12.79C3.777 12.278 4.753 12 6 12h4.75a.75.75 0 0 1 .75.75v2.235L16.67 10 11.5 5.015V7.25a.75.75 0 0 1-.75.75H9.5c-2.444 0-4.023.434-5 1.309-.784.702-1.29 1.788-1.448 3.481" clip-rule="evenodd"/>');
+  Slacky.addIcon('bookmark', '<path fill="currentColor" fill-rule="evenodd" d="M4.25 4.25A2.75 2.75 0 0 1 7 1.5h6a2.75 2.75 0 0 1 2.75 2.75v12.793c0 1.114-1.346 1.671-2.134.884L10 14.31l-3.616 3.616c-.788.787-2.134.23-2.134-.884zM7 3c-.69 0-1.25.56-1.25 1.25v12.19l3.649-3.65a.85.85 0 0 1 1.202 0l3.649 3.65V4.25C14.25 3.56 13.69 3 13 3z" clip-rule="evenodd"/>');
+  Slacky.addIcon('ellipsis-horizontal-filled', '<path fill="currentColor" d="M14.5 10a1.75 1.75 0 1 1 3.5 0 1.75 1.75 0 0 1-3.5 0m-6.25 0a1.75 1.75 0 1 1 3.5 0 1.75 1.75 0 0 1-3.5 0M2 10a1.75 1.75 0 1 1 3.5 0A1.75 1.75 0 0 1 2 10"/>');
+  Slacky.addIcon('pin', '<path fill="currentColor" fill-rule="evenodd" d="M12.884 2.166a1.25 1.25 0 0 1 1.768 0l3.182 3.182a1.25 1.25 0 0 1 0 1.768l-3.889 3.889a.75.75 0 0 0-.167.31l-.762 3.048a1.25 1.25 0 0 1-2.044.6L8.53 12.53l-4.72 4.72a.75.75 0 0 1-1.06-1.06l4.72-4.72-2.44-2.44a1.25 1.25 0 0 1 .6-2.045l3.048-.762a.75.75 0 0 0 .31-.167z" clip-rule="evenodd"/>');
+
+  // Wire message action button icons by data-qa (matches the shell + demo).
+  // Emoji quick-react buttons carry literal emoji text and need no icon.
+  const actionIconMap = {
+    add_reaction: 'add-reaction',
+    start_thread: 'threads',
+    share_message: 'share-message',
+    add_to_later_todos: 'check-circle',
+    send_to_slackbot: 'slackbot-color',
+    more_message_actions: 'ellipsis-vertical-filled'
+  };
+  document.querySelectorAll('.c-message_actions__button[data-qa]').forEach(btn => {
+    const icon = actionIconMap[btn.getAttribute('data-qa')];
+    if (icon) btn.innerHTML = Slacky.icon(icon, 18);
+  });
+
+  // Pin icon
+  const pinEl = document.getElementById('mk-pin-icon');
+  if (pinEl) pinEl.innerHTML = Slacky.icon('pin', 14);
+
+  // Sidebar active link tracking
+  const sections = document.querySelectorAll('.mk-section');
+  const navLinks = document.querySelectorAll('.mk-nav__link');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('mk-nav__link--active'));
+        const link = document.querySelector(`.mk-nav__link[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('mk-nav__link--active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Dark mode
+  document.getElementById('mk-dark-mode').onclick = () => Slacky.darkMode();
+</script>
+</body>
+</html>

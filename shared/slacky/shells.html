@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shells — Slacky</title>
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="dark.css">
+  <link rel="stylesheet" href="components.css">
+  <style>
+    :root {
+      --shells-bg: #f8f8fa;
+      --shells-border: #e0e0e0;
+      --shells-card-bg: #fff;
+    }
+
+    .sk-client-theme--dark {
+      --shells-bg: #1a1d21;
+      --shells-border: #797c814d;
+      --shells-card-bg: #212428;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    @font-face {
+      font-family: "Slack Circular";
+      src: url("fonts/circular/lineto-slack-circular-book.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Slack Circular";
+      src: url("fonts/circular/lineto-slack-circular-bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    .prototype-breadcrumb {
+      background: #EEF0F3;
+      padding: 10px 20px;
+      font-family: "Slack Circular", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      -webkit-font-smoothing: antialiased;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+    }
+    .prototype-breadcrumb a {
+      color: #1D1C1D;
+      text-decoration: none;
+      font-weight: 400;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .prototype-breadcrumb a:hover { opacity: 1; }
+    .prototype-breadcrumb .breadcrumb-separator {
+      color: #1D1C1D;
+      opacity: 0.4;
+    }
+    .prototype-breadcrumb .breadcrumb-current {
+      color: #1D1C1D;
+      font-weight: 700;
+    }
+
+    .showcase-header {
+      position: fixed;
+      top: 37px;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      background: var(--shells-card-bg);
+      border-bottom: 1px solid var(--shells-border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--dt_static_space-100, 16px);
+      gap: var(--dt_static_space-150, 24px);
+      height: 48px;
+    }
+
+    .showcase-header__title {
+      font-size: var(--dt_static_type-size-subtitle, 18px);
+      font-weight: var(--dt_static_type-weight-black, 900);
+      flex-shrink: 0;
+    }
+
+    .showcase-header .c-tabs__tab_menu {
+      box-shadow: none;
+      display: flex;
+      align-items: flex-end;
+      height: 100%;
+    }
+
+    .showcase-header .c-tabs__tab {
+      padding: 14px 0 10px;
+      margin: 0 var(--dt_static_space-075, 12px);
+      font-size: var(--dt_static_type-size-base, 15px);
+      text-decoration: none;
+    }
+
+    .showcase-header .c-tabs__tab:first-child {
+      margin-left: 0;
+    }
+
+    body {
+      font-family: var(--font-family-lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+      background: var(--shells-bg);
+      color: var(--dt_color-content-pry, #1d1c1d);
+      display: flex;
+      min-height: 100vh;
+      padding-top: 85px;
+    }
+
+    /* Sidebar */
+    .shells-sidebar {
+      width: 240px;
+      background: var(--shells-card-bg);
+      border-right: 1px solid var(--shells-border);
+      position: fixed;
+      top: 85px;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      padding: 16px 0;
+      z-index: 10;
+    }
+
+    .shells-sidebar__group-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      padding: 8px 20px 6px;
+    }
+
+    .shells-sidebar__link {
+      display: block;
+      padding: 5px 20px;
+      font-size: 13px;
+      color: var(--dt_color-content-pry, #1d1c1d);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .shells-sidebar__link:hover {
+      background: rgba(0,0,0,0.04);
+    }
+
+    .shells-sidebar__link.is-active {
+      background: var(--dt_color-base-inv-hgl-1, #1264a3);
+      color: #fff;
+    }
+
+    .sk-client-theme--dark .shells-sidebar__link:hover {
+      background: #f8f8f80f;
+    }
+
+    /* Main content */
+    .shells-main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px 48px 80px;
+    }
+
+    .shells-main h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .shells-main > p {
+      font-size: 14px;
+      color: var(--dt_color-content-sec, #616061);
+      margin-bottom: 32px;
+    }
+
+    /* Shell preview container */
+    .shell-section {
+      margin-bottom: 48px;
+      scroll-margin-top: 24px;
+    }
+
+    .shell-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--shells-border);
+    }
+
+    .shell-section h2 span {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--dt_color-content-sec, #616061);
+      margin-left: 8px;
+    }
+
+    .shell-desc {
+      font-size: 13px;
+      color: var(--dt_color-content-sec, #616061);
+      margin-bottom: 16px;
+    }
+
+    .shell-preview-frame {
+      width: 100%;
+      height: 900px;
+      border: none;
+      border-radius: 8px;
+      display: block;
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="prototype-breadcrumb">
+  <a href="https://pages.slack-github.com/muno/prototypes/">Prototypes</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-current">Slacky Component Library</span>
+</nav>
+
+<header class="showcase-header">
+  <span class="showcase-header__title">Slacky</span>
+  <div class="c-tabs__tab_menu" role="tablist">
+    <a class="c-tabs__tab" href="showcase.html" role="tab">Components</a>
+    <a class="c-tabs__tab" href="messagekit.html" role="tab">MessageKit</a>
+    <a class="c-tabs__tab c-tabs__tab--active" href="shells.html" role="tab" aria-selected="true">Shells</a>
+  </div>
+</header>
+
+<nav class="shells-sidebar">
+  <div class="shells-sidebar__group-label">Available Shells</div>
+  <a class="shells-sidebar__link is-active" href="#channel-message">Channel Message</a>
+</nav>
+
+<main class="shells-main">
+  <h1>Shells</h1>
+  <p>Full Slack client layout templates. Each shell provides the complete IA4 structure so prototypes render inside the real Slack UI instead of a blank page.</p>
+
+  <section class="shell-section" id="channel-message">
+    <h2>Channel Message Shell <span>p-ia4_client</span></h2>
+    <p class="shell-desc">Complete IA4 layout with top nav, tab rail, sidebar, channel header, channel tabs, message pane, thread panel, and composer. Aubergine-themed. Click any reply bar to open the thread panel.</p>
+
+    <iframe class="shell-preview-frame" src="shell-channel.html"></iframe>
+  </section>
+</main>
+
+<!-- Dark mode toggle -->
+<div class="theme-toggle">
+  <button class="c-button c-button--default c-button--small" id="dark-toggle" aria-label="Toggle dark mode">Dark mode</button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var toggle = document.getElementById('dark-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      document.documentElement.classList.toggle('sk-client-theme--dark');
+      toggle.textContent = document.documentElement.classList.contains('sk-client-theme--dark') ? 'Light mode' : 'Dark mode';
+    });
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1347 @@
+/* Slack-Lato Light */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    url('fonts/lato-2-compressed/lato-light.woff2') format('woff2'),
+    url('fonts/lato-2/lato-light.woff') format('woff');
+  unicode-range: U+0000-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Lato Regular */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url('fonts/lato-2-compressed/lato-regular.woff2') format('woff2'),
+    url('fonts/lato-2/lato-regular.woff') format('woff');
+  unicode-range: U+0000-2157, U+2159-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Lato Bold */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    url('fonts/lato-2-compressed/lato-bold.woff2') format('woff2'),
+    url('fonts/lato-2/lato-bold.woff') format('woff');
+  unicode-range: U+0000-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Lato Black */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: normal;
+  font-weight: 900;
+  src:
+    url('fonts/lato-2-compressed/lato-black.woff2') format('woff2'),
+    url('fonts/lato-2/lato-black.woff') format('woff');
+  unicode-range: U+0000-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Lato Light Italic */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: italic;
+  font-weight: 300;
+  src:
+    url('fonts/lato-2-compressed/lato-italic-light.woff2') format('woff2'),
+    url('fonts/lato-2/lato-italic-light.woff') format('woff');
+  unicode-range: U+0000-2259, U+2261-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Lato Regular Italic */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: italic;
+  font-weight: 400;
+  src:
+    url('fonts/lato-2-compressed/lato-italic.woff2') format('woff2'),
+    url('fonts/lato-2/lato-italic.woff') format('woff');
+  unicode-range: U+0000-2259, U+2261-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Lato Bold Italic */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: italic;
+  font-weight: 700;
+  src:
+    url('fonts/lato-2-compressed/lato-italic-bold.woff2') format('woff2'),
+    url('fonts/lato-2/lato-italic-bold.woff') format('woff');
+  unicode-range: U+0000-2259, U+2261-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Lato Black Italic */
+@font-face {
+  font-family: 'Slack-Lato';
+  font-style: italic;
+  font-weight: 900;
+  src:
+    url('fonts/lato-2-compressed/lato-italic-black.woff2') format('woff2'),
+    url('fonts/lato-2/lato-italic-black.woff') format('woff');
+  unicode-range: U+0000-2259, U+2261-F8FE, U+F900-FFFF;
+}
+
+/* Slack-Fractions */
+@font-face {
+  font-family: 'Slack-Fractions';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url('fonts/slack-fractions/Slack-Fractions.woff2') format('woff2'),
+    url('fonts/slack-fractions/Slack-Fractions.woff') format('woff');
+  unicode-range: U+2158;
+}
+
+/* Lato latin-ext */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/lato-2/lato-latin-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Lato latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/lato-2/lato-latin-latin-ext.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/*
+  Do not edit directly
+  Generated on Fri, 27 Mar 2026 14:56:05 GMT
+
+  For more info: https://slack-github.com/slack/design-tokens
+*/
+
+:root {
+	--dt_static_shadow-a11y: 0 0 0 1px #1264a3, 0 0 0 5px #0e9dd333;
+	--dt_static_shadow-sm: 0 1px 2px 0 #0000000c;
+	--dt_static_shadow-base: 0 1px 3px 0 #00000019, 0 1px 2px -1px #00000019;
+	--dt_static_shadow-md: 0 2px 4px -2px #00000019, 0 4px 6px -1px #00000019;
+	--dt_static_shadow-lg: 0 4px 6px -4px #00000019, 0 10px 15px -3px #00000019;
+	--dt_static_shadow-xl: 0 20px 25px -5px #00000019, 0 8px 10px -6px #00000019;
+	--dt_static_shadow-2xl: 0 25px 50px -12px #00000040;
+	--dt_static_shadow-inner: inset 0 2px 4px 0 #0000000c;
+	--dt_static_radius-none: 0px;
+	--dt_static_radius-small: 2px;
+	--dt_static_radius-base: 6px;
+	--dt_static_radius-large: 8px;
+	--dt_static_radius-xlarge: 12px;
+	--dt_static_radius-rounded: 9999px;
+	--dt_static_radius-ia: clamp(6px, min(22.222%, 12px), 12px);
+	--dt_static_space-0: 0px;
+	--dt_static_space-100: 16px;
+	--dt_static_space-125: 20px;
+	--dt_static_space-150: 24px;
+	--dt_static_space-175: 28px;
+	--dt_static_space-200: 32px;
+	--dt_static_space-225: 36px;
+	--dt_static_space-250: 40px;
+	--dt_static_space-275: 44px;
+	--dt_static_space-300: 48px;
+	--dt_static_space-325: 52px;
+	--dt_static_space-350: 56px;
+	--dt_static_space-375: 60px;
+	--dt_static_space-400: 64px;
+	--dt_static_space-500: 80px;
+	--dt_static_space-525: 84px;
+	--dt_static_space-550: 88px;
+	--dt_static_space-575: 92px;
+	--dt_static_space-600: 96px;
+	--dt_static_space-625: 100px;
+	--dt_static_space-650: 104px;
+	--dt_static_space-675: 108px;
+	--dt_static_space-700: 112px;
+	--dt_static_space-750: 120px;
+	--dt_static_space-800: 128px;
+	--dt_static_space-850: 136px;
+	--dt_static_space-900: 144px;
+	--dt_static_space-950: 160px;
+	--dt_static_space-1000: 176px;
+	--dt_static_space-1100: 184px;
+	--dt_static_space-1200: 192px;
+	--dt_static_space-1300: 200px;
+	--dt_static_space-1400: 208px;
+	--dt_static_space-1500: 224px;
+	--dt_static_space-1600: 256px;
+	--dt_static_space-1875: 300px;
+	--dt_static_space-2000: 320px;
+	--dt_static_space-2250: 360px;
+	--dt_static_space-2500: 400px;
+	--dt_static_space-3200: 512px;
+	--dt_static_space-px: 1px;
+	--dt_static_space-0125: 2px;
+	--dt_static_space-025: 4px;
+	--dt_static_space-050: 8px;
+	--dt_static_space-075: 12px;
+	--dt_static_opacity-0: 0;
+	--dt_static_opacity-25: 0.25;
+	--dt_static_opacity-50: 0.5;
+	--dt_static_opacity-75: 0.75;
+	--dt_static_opacity-100: 1;
+	--dt_static_z-index-1: 1;
+	--dt_static_z-index-2: 2;
+	--dt_static_z-index-negative: -1;
+	--dt_static_transition-duration-short: 80ms;
+	--dt_static_transition-duration-long: 160ms;
+	--dt_static_transition-ease-default: cubic-bezier(0.36, 0.19, 0.29, 1);
+	--dt_static_type-leading-small: 1.25;
+	--dt_static_type-leading-base: 1.5;
+	--dt_static_type-size-micro: 12px;
+	--dt_static_type-size-caption: 13px;
+	--dt_static_type-size-base: 15px;
+	--dt_static_type-size-subtitle: 18px;
+	--dt_static_type-size-title: 22px;
+	--dt_static_type-size-headline: 28px;
+	--dt_static_type-weight-base: 400;
+	--dt_static_type-weight-bold: var(--custom-font-weight-bold, 700);
+	--dt_static_type-weight-black: var(--custom-font-weight-black, 900);
+}
+
+/*
+
+ __             __           ___  __       ___  __
+/__` |     /\  /  ` |__/    |__  /  \ |\ |  |  /__`
+.__/ |___ /~~\ \__, |  \    |    \__/ | \|  |  .__/
+
+All variables used to set the font-family for components rendered in the
+desktop/web client should be defined here and named according to
+their function.
+*/
+
+:root {
+  --font-family-lato: 'Slack-Lato', 'Slack-Fractions', 'appleLogo', sans-serif;
+  /*
+  Lato is included in the list of fonts used for non-Latin languages to
+  ensure Latin characters are rendered correctly when the interface
+  includes both non-Latin and Latin characters.
+
+  From the CSS spec:
+  A user agent iterates through the list of family names until it matches
+  an available font that contains a glyph for the character to be
+  rendered. This allows for differences in available fonts across
+  platforms and for differences in the range of characters supported by
+  individual fonts.[1]
+
+  https://www.w3.org/TR/css-fonts-3/#font-family-prop;
+  */
+  --font-family-notosans-jp: 'NotoSansJP', var(--font-family-lato);
+  --font-family-notosans-kr: 'NotoSansKR', var(--font-family-lato);
+  --font-family-notosans-sc: 'NotoSansSC', var(--font-family-lato);
+  --font-family-notosans-tc: 'NotoSansTC', var(--font-family-lato);
+  --font-family-monospace:
+    'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace !important;
+  --font-family-helvetica:
+    'Helvetica Neue', Helvetica, 'Segoe UI', Tahoma, Arial, sans-serif;
+  --font-family-fallback:
+    system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', roboto,
+    'Helvetica Neue', arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-family-avant-garde:
+    'Salesforce-Avant-Garde', var(--font-family-fallback);
+  --font-family-salesforce-sans: 'Salesforce-Sans', var(--font-family-fallback);
+  --font-family-tazugane-info:
+    'Tazugane-Info-Heavy', var(--font-family-fallback);
+  --font-family-m-xianghe-hei-sc-pro-bold:
+    'MXiangHeHeiSCProBold', var(--font-family-fallback);
+  --font-family-m-xianghe-hei-tc-bold:
+    'MXiangHeHeiTCBold', var(--font-family-fallback);
+  --font-family-seol-sans-heavy: 'SeolSansHeavy', var(--font-family-fallback);
+
+  /*
+  --font-family-default represents the default font for the desktop/web
+	client project, and therefore this variable is meant to be used
+	EXCLUSIVELY by components rendered in the client on account of it being
+	the only project that currently allows the user to change their font.
+
+	All text rendered by the desktop/web client meant to match the user's
+	font preference should rely on this variable (either via inheritance or
+	explicitly when necessary) so as to ensure consistency for the user.
+
+	Beyond the values listed here, the value of --font-family-default can be
+	changed by the user changing their font via:
+
+	1. Preferences > Appearance > Font
+	2. Using /slackfont
+
+	The code that sets the value of --font-family-default per the user's
+	preferred font can be found in: js/projects/shared/components/theme.tsx
+  */
+  --font-family-default: var(--font-family-lato);
+
+  /*
+	--font-family-marketing-heading and --font-family-marketing-body are
+  used by components running in the desktop/web
+	client that need to match the font used by marketing collateral
+	(e.g. slack.com). Examples include flows a new user would transition to
+	from slack.com such as: Slack Connect or setup/new user
+	experience flows.
+
+	Managing the use of this font via a single variable makes for
+	easy changes.
+  */
+  --font-family-marketing-heading: var(--font-family-avant-garde);
+  --font-family-marketing-body: var(--font-family-salesforce-sans);
+}
+
+:root[lang='ja-JP'] {
+  --font-family-default: var(--font-family-notosans-jp);
+  --font-family-marketing-heading: var(--font-family-tazugane-info);
+  --font-family-marketing-body: var(--font-family-notosans-jp);
+}
+
+:root[lang='ko-KR'] {
+  --font-family-default: var(--font-family-notosans-kr);
+  --font-family-marketing-heading: var(--font-family-seol-sans-heavy);
+  --font-family-marketing-body: var(--font-family-notosans-kr);
+}
+
+:root[lang='zh-CN'] {
+  --font-family-default: var(--font-family-notosans-sc);
+  --font-family-marketing-heading: var(--font-family-m-xianghe-hei-sc-pro-bold);
+  --font-family-marketing-body: var(--font-family-notosans-sc);
+}
+
+:root[lang='zh-TW'] {
+  --font-family-default: var(--font-family-notosans-tc);
+  --font-family-marketing-heading: var(--font-family-m-xianghe-hei-tc-bold);
+  --font-family-marketing-body: var(--font-family-notosans-tc);
+}
+
+:root, .sk-client-theme--light {
+	color-scheme: light;
+	/* Constants/White */
+	--dt_color-constants-white: #ffffff;
+	/* Constants/Black */
+	--dt_color-constants-black: #000000;
+	/* Brand/Core/Aubergine */
+	--dt_color-brand-core-aubergine: #4a154b;
+	/* Brand/Core/Horchatta */
+	--dt_color-brand-core-horchatta: #f4ede4;
+	/* Brand/Core/Black */
+	--dt_color-brand-core-black: #1d1c1d;
+	/* Brand/Core/White */
+	--dt_color-brand-core-white: #ffffff;
+	/* Brand/Core/Slack Blue */
+	--dt_color-brand-core-slack-blue: #36c5f0;
+	/* Brand/Core/Slack Green */
+	--dt_color-brand-core-slack-green: #2eb67d;
+	/* Brand/Core/Slack Yellow */
+	--dt_color-brand-core-slack-yellow: #ecb22e;
+	/* Brand/Core/Slack Red */
+	--dt_color-brand-core-slack-red: #e01e5a;
+	/* Brand/Secondary/Inactive Gray */
+	--dt_color-brand-sec-inactive-gray: #eaeaea;
+	/* Brand/Secondary/Legal */
+	--dt_color-brand-sec-legal: #5e5d60;
+	/* Brand/Secondary/Small Text */
+	--dt_color-brand-sec-small-text: #454447;
+	/* Brand/Secondary/Text */
+	--dt_color-brand-sec-text: #1d1c1d;
+	/* Brand/Secondary/Terracotta */
+	--dt_color-brand-sec-terracotta: #de8969;
+	/* Brand/Secondary/Peach */
+	--dt_color-brand-sec-peach: #fed4be;
+	/* Brand/Secondary/Sandbar */
+	--dt_color-brand-sec-sandbar: #ffd57e;
+	/* Brand/Secondary/Moss */
+	--dt_color-brand-sec-moss: #608813;
+	/* Brand/Secondary/Evergreen */
+	--dt_color-brand-sec-evergreen: #185f34;
+	/* Brand/Secondary/Pool */
+	--dt_color-brand-sec-pool: #78d7dd;
+	/* Brand/Secondary/Teal */
+	--dt_color-brand-sec-teal: #167d8e;
+	/* Brand/Secondary/Cobalt */
+	--dt_color-brand-sec-cobalt: #112377;
+	/* Brand/Secondary/Bright Aubergine */
+	--dt_color-brand-sec-bright-aubergine: #611f69;
+	/* Brand/Secondary/Mauve */
+	--dt_color-brand-sec-mauve: #c05b8c;
+	/* Brand/Secondary/Berry */
+	--dt_color-brand-sec-berry: #5e1237;
+	/* Brand/Secondary/Bubblegum */
+	--dt_color-brand-sec-bubblegum: #ffb6bd;
+	/* Brand/Secondary/Salmon */
+	--dt_color-brand-sec-salmon: #f2606a;
+	/* Brand/Secondary/Crimson */
+	--dt_color-brand-sec-crimson: #921d21;
+	/* Brand/Secondary/Background Gray */
+	--dt_color-brand-sec-bg-gray: #f8f8f8;
+	/* Base/Primary */
+	--dt_color-base-pry: #ffffff;
+	/* Base/Secondary */
+	--dt_color-base-sec: #f8f8f8;
+	/* Base/Tertiary */
+	--dt_color-base-ter: #eaeaea;
+	/* Base/Highlight 1 */
+	--dt_color-base-hgl-1: #e3f8ff;
+	/* Base/Highlight 2 */
+	--dt_color-base-hgl-2: #e3fff3;
+	/* Base/Highlight 3 */
+	--dt_color-base-hgl-3: #fffae0;
+	/* Base/Important */
+	--dt_color-base-imp: #ffe8ef;
+	/* Base/Modal */
+	--dt_color-base-modal: #1d1c1db3;
+	/* Base/Inverse Primary */
+	--dt_color-base-inv-pry: #1d1c1d;
+	/* Base/Inverse Highlight 1 */
+	--dt_color-base-inv-hgl-1: #1264a3;
+	/* Base/Inverse Highlight 2 */
+	--dt_color-base-inv-hgl-2: #007a5a;
+	/* Base/Inverse Highlight 3 */
+	--dt_color-base-inv-hgl-3: #f1b900;
+	/* Base/Inverse Important */
+	--dt_color-base-inv-imp: #e01e5a;
+	/* Base/Primary Hover */
+	--dt_color-base-pry-hover: #4544470f;
+	/* Base/Primary Pressed */
+	--dt_color-base-pry-pressed: #45444721;
+	/* Base/Secondary Hover */
+	--dt_color-base-sec-hover: #4544470f;
+	/* Base/Secondary Pressed */
+	--dt_color-base-sec-pressed: #45444721;
+	/* Base/Tertiary Hover */
+	--dt_color-base-ter-hover: #4544470f;
+	/* Base/Tertiary Pressed */
+	--dt_color-base-ter-pressed: #45444721;
+	/* Base/Highlight 1 Hover */
+	--dt_color-base-hgl-1-hover: #0071a40f;
+	/* Base/Highlight 1 Pressed */
+	--dt_color-base-hgl-1-pressed: #0071a421;
+	/* Base/Highlight 2 Hover */
+	--dt_color-base-hgl-2-hover: #007a5a0f;
+	/* Base/Highlight 2 Pressed */
+	--dt_color-base-hgl-2-pressed: #007a5a21;
+	/* Base/Highlight 3 Hover */
+	--dt_color-base-hgl-3-hover: #aa80000f;
+	/* Base/Highlight 3 Pressed */
+	--dt_color-base-hgl-3-pressed: #aa800021;
+	/* Base/Important Hover */
+	--dt_color-base-imp-hover: #c013430f;
+	/* Base/Important Pressed */
+	--dt_color-base-imp-pressed: #c0134321;
+	/* Base/Modal Hover */
+	--dt_color-base-modal-hover: #1d1c1d38;
+	/* Base/Modal Pressed */
+	--dt_color-base-modal-pressed: #1d1c1d47;
+	/* Base/Inverse Primary Hover */
+	--dt_color-base-inv-pry-hover: #1d1c1d38;
+	/* Base/Inverse Primary Pressed */
+	--dt_color-base-inv-pry-pressed: #1d1c1d47;
+	/* Base/Inverse Highlight 1 Hover */
+	--dt_color-base-inv-hgl-1-hover: #122a5921;
+	/* Base/Inverse Highlight 1 Pressed */
+	--dt_color-base-inv-hgl-1-pressed: #122a5938;
+	/* Base/Inverse Highlight 2 Hover */
+	--dt_color-base-inv-hgl-2-hover: #0a403221;
+	/* Base/Inverse Highlight 2 Pressed */
+	--dt_color-base-inv-hgl-2-pressed: #0a403238;
+	/* Base/Inverse Highlight 3 Hover */
+	--dt_color-base-inv-hgl-3-hover: #4d390017;
+	/* Base/Inverse Highlight 3 Pressed */
+	--dt_color-base-inv-hgl-3-pressed: #4d390038;
+	/* Base/Inverse Important Hover */
+	--dt_color-base-inv-imp-hover: #59000f17;
+	/* Base/Inverse Important Pressed */
+	--dt_color-base-inv-imp-pressed: #59000f38;
+	/* Surface/Primary */
+	--dt_color-surf-pry: #1d1c1d0f;
+	/* Surface/Secondary */
+	--dt_color-surf-sec: #1d1c1d40;
+	/* Surface/Highlight 1 */
+	--dt_color-surf-hgl-1: #36c5f021;
+	/* Surface/Highlight 2 */
+	--dt_color-surf-hgl-2: #4cc89440;
+	/* Surface/Highlight 3 */
+	--dt_color-surf-hgl-3: #ffc6002e;
+	/* Surface/Important */
+	--dt_color-surf-imp: #ff81aa21;
+	/* Surface/Inverse */
+	--dt_color-surf-inv: #ffffff2e;
+	/* Surface/Inverse Highlight 3 */
+	--dt_color-surf-inv-hgl-3: #aa8000b3;
+	/* Surface/Primary Hover */
+	--dt_color-surf-pry-hover: #1d1c1d38;
+	/* Surface/Primary Pressed */
+	--dt_color-surf-pry-pressed: #1d1c1d47;
+	/* Surface/Secondary Hover */
+	--dt_color-surf-sec-hover: #1d1c1d38;
+	/* Surface/Secondary Pressed */
+	--dt_color-surf-sec-pressed: #1d1c1d47;
+	/* Surface/Highlight 1 Hover */
+	--dt_color-surf-hgl-1-hover: #0071a417;
+	/* Surface/Highlight 1 Pressed */
+	--dt_color-surf-hgl-1-pressed: #0071a421;
+	/* Surface/Highlight 2 Hover */
+	--dt_color-surf-hgl-2-hover: #007a5a17;
+	/* Surface/Highlight 2 Pressed */
+	--dt_color-surf-hgl-2-pressed: #007a5a21;
+	/* Surface/Highlight 3 Hover */
+	--dt_color-surf-hgl-3-hover: #aa800017;
+	/* Surface/Highlight 3 Pressed */
+	--dt_color-surf-hgl-3-pressed: #aa800021;
+	/* Surface/Important Hover */
+	--dt_color-surf-imp-hover: #c0134317;
+	/* Surface/Important Pressed */
+	--dt_color-surf-imp-pressed: #c0134321;
+	/* Surface/Inverse Hover */
+	--dt_color-surf-inv-hover: #4544470f;
+	/* Surface/Inverse Pressed */
+	--dt_color-surf-inv-pressed: #45444721;
+	/* Surface/Inverse Highlight 3 Hover */
+	--dt_color-surf-inv-hgl-3-hover: #4d390021;
+	/* Surface/Inverse Highlight 3 Pressed */
+	--dt_color-surf-inv-hgl-3-pressed: #4d390038;
+	/* Container/Primary */
+	--dt_color-ctr-pry: #ffffff;
+	/* Container/Secondary */
+	--dt_color-ctr-sec: #f8f8f8;
+	/* Container/Primary Hover */
+	--dt_color-ctr-pry-hover: #4544470f;
+	/* Container/Primary Pressed */
+	--dt_color-ctr-pry-pressed: #45444721;
+	/* Container/Secondary Hover */
+	--dt_color-ctr-sec-hover: #4544470f;
+	/* Container/Secondary Pressed */
+	--dt_color-ctr-sec-pressed: #45444721;
+	/* Content/Primary */
+	--dt_color-content-pry: #1d1c1d;
+	/* Content/Secondary */
+	--dt_color-content-sec: #454447;
+	/* Content/Tertiary */
+	--dt_color-content-ter: #5e5d60;
+	/* Content/Highlight 1 */
+	--dt_color-content-hgl-1: #1264a3;
+	/* Content/Highlight 2 */
+	--dt_color-content-hgl-2: #007a5a;
+	/* Content/Highlight 3 */
+	--dt_color-content-hgl-3: #6b5000;
+	/* Content/Important */
+	--dt_color-content-imp: #c01343;
+	/* Content/Inverse Primary */
+	--dt_color-content-inv-pry: #ffffff;
+	/* Content/Inverse Secondary */
+	--dt_color-content-inv-sec: #cbcccf;
+	/* Content/Inverse Highlight 1 */
+	--dt_color-content-inv-hgl-1: #9ed6fa;
+	/* Content/Inverse Highlight 2 */
+	--dt_color-content-inv-hgl-2: #4cc894;
+	/* Content/Inverse Highlight 3 */
+	--dt_color-content-inv-hgl-3: #ffd738;
+	/* Content/Inverse Important */
+	--dt_color-content-inv-imp: #ffa3c2;
+	/* Outline/Primary */
+	--dt_color-otl-pry: #7c7a7f;
+	/* Outline/Secondary */
+	--dt_color-otl-sec: #5e5d6073;
+	/* Outline/Tertiary */
+	--dt_color-otl-ter: #5e5d6021;
+	/* Outline/Highlight 1 */
+	--dt_color-otl-hgl-1: #1264a3;
+	/* Outline/Highlight 1 Secondary */
+	--dt_color-otl-hgl-1-sec: #0e9dd333;
+	/* Outline/Highlight 2 */
+	--dt_color-otl-hgl-2: #007a5a;
+	/* Outline/Highlight 2 Secondary */
+	--dt_color-otl-hgl-2-sec: #007a5a1a;
+	/* Outline/Highlight 3 */
+	--dt_color-otl-hgl-3: #c79600;
+	/* Outline/Highlight 3 Secondary */
+	--dt_color-otl-hgl-3-sec: #f1b90033;
+	/* Outline/Important */
+	--dt_color-otl-imp: #e01e5a;
+	/* Outline/Important Secondary */
+	--dt_color-otl-imp-sec: #e01e5a4d;
+	/* Outline/Inverse Primary */
+	--dt_color-otl-inv-pry: #f8f8f8d9;
+	/* Outline/Inverse Secondary */
+	--dt_color-otl-inv-sec: #f8f8f88c;
+	/* Outline/Inverse Tertiary */
+	--dt_color-otl-inv-ter: #f8f8f833;
+	/* Palettes/Gray/0 — rgb(248,248,248) */
+	--dt_color-plt-gray-0: #f8f8f8;
+	/* Palettes/Gray/5 — rgb(234,234,234) */
+	--dt_color-plt-gray-5: #eaeaea;
+	/* Palettes/Gray/10 — rgb(215,215,218) */
+	--dt_color-plt-gray-10: #d7d7da;
+	/* Palettes/Gray/20 — rgb(203,204,207) */
+	--dt_color-plt-gray-20: #cbcccf;
+	/* Palettes/Gray/30 — rgb(181,181,186) */
+	--dt_color-plt-gray-30: #b5b5ba;
+	/* Palettes/Gray/40 — rgb(154,154,159) */
+	--dt_color-plt-gray-40: #9a9a9f;
+	/* Palettes/Gray/50 — rgb(124,122,127) */
+	--dt_color-plt-gray-50: #7c7a7f;
+	/* Palettes/Gray/60 — rgb(94,93,96) */
+	--dt_color-plt-gray-60: #5e5d60;
+	/* Palettes/Gray/70 — rgb(69,68,71) */
+	--dt_color-plt-gray-70: #454447;
+	/* Palettes/Gray/80 — rgb(51,49,51) */
+	--dt_color-plt-gray-80: #333133;
+	/* Palettes/Gray/90 — rgb(38,36,38) */
+	--dt_color-plt-gray-90: #262426;
+	/* Palettes/Gray/100 — rgb(29,28,29) */
+	--dt_color-plt-gray-100: #1d1c1d;
+	/* Palettes/Gray/Hover */
+	--dt_color-plt-gray-hover: #1d1c1d21;
+	/* Palettes/Gray/Pressed */
+	--dt_color-plt-gray-pressed: #1d1c1d38;
+	/* Palettes/Tomato/0 — rgb(255,235,235) */
+	--dt_color-plt-tomato-0: #ffebeb;
+	/* Palettes/Tomato/5 — rgb(255,214,213) */
+	--dt_color-plt-tomato-5: #ffd6d5;
+	/* Palettes/Tomato/10 — rgb(255,194,190) */
+	--dt_color-plt-tomato-10: #ffc2be;
+	/* Palettes/Tomato/20 — rgb(254,156,146) */
+	--dt_color-plt-tomato-20: #fe9c92;
+	/* Palettes/Tomato/30 — rgb(247,124,105) */
+	--dt_color-plt-tomato-30: #f77c69;
+	/* Palettes/Tomato/40 — rgb(237,98,70) */
+	--dt_color-plt-tomato-40: #ed6246;
+	/* Palettes/Tomato/50 — rgb(222,78,43) */
+	--dt_color-plt-tomato-50: #de4e2b;
+	/* Palettes/Tomato/60 — rgb(199,60,28) */
+	--dt_color-plt-tomato-60: #c73c1c;
+	/* Palettes/Tomato/70 — rgb(173,46,18) */
+	--dt_color-plt-tomato-70: #ad2e12;
+	/* Palettes/Tomato/80 — rgb(146,34,12) */
+	--dt_color-plt-tomato-80: #92220c;
+	/* Palettes/Tomato/90 — rgb(120,26,9) */
+	--dt_color-plt-tomato-90: #781a09;
+	/* Palettes/Tomato/100 — rgb(97,19,7) */
+	--dt_color-plt-tomato-100: #611307;
+	/* Palettes/Tomato/Hover */
+	--dt_color-plt-tomato-hover: #61130721;
+	/* Palettes/Tomato/Pressed */
+	--dt_color-plt-tomato-pressed: #61130738;
+	/* Palettes/Paprika/0 — rgb(255,240,235) */
+	--dt_color-plt-paprika-0: #fff0eb;
+	/* Palettes/Paprika/5 — rgb(251,223,213) */
+	--dt_color-plt-paprika-5: #fbdfd5;
+	/* Palettes/Paprika/10 — rgb(244,201,185) */
+	--dt_color-plt-paprika-10: #f4c9b9;
+	/* Palettes/Paprika/20 — rgb(232,169,145) */
+	--dt_color-plt-paprika-20: #e8a991;
+	/* Palettes/Paprika/30 — rgb(222,137,105) */
+	--dt_color-plt-paprika-30: #de8969;
+	/* Palettes/Paprika/40 — rgb(220,114,75) */
+	--dt_color-plt-paprika-40: #dc724b;
+	/* Palettes/Paprika/50 — rgb(214,93,48) */
+	--dt_color-plt-paprika-50: #d65d30;
+	/* Palettes/Paprika/60 — rgb(204,75,27) */
+	--dt_color-plt-paprika-60: #cc4b1b;
+	/* Palettes/Paprika/70 — rgb(187,60,12) */
+	--dt_color-plt-paprika-70: #bb3c0c;
+	/* Palettes/Paprika/80 — rgb(162,48,4) */
+	--dt_color-plt-paprika-80: #a23004;
+	/* Palettes/Paprika/90 — rgb(132,37,0) */
+	--dt_color-plt-paprika-90: #842500;
+	/* Palettes/Paprika/100 — rgb(97,27,0) */
+	--dt_color-plt-paprika-100: #611b00;
+	/* Palettes/Paprika/Hover */
+	--dt_color-plt-paprika-hover: #611b0021;
+	/* Palettes/Paprika/Pressed */
+	--dt_color-plt-paprika-pressed: #611b0038;
+	/* Palettes/Tangerine/0 — rgb(255,237,229) */
+	--dt_color-plt-tangerine-0: #ffede5;
+	/* Palettes/Tangerine/5 — rgb(255,227,214) */
+	--dt_color-plt-tangerine-5: #ffe3d6;
+	/* Palettes/Tangerine/10 — rgb(254,212,190) */
+	--dt_color-plt-tangerine-10: #fed4be;
+	/* Palettes/Tangerine/20 — rgb(251,184,149) */
+	--dt_color-plt-tangerine-20: #fbb895;
+	/* Palettes/Tangerine/30 — rgb(248,155,108) */
+	--dt_color-plt-tangerine-30: #f89b6c;
+	/* Palettes/Tangerine/40 — rgb(242,128,69) */
+	--dt_color-plt-tangerine-40: #f28045;
+	/* Palettes/Tangerine/50 — rgb(233,104,37) */
+	--dt_color-plt-tangerine-50: #e96825;
+	/* Palettes/Tangerine/60 — rgb(220,84,12) */
+	--dt_color-plt-tangerine-60: #dc540c;
+	/* Palettes/Tangerine/70 — rgb(200,70,0) */
+	--dt_color-plt-tangerine-70: #c84600;
+	/* Palettes/Tangerine/80 — rgb(172,61,0) */
+	--dt_color-plt-tangerine-80: #ac3d00;
+	/* Palettes/Tangerine/90 — rgb(139,50,0) */
+	--dt_color-plt-tangerine-90: #8b3200;
+	/* Palettes/Tangerine/100 — rgb(102,37,0) */
+	--dt_color-plt-tangerine-100: #662500;
+	/* Palettes/Tangerine/Hover */
+	--dt_color-plt-tangerine-hover: #66250021;
+	/* Palettes/Tangerine/Pressed */
+	--dt_color-plt-tangerine-pressed: #66250038;
+	/* Palettes/Campfire/0 — rgb(255,242,224) */
+	--dt_color-plt-campfire-0: #fff2e0;
+	/* Palettes/Campfire/5 — rgb(253,226,190) */
+	--dt_color-plt-campfire-5: #fde2be;
+	/* Palettes/Campfire/10 — rgb(251,204,145) */
+	--dt_color-plt-campfire-10: #fbcc91;
+	/* Palettes/Campfire/20 — rgb(246,180,101) */
+	--dt_color-plt-campfire-20: #f6b465;
+	/* Palettes/Campfire/30 — rgb(237,144,39) */
+	--dt_color-plt-campfire-30: #ed9027;
+	/* Palettes/Campfire/40 — rgb(222,122,13) */
+	--dt_color-plt-campfire-40: #de7a0d;
+	/* Palettes/Campfire/50 — rgb(207,108,2) */
+	--dt_color-plt-campfire-50: #cf6c02;
+	/* Palettes/Campfire/60 — rgb(188,96,0) */
+	--dt_color-plt-campfire-60: #bc6000;
+	/* Palettes/Campfire/70 — rgb(163,82,0) */
+	--dt_color-plt-campfire-70: #a35200;
+	/* Palettes/Campfire/80 — rgb(134,67,0) */
+	--dt_color-plt-campfire-80: #864300;
+	/* Palettes/Campfire/90 — rgb(104,52,0) */
+	--dt_color-plt-campfire-90: #683400;
+	/* Palettes/Campfire/100 — rgb(77,38,0) */
+	--dt_color-plt-campfire-100: #4d2600;
+	/* Palettes/Campfire/Hover */
+	--dt_color-plt-campfire-hover: #4d260021;
+	/* Palettes/Campfire/Pressed */
+	--dt_color-plt-campfire-pressed: #4d260038;
+	/* Palettes/Honeycomb/0 — rgb(252,242,217) */
+	--dt_color-plt-honeycomb-0: #fcf2d9;
+	/* Palettes/Honeycomb/5 — rgb(253,227,170) */
+	--dt_color-plt-honeycomb-5: #fde3aa;
+	/* Palettes/Honeycomb/10 — rgb(255,213,126) */
+	--dt_color-plt-honeycomb-10: #ffd57e;
+	/* Palettes/Honeycomb/20 — rgb(244,195,96) */
+	--dt_color-plt-honeycomb-20: #f4c360;
+	/* Palettes/Honeycomb/30 — rgb(236,178,46) */
+	--dt_color-plt-honeycomb-30: #ecb22e;
+	/* Palettes/Honeycomb/40 — rgb(225,155,6) */
+	--dt_color-plt-honeycomb-40: #e19b06;
+	/* Palettes/Honeycomb/50 — rgb(211,141,0) */
+	--dt_color-plt-honeycomb-50: #d38d00;
+	/* Palettes/Honeycomb/60 — rgb(192,127,0) */
+	--dt_color-plt-honeycomb-60: #c07f00;
+	/* Palettes/Honeycomb/70 — rgb(168,110,0) */
+	--dt_color-plt-honeycomb-70: #a86e00;
+	/* Palettes/Honeycomb/80 — rgb(142,91,0) */
+	--dt_color-plt-honeycomb-80: #8e5b00;
+	/* Palettes/Honeycomb/90 — rgb(115,73,0) */
+	--dt_color-plt-honeycomb-90: #734900;
+	/* Palettes/Honeycomb/100 — rgb(89,57,0) */
+	--dt_color-plt-honeycomb-100: #593900;
+	/* Palettes/Honeycomb/Hover */
+	--dt_color-plt-honeycomb-hover: #59390021;
+	/* Palettes/Honeycomb/Pressed */
+	--dt_color-plt-honeycomb-pressed: #59390038;
+	/* Palettes/Sunflower/0 — rgb(255,250,224) */
+	--dt_color-plt-sunflower-0: #fffae0;
+	/* Palettes/Sunflower/5 — rgb(255,244,184) */
+	--dt_color-plt-sunflower-5: #fff4b8;
+	/* Palettes/Sunflower/10 — rgb(255,236,129) */
+	--dt_color-plt-sunflower-10: #ffec81;
+	/* Palettes/Sunflower/20 — rgb(255,215,56) */
+	--dt_color-plt-sunflower-20: #ffd738;
+	/* Palettes/Sunflower/30 — rgb(255,198,0) */
+	--dt_color-plt-sunflower-30: #ffc600;
+	/* Palettes/Sunflower/40 — rgb(241,185,0) */
+	--dt_color-plt-sunflower-40: #f1b900;
+	/* Palettes/Sunflower/50 — rgb(222,169,0) */
+	--dt_color-plt-sunflower-50: #dea900;
+	/* Palettes/Sunflower/60 — rgb(199,150,0) */
+	--dt_color-plt-sunflower-60: #c79600;
+	/* Palettes/Sunflower/70 — rgb(170,128,0) */
+	--dt_color-plt-sunflower-70: #aa8000;
+	/* Palettes/Sunflower/80 — rgb(139,104,0) */
+	--dt_color-plt-sunflower-80: #8b6800;
+	/* Palettes/Sunflower/90 — rgb(107,80,0) */
+	--dt_color-plt-sunflower-90: #6b5000;
+	/* Palettes/Sunflower/100 — rgb(77,57,0) */
+	--dt_color-plt-sunflower-100: #4d3900;
+	/* Palettes/Sunflower/Hover */
+	--dt_color-plt-sunflower-hover: #4d390021;
+	/* Palettes/Sunflower/Pressed */
+	--dt_color-plt-sunflower-pressed: #4d390038;
+	/* Palettes/Grass/0 — rgb(244,255,219) */
+	--dt_color-plt-grass-0: #f4ffdb;
+	/* Palettes/Grass/5 — rgb(229,245,184) */
+	--dt_color-plt-grass-5: #e5f5b8;
+	/* Palettes/Grass/10 — rgb(210,235,140) */
+	--dt_color-plt-grass-10: #d2eb8c;
+	/* Palettes/Grass/20 — rgb(180,215,88) */
+	--dt_color-plt-grass-20: #b4d758;
+	/* Palettes/Grass/30 — rgb(155,195,57) */
+	--dt_color-plt-grass-30: #9bc339;
+	/* Palettes/Grass/40 — rgb(133,175,38) */
+	--dt_color-plt-grass-40: #85af26;
+	/* Palettes/Grass/50 — rgb(114,156,26) */
+	--dt_color-plt-grass-50: #729c1a;
+	/* Palettes/Grass/60 — rgb(96,136,19) */
+	--dt_color-plt-grass-60: #608813;
+	/* Palettes/Grass/70 — rgb(80,116,14) */
+	--dt_color-plt-grass-70: #50740e;
+	/* Palettes/Grass/80 — rgb(64,96,10) */
+	--dt_color-plt-grass-80: #40600a;
+	/* Palettes/Grass/90 — rgb(50,76,8) */
+	--dt_color-plt-grass-90: #324c08;
+	/* Palettes/Grass/100 — rgb(36,56,6) */
+	--dt_color-plt-grass-100: #243806;
+	/* Palettes/Grass/Hover */
+	--dt_color-plt-grass-hover: #24380621;
+	/* Palettes/Grass/Pressed */
+	--dt_color-plt-grass-pressed: #24380638;
+	/* Palettes/Cilantro/0 — rgb(240,255,233) */
+	--dt_color-plt-cilantro-0: #f0ffe9;
+	/* Palettes/Cilantro/5 — rgb(215,245,200) */
+	--dt_color-plt-cilantro-5: #d7f5c8;
+	/* Palettes/Cilantro/10 — rgb(192,236,170) */
+	--dt_color-plt-cilantro-10: #c0ecaa;
+	/* Palettes/Cilantro/20 — rgb(148,216,116) */
+	--dt_color-plt-cilantro-20: #94d874;
+	/* Palettes/Cilantro/30 — rgb(111,197,74) */
+	--dt_color-plt-cilantro-30: #6fc54a;
+	/* Palettes/Cilantro/40 — rgb(80,177,42) */
+	--dt_color-plt-cilantro-40: #50b12a;
+	/* Palettes/Cilantro/50 — rgb(55,158,21) */
+	--dt_color-plt-cilantro-50: #379e15;
+	/* Palettes/Cilantro/60 — rgb(34,139,7) */
+	--dt_color-plt-cilantro-60: #228b07;
+	/* Palettes/Cilantro/70 — rgb(19,119,0) */
+	--dt_color-plt-cilantro-70: #137700;
+	/* Palettes/Cilantro/80 — rgb(11,100,0) */
+	--dt_color-plt-cilantro-80: #0b6400;
+	/* Palettes/Cilantro/90 — rgb(4,81,0) */
+	--dt_color-plt-cilantro-90: #045100;
+	/* Palettes/Cilantro/100 — rgb(0,61,0) */
+	--dt_color-plt-cilantro-100: #003d00;
+	/* Palettes/Cilantro/Hover */
+	--dt_color-plt-cilantro-hover: #003d0021;
+	/* Palettes/Cilantro/Pressed */
+	--dt_color-plt-cilantro-pressed: #003d0038;
+	/* Palettes/Mojito/0 — rgb(233,255,236) */
+	--dt_color-plt-mojito-0: #e9ffec;
+	/* Palettes/Mojito/5 — rgb(208,246,215) */
+	--dt_color-plt-mojito-5: #d0f6d7;
+	/* Palettes/Mojito/10 — rgb(184,238,194) */
+	--dt_color-plt-mojito-10: #b8eec2;
+	/* Palettes/Mojito/20 — rgb(135,220,155) */
+	--dt_color-plt-mojito-20: #87dc9b;
+	/* Palettes/Mojito/30 — rgb(96,202,126) */
+	--dt_color-plt-mojito-30: #60ca7e;
+	/* Palettes/Mojito/40 — rgb(67,184,104) */
+	--dt_color-plt-mojito-40: #43b868;
+	/* Palettes/Mojito/50 — rgb(47,166,89) */
+	--dt_color-plt-mojito-50: #2fa659;
+	/* Palettes/Mojito/60 — rgb(34,149,77) */
+	--dt_color-plt-mojito-60: #22954d;
+	/* Palettes/Mojito/70 — rgb(26,131,67) */
+	--dt_color-plt-mojito-70: #1a8343;
+	/* Palettes/Mojito/80 — rgb(26,113,60) */
+	--dt_color-plt-mojito-80: #1a713c;
+	/* Palettes/Mojito/90 — rgb(24,95,52) */
+	--dt_color-plt-mojito-90: #185f34;
+	/* Palettes/Mojito/100 — rgb(0,69,34) */
+	--dt_color-plt-mojito-100: #004522;
+	/* Palettes/Mojito/Hover */
+	--dt_color-plt-mojito-hover: #00452221;
+	/* Palettes/Mojito/Pressed */
+	--dt_color-plt-mojito-pressed: #00452238;
+	/* Palettes/Jade/0 — rgb(227,255,243) */
+	--dt_color-plt-jade-0: #e3fff3;
+	/* Palettes/Jade/5 — rgb(195,246,224) */
+	--dt_color-plt-jade-5: #c3f6e0;
+	/* Palettes/Jade/10 — rgb(165,237,206) */
+	--dt_color-plt-jade-10: #a5edce;
+	/* Palettes/Jade/20 — rgb(116,219,175) */
+	--dt_color-plt-jade-20: #74dbaf;
+	/* Palettes/Jade/30 — rgb(76,200,148) */
+	--dt_color-plt-jade-30: #4cc894;
+	/* Palettes/Jade/40 — rgb(46,182,125) */
+	--dt_color-plt-jade-40: #2eb67d;
+	/* Palettes/Jade/50 — rgb(32,162,113) */
+	--dt_color-plt-jade-50: #20a271;
+	/* Palettes/Jade/60 — rgb(23,143,101) */
+	--dt_color-plt-jade-60: #178f65;
+	/* Palettes/Jade/70 — rgb(0,122,90) */
+	--dt_color-plt-jade-70: #007a5a;
+	/* Palettes/Jade/80 — rgb(14,103,77) */
+	--dt_color-plt-jade-80: #0e674d;
+	/* Palettes/Jade/90 — rgb(12,83,64) */
+	--dt_color-plt-jade-90: #0c5340;
+	/* Palettes/Jade/100 — rgb(10,64,50) */
+	--dt_color-plt-jade-100: #0a4032;
+	/* Palettes/Jade/Hover */
+	--dt_color-plt-jade-hover: #0a403221;
+	/* Palettes/Jade/Pressed */
+	--dt_color-plt-jade-pressed: #0a403238;
+	/* Palettes/Aquarium/0 — rgb(227,255,255) */
+	--dt_color-plt-aquarium-0: #e3ffff;
+	/* Palettes/Aquarium/5 — rgb(197,246,247) */
+	--dt_color-plt-aquarium-5: #c5f6f7;
+	/* Palettes/Aquarium/10 — rgb(169,237,239) */
+	--dt_color-plt-aquarium-10: #a9edef;
+	/* Palettes/Aquarium/20 — rgb(120,215,221) */
+	--dt_color-plt-aquarium-20: #78d7dd;
+	/* Palettes/Aquarium/30 — rgb(83,191,201) */
+	--dt_color-plt-aquarium-30: #53bfc9;
+	/* Palettes/Aquarium/40 — rgb(55,168,182) */
+	--dt_color-plt-aquarium-40: #37a8b6;
+	/* Palettes/Aquarium/50 — rgb(35,146,162) */
+	--dt_color-plt-aquarium-50: #2392a2;
+	/* Palettes/Aquarium/60 — rgb(22,125,142) */
+	--dt_color-plt-aquarium-60: #167d8e;
+	/* Palettes/Aquarium/70 — rgb(13,106,123) */
+	--dt_color-plt-aquarium-70: #0d6a7b;
+	/* Palettes/Aquarium/80 — rgb(8,88,103) */
+	--dt_color-plt-aquarium-80: #085867;
+	/* Palettes/Aquarium/90 — rgb(5,71,83) */
+	--dt_color-plt-aquarium-90: #054753;
+	/* Palettes/Aquarium/100 — rgb(3,54,64) */
+	--dt_color-plt-aquarium-100: #033640;
+	/* Palettes/Aquarium/Hover */
+	--dt_color-plt-aquarium-hover: #03364021;
+	/* Palettes/Aquarium/Pressed */
+	--dt_color-plt-aquarium-pressed: #03364038;
+	/* Palettes/Lagoon/0 — rgb(227,248,255) */
+	--dt_color-plt-lagoon-0: #e3f8ff;
+	/* Palettes/Lagoon/5 — rgb(193,240,254) */
+	--dt_color-plt-lagoon-5: #c1f0fe;
+	/* Palettes/Lagoon/10 — rgb(159,232,253) */
+	--dt_color-plt-lagoon-10: #9fe8fd;
+	/* Palettes/Lagoon/20 — rgb(103,215,248) */
+	--dt_color-plt-lagoon-20: #67d7f8;
+	/* Palettes/Lagoon/30 — rgb(54,197,240) */
+	--dt_color-plt-lagoon-30: #36c5f0;
+	/* Palettes/Lagoon/40 — rgb(28,182,235) */
+	--dt_color-plt-lagoon-40: #1cb6eb;
+	/* Palettes/Lagoon/50 — rgb(14,157,211) */
+	--dt_color-plt-lagoon-50: #0e9dd3;
+	/* Palettes/Lagoon/60 — rgb(4,135,190) */
+	--dt_color-plt-lagoon-60: #0487be;
+	/* Palettes/Lagoon/70 — rgb(0,113,164) */
+	--dt_color-plt-lagoon-70: #0071a4;
+	/* Palettes/Lagoon/80 — rgb(11,82,123) */
+	--dt_color-plt-lagoon-80: #0b527b;
+	/* Palettes/Lagoon/90 — rgb(28,64,95) */
+	--dt_color-plt-lagoon-90: #1c405f;
+	/* Palettes/Lagoon/100 — rgb(13,46,69) */
+	--dt_color-plt-lagoon-100: #0d2e45;
+	/* Palettes/Lagoon/Hover */
+	--dt_color-plt-lagoon-hover: #0d2e4521;
+	/* Palettes/Lagoon/Pressed */
+	--dt_color-plt-lagoon-pressed: #0d2e4538;
+	/* Palettes/Ocean/0 — rgb(230,245,254) */
+	--dt_color-plt-ocean-0: #e6f5fe;
+	/* Palettes/Ocean/5 — rgb(194,230,253) */
+	--dt_color-plt-ocean-5: #c2e6fd;
+	/* Palettes/Ocean/10 — rgb(158,214,250) */
+	--dt_color-plt-ocean-10: #9ed6fa;
+	/* Palettes/Ocean/20 — rgb(115,189,243) */
+	--dt_color-plt-ocean-20: #73bdf3;
+	/* Palettes/Ocean/30 — rgb(84,169,234) */
+	--dt_color-plt-ocean-30: #54a9ea;
+	/* Palettes/Ocean/40 — rgb(59,151,221) */
+	--dt_color-plt-ocean-40: #3b97dd;
+	/* Palettes/Ocean/50 — rgb(41,133,205) */
+	--dt_color-plt-ocean-50: #2985cd;
+	/* Palettes/Ocean/60 — rgb(27,116,185) */
+	--dt_color-plt-ocean-60: #1b74b9;
+	/* Palettes/Ocean/70 — rgb(18,100,163) */
+	--dt_color-plt-ocean-70: #1264a3;
+	/* Palettes/Ocean/80 — rgb(11,76,140) */
+	--dt_color-plt-ocean-80: #0b4c8c;
+	/* Palettes/Ocean/90 — rgb(9,58,115) */
+	--dt_color-plt-ocean-90: #093a73;
+	/* Palettes/Ocean/100 — rgb(18,42,89) */
+	--dt_color-plt-ocean-100: #122a59;
+	/* Palettes/Ocean/Hover */
+	--dt_color-plt-ocean-hover: #122a5921;
+	/* Palettes/Ocean/Pressed */
+	--dt_color-plt-ocean-pressed: #122a5938;
+	/* Palettes/Indigo/0 — rgb(240,243,252) */
+	--dt_color-plt-indigo-0: #f0f3fc;
+	/* Palettes/Indigo/5 — rgb(220,227,250) */
+	--dt_color-plt-indigo-5: #dce3fa;
+	/* Palettes/Indigo/10 — rgb(200,212,248) */
+	--dt_color-plt-indigo-10: #c8d4f8;
+	/* Palettes/Indigo/20 — rgb(160,179,243) */
+	--dt_color-plt-indigo-20: #a0b3f3;
+	/* Palettes/Indigo/30 — rgb(125,149,235) */
+	--dt_color-plt-indigo-30: #7d95eb;
+	/* Palettes/Indigo/40 — rgb(95,123,225) */
+	--dt_color-plt-indigo-40: #5f7be1;
+	/* Palettes/Indigo/50 — rgb(72,100,210) */
+	--dt_color-plt-indigo-50: #4864d2;
+	/* Palettes/Indigo/60 — rgb(54,81,192) */
+	--dt_color-plt-indigo-60: #3651c0;
+	/* Palettes/Indigo/70 — rgb(40,64,169) */
+	--dt_color-plt-indigo-70: #2840a9;
+	/* Palettes/Indigo/80 — rgb(30,50,143) */
+	--dt_color-plt-indigo-80: #1e328f;
+	/* Palettes/Indigo/90 — rgb(17,35,119) */
+	--dt_color-plt-indigo-90: #112377;
+	/* Palettes/Indigo/100 — rgb(9,24,97) */
+	--dt_color-plt-indigo-100: #091861;
+	/* Palettes/Indigo/Hover */
+	--dt_color-plt-indigo-hover: #09186121;
+	/* Palettes/Indigo/Pressed */
+	--dt_color-plt-indigo-pressed: #09186138;
+	/* Palettes/Aubergine/0 — rgb(249,237,255) */
+	--dt_color-plt-aubergine-0: #f9edff;
+	/* Palettes/Aubergine/5 — rgb(246,228,255) */
+	--dt_color-plt-aubergine-5: #f6e4ff;
+	/* Palettes/Aubergine/10 — rgb(244,218,255) */
+	--dt_color-plt-aubergine-10: #f4daff;
+	/* Palettes/Aubergine/20 — rgb(234,189,251) */
+	--dt_color-plt-aubergine-20: #eabdfb;
+	/* Palettes/Aubergine/30 — rgb(223,159,244) */
+	--dt_color-plt-aubergine-30: #df9ff4;
+	/* Palettes/Aubergine/40 — rgb(211,137,231) */
+	--dt_color-plt-aubergine-40: #d389e7;
+	/* Palettes/Aubergine/50 — rgb(196,116,211) */
+	--dt_color-plt-aubergine-50: #c474d3;
+	/* Palettes/Aubergine/60 — rgb(163,80,175) */
+	--dt_color-plt-aubergine-60: #a350af;
+	/* Palettes/Aubergine/70 — rgb(131,56,138) */
+	--dt_color-plt-aubergine-70: #83388a;
+	/* Palettes/Aubergine/80 — rgb(97,31,105) */
+	--dt_color-plt-aubergine-80: #611f69;
+	/* Palettes/Aubergine/90 — rgb(74,21,75) */
+	--dt_color-plt-aubergine-90: #4a154b;
+	/* Palettes/Aubergine/100 — rgb(57,6,58) */
+	--dt_color-plt-aubergine-100: #39063a;
+	/* Palettes/Aubergine/Hover */
+	--dt_color-plt-aubergine-hover: #39063a21;
+	/* Palettes/Aubergine/Pressed */
+	--dt_color-plt-aubergine-pressed: #39063a38;
+	/* Palettes/Sangria/0 — rgb(255,240,246) */
+	--dt_color-plt-sangria-0: #fff0f6;
+	/* Palettes/Sangria/5 — rgb(250,225,236) */
+	--dt_color-plt-sangria-5: #fae1ec;
+	/* Palettes/Sangria/10 — rgb(246,210,226) */
+	--dt_color-plt-sangria-10: #f6d2e2;
+	/* Palettes/Sangria/20 — rgb(237,180,206) */
+	--dt_color-plt-sangria-20: #edb4ce;
+	/* Palettes/Sangria/30 — rgb(226,150,185) */
+	--dt_color-plt-sangria-30: #e296b9;
+	/* Palettes/Sangria/40 — rgb(211,120,163) */
+	--dt_color-plt-sangria-40: #d378a3;
+	/* Palettes/Sangria/50 — rgb(192,91,140) */
+	--dt_color-plt-sangria-50: #c05b8c;
+	/* Palettes/Sangria/60 — rgb(180,73,126) */
+	--dt_color-plt-sangria-60: #b4497e;
+	/* Palettes/Sangria/70 — rgb(148,51,100) */
+	--dt_color-plt-sangria-70: #943364;
+	/* Palettes/Sangria/80 — rgb(124,40,82) */
+	--dt_color-plt-sangria-80: #7c2852;
+	/* Palettes/Sangria/90 — rgb(94,18,55) */
+	--dt_color-plt-sangria-90: #5e1237;
+	/* Palettes/Sangria/100 — rgb(77,0,37) */
+	--dt_color-plt-sangria-100: #4d0025;
+	/* Palettes/Sangria/Hover */
+	--dt_color-plt-sangria-hover: #4d002521;
+	/* Palettes/Sangria/Pressed */
+	--dt_color-plt-sangria-pressed: #4d002538;
+	/* Palettes/Flamingo/0 — rgb(255,232,239) */
+	--dt_color-plt-flamingo-0: #ffe8ef;
+	/* Palettes/Flamingo/5 — rgb(255,214,228) */
+	--dt_color-plt-flamingo-5: #ffd6e4;
+	/* Palettes/Flamingo/10 — rgb(255,196,217) */
+	--dt_color-plt-flamingo-10: #ffc4d9;
+	/* Palettes/Flamingo/20 — rgb(255,163,194) */
+	--dt_color-plt-flamingo-20: #ffa3c2;
+	/* Palettes/Flamingo/30 — rgb(255,129,170) */
+	--dt_color-plt-flamingo-30: #ff81aa;
+	/* Palettes/Flamingo/40 — rgb(250,95,144) */
+	--dt_color-plt-flamingo-40: #fa5f90;
+	/* Palettes/Flamingo/50 — rgb(239,62,117) */
+	--dt_color-plt-flamingo-50: #ef3e75;
+	/* Palettes/Flamingo/60 — rgb(224,30,90) */
+	--dt_color-plt-flamingo-60: #e01e5a;
+	/* Palettes/Flamingo/70 — rgb(192,19,67) */
+	--dt_color-plt-flamingo-70: #c01343;
+	/* Palettes/Flamingo/80 — rgb(158,11,46) */
+	--dt_color-plt-flamingo-80: #9e0b2e;
+	/* Palettes/Flamingo/90 — rgb(123,4,28) */
+	--dt_color-plt-flamingo-90: #7b041c;
+	/* Palettes/Flamingo/100 — rgb(89,0,15) */
+	--dt_color-plt-flamingo-100: #59000f;
+	/* Palettes/Flamingo/Hover */
+	--dt_color-plt-flamingo-hover: #59000f21;
+	/* Palettes/Flamingo/Pressed */
+	--dt_color-plt-flamingo-pressed: #59000f38;
+	/* Palettes/Rose/0 — rgb(255,232,234) */
+	--dt_color-plt-rose-0: #ffe8ea;
+	/* Palettes/Rose/5 — rgb(255,221,224) */
+	--dt_color-plt-rose-5: #ffdde0;
+	/* Palettes/Rose/10 — rgb(255,209,214) */
+	--dt_color-plt-rose-10: #ffd1d6;
+	/* Palettes/Rose/20 — rgb(255,182,189) */
+	--dt_color-plt-rose-20: #ffb6bd;
+	/* Palettes/Rose/30 — rgb(250,157,166) */
+	--dt_color-plt-rose-30: #fa9da6;
+	/* Palettes/Rose/40 — rgb(250,124,134) */
+	--dt_color-plt-rose-40: #fa7c86;
+	/* Palettes/Rose/50 — rgb(242,96,106) */
+	--dt_color-plt-rose-50: #f2606a;
+	/* Palettes/Rose/60 — rgb(217,69,77) */
+	--dt_color-plt-rose-60: #d9454d;
+	/* Palettes/Rose/70 — rgb(187,44,51) */
+	--dt_color-plt-rose-70: #bb2c33;
+	/* Palettes/Rose/80 — rgb(146,29,33) */
+	--dt_color-plt-rose-80: #921d21;
+	/* Palettes/Rose/90 — rgb(121,10,13) */
+	--dt_color-plt-rose-90: #790a0d;
+	/* Palettes/Rose/100 — rgb(89,0,1) */
+	--dt_color-plt-rose-100: #590001;
+	/* Palettes/Rose/Hover */
+	--dt_color-plt-rose-hover: #59000121;
+	/* Palettes/Rose/Pressed */
+	--dt_color-plt-rose-pressed: #59000138;
+	/* Palettes/Horchata/0 — rgb(244,237,228) */
+	--dt_color-plt-horchata-0: #f4ede4;
+	/* Palettes/Horchata/5 — rgb(236,222,204) */
+	--dt_color-plt-horchata-5: #ecdecc;
+	/* Palettes/Horchata/10 — rgb(227,206,181) */
+	--dt_color-plt-horchata-10: #e3ceb5;
+	/* Palettes/Horchata/20 — rgb(209,177,139) */
+	--dt_color-plt-horchata-20: #d1b18b;
+	/* Palettes/Horchata/30 — rgb(191,150,104) */
+	--dt_color-plt-horchata-30: #bf9668;
+	/* Palettes/Horchata/40 — rgb(174,127,77) */
+	--dt_color-plt-horchata-40: #ae7f4d;
+	/* Palettes/Horchata/50 — rgb(156,108,57) */
+	--dt_color-plt-horchata-50: #9c6c39;
+	/* Palettes/Horchata/60 — rgb(138,91,42) */
+	--dt_color-plt-horchata-60: #8a5b2a;
+	/* Palettes/Horchata/70 — rgb(120,76,31) */
+	--dt_color-plt-horchata-70: #784c1f;
+	/* Palettes/Horchata/80 — rgb(102,63,24) */
+	--dt_color-plt-horchata-80: #663f18;
+	/* Palettes/Horchata/90 — rgb(84,51,18) */
+	--dt_color-plt-horchata-90: #543312;
+	/* Palettes/Horchata/100 — rgb(66,40,13) */
+	--dt_color-plt-horchata-100: #42280d;
+	/* Palettes/Horchata/Hover */
+	--dt_color-plt-horchata-hover: #42280d21;
+	/* Palettes/Horchata/Pressed */
+	--dt_color-plt-horchata-pressed: #42280d38;
+	--dt_blend-mode-interaction: multiply;
+}
+
+.sk-client-theme--dark {
+	color-scheme: dark;
+}
+
+/*
+  Sidebar theme — overrides semantic tokens for the workspace sidebar.
+  In the webapp, this is applied via .sk-client-theme--light-inverted-sidebar.
+  Source: js/lib/slack-kit/src/design-tokens/light-inverted-sidebar.css
+
+  Usage in prototypes: add class "sk-client-theme--sidebar" to any container
+  that should render with sidebar/workspace theming (e.g. the sidebar panel).
+  All the same --dt_color-* variables resolve to sidebar-specific values.
+*/
+.sk-client-theme--sidebar {
+	/* Base/Primary */
+	--dt_color-base-pry: #ffffff;
+	/* Base/Primary Hover */
+	--dt_color-base-pry-hover: #1d1c1d14;
+	/* Base/Primary Pressed */
+	--dt_color-base-pry-pressed: #1d1c1d2e;
+	/* Base/Secondary */
+	--dt_color-base-sec: #f8f8f8;
+	/* Base/Secondary Hover */
+	--dt_color-base-sec-hover: #1d1c1d14;
+	/* Base/Secondary Pressed */
+	--dt_color-base-sec-pressed: #1d1c1d2e;
+	/* Base/Tertiary */
+	--dt_color-base-ter: #eaeaea;
+	/* Base/Tertiary Hover */
+	--dt_color-base-ter-hover: #1d1c1d14;
+	/* Base/Tertiary Pressed */
+	--dt_color-base-ter-pressed: #1d1c1d2e;
+	/* Base/Highlight 1 */
+	--dt_color-base-hgl-1: #e3f8ff;
+	/* Base/Highlight 1 Hover */
+	--dt_color-base-hgl-1-hover: #0d2e4514;
+	/* Base/Highlight 1 Pressed */
+	--dt_color-base-hgl-1-pressed: #0d2e452e;
+	/* Base/Highlight 2 */
+	--dt_color-base-hgl-2: #e3fff3;
+	/* Base/Highlight 2 Hover */
+	--dt_color-base-hgl-2-hover: #0a403214;
+	/* Base/Highlight 2 Pressed */
+	--dt_color-base-hgl-2-pressed: #0a40322e;
+	/* Base/Highlight 3 */
+	--dt_color-base-hgl-3: #fffae0;
+	/* Base/Highlight 3 Hover */
+	--dt_color-base-hgl-3-hover: #4d390014;
+	/* Base/Highlight 3 Pressed */
+	--dt_color-base-hgl-3-pressed: #4d39002e;
+	/* Base/Important */
+	--dt_color-base-imp: #ffe8ef;
+	/* Base/Important Hover */
+	--dt_color-base-imp-hover: #59000f14;
+	/* Base/Important Pressed */
+	--dt_color-base-imp-pressed: #59000f2e;
+	/* Base/Modal */
+	--dt_color-base-modal: #1d1c1db3;
+	/* Base/Modal Hover */
+	--dt_color-base-modal-hover: #1d1c1d14;
+	/* Base/Modal Pressed */
+	--dt_color-base-modal-pressed: #1d1c1d2e;
+	/* Base/Inverse Primary */
+	--dt_color-base-inv-pry: #1d1c1d;
+	/* Base/Inverse Primary Hover */
+	--dt_color-base-inv-pry-hover: #1d1c1d14;
+	/* Base/Inverse Primary Pressed */
+	--dt_color-base-inv-pry-pressed: #1d1c1d2e;
+	/* Base/Inverse Highlight 1 */
+	--dt_color-base-inv-hgl-1: #1264a3;
+	/* Base/Inverse Highlight 1 Hover */
+	--dt_color-base-inv-hgl-1-hover: #122a5914;
+	/* Base/Inverse Highlight 1 Pressed */
+	--dt_color-base-inv-hgl-1-pressed: #122a592e;
+	/* Base/Inverse Highlight 2 */
+	--dt_color-base-inv-hgl-2: #007a5a;
+	/* Base/Inverse Highlight 2 Hover */
+	--dt_color-base-inv-hgl-2-hover: #0a403214;
+	/* Base/Inverse Highlight 2 Pressed */
+	--dt_color-base-inv-hgl-2-pressed: #0a40322e;
+	/* Base/Inverse Highlight 3 */
+	--dt_color-base-inv-hgl-3: #f1b900;
+	/* Base/Inverse Highlight 3 Hover */
+	--dt_color-base-inv-hgl-3-hover: #4d390014;
+	/* Base/Inverse Highlight 3 Pressed */
+	--dt_color-base-inv-hgl-3-pressed: #4d39002e;
+	/* Base/Inverse Important */
+	--dt_color-base-inv-imp: #e01e5a;
+	/* Base/Inverse Important Hover */
+	--dt_color-base-inv-imp-hover: #59000f14;
+	/* Base/Inverse Important Pressed */
+	--dt_color-base-inv-imp-pressed: #59000f2e;
+	/* Surface/Primary */
+	--dt_color-surf-pry: #1d1c1d0f;
+	/* Surface/Primary Hover */
+	--dt_color-surf-pry-hover: #1d1c1d14;
+	/* Surface/Primary Pressed */
+	--dt_color-surf-pry-pressed: #1d1c1d2e;
+	/* Surface/Secondary */
+	--dt_color-surf-sec: #1d1c1d40;
+	/* Surface/Secondary Hover */
+	--dt_color-surf-sec-hover: #1d1c1d14;
+	/* Surface/Secondary Pressed */
+	--dt_color-surf-sec-pressed: #1d1c1d2e;
+	/* Surface/Highlight 1 */
+	--dt_color-surf-hgl-1: #36c5f021;
+	/* Surface/Highlight 1 Hover */
+	--dt_color-surf-hgl-1-hover: #0d2e4514;
+	/* Surface/Highlight 1 Pressed */
+	--dt_color-surf-hgl-1-pressed: #0d2e452e;
+	/* Surface/Highlight 2 */
+	--dt_color-surf-hgl-2: #4cc89440;
+	/* Surface/Highlight 2 Hover */
+	--dt_color-surf-hgl-2-hover: #0a403214;
+	/* Surface/Highlight 2 Pressed */
+	--dt_color-surf-hgl-2-pressed: #0a40322e;
+	/* Surface/Highlight 3 */
+	--dt_color-surf-hgl-3: #ffc6002e;
+	/* Surface/Highlight 3 Hover */
+	--dt_color-surf-hgl-3-hover: #4d390014;
+	/* Surface/Highlight 3 Pressed */
+	--dt_color-surf-hgl-3-pressed: #4d39002e;
+	/* Surface/Important */
+	--dt_color-surf-imp: #ff81aa21;
+	/* Surface/Important Hover */
+	--dt_color-surf-imp-hover: #59000f14;
+	/* Surface/Important Pressed */
+	--dt_color-surf-imp-pressed: #59000f2e;
+	/* Surface/Inverse */
+	--dt_color-surf-inv: #ffffff2e;
+	/* Surface/Inverse Hover */
+	--dt_color-surf-inv-hover: #1d1c1d14;
+	/* Surface/Inverse Pressed */
+	--dt_color-surf-inv-pressed: #1d1c1d2e;
+	/* Surface/Inverse Highlight 3 */
+	--dt_color-surf-inv-hgl-3: #aa8000b3;
+	/* Surface/Inverse Highlight 3 Hover */
+	--dt_color-surf-inv-hgl-3-hover: #4d390014;
+	/* Surface/Inverse Highlight 3 Pressed */
+	--dt_color-surf-inv-hgl-3-pressed: #4d39002e;
+	/* Container/Primary */
+	--dt_color-ctr-pry: #ffffff;
+	/* Container/Primary Hover */
+	--dt_color-ctr-pry-hover: #1d1c1d14;
+	/* Container/Primary Pressed */
+	--dt_color-ctr-pry-pressed: #1d1c1d2e;
+	/* Container/Secondary */
+	--dt_color-ctr-sec: #f8f8f8;
+	/* Container/Secondary Hover */
+	--dt_color-ctr-sec-hover: #1d1c1d14;
+	/* Container/Secondary Pressed */
+	--dt_color-ctr-sec-pressed: #1d1c1d2e;
+	/* Content/Primary */
+	--dt_color-content-pry: #1d1c1d;
+	/* Content/Secondary */
+	--dt_color-content-sec: #454447;
+	/* Content/Tertiary */
+	--dt_color-content-ter: #77757a;
+	/* Content/Highlight 1 */
+	--dt_color-content-hgl-1: #1264a3;
+	/* Content/Highlight 2 */
+	--dt_color-content-hgl-2: #007a5a;
+	/* Content/Highlight 3 */
+	--dt_color-content-hgl-3: #6b5000;
+	/* Content/Important */
+	--dt_color-content-imp: #c01343;
+	/* Content/Inverse Primary */
+	--dt_color-content-inv-pry: #ffffff;
+	/* Content/Inverse Secondary */
+	--dt_color-content-inv-sec: #eaeaea;
+	/* Content/Inverse Highlight 1 */
+	--dt_color-content-inv-hgl-1: #9ed6fa;
+	/* Content/Inverse Highlight 2 */
+	--dt_color-content-inv-hgl-2: #4cc894;
+	/* Content/Inverse Highlight 3 */
+	--dt_color-content-inv-hgl-3: #ffd738;
+	/* Content/Inverse Important */
+	--dt_color-content-inv-imp: #ffa3c2;
+	/* Outline/Primary */
+	--dt_color-otl-pry: #7c7a7f;
+	/* Outline/Secondary */
+	--dt_color-otl-sec: #5e5d6073;
+	/* Outline/Tertiary */
+	--dt_color-otl-ter: #5e5d6021;
+	/* Outline/Highlight 1 */
+	--dt_color-otl-hgl-1: #1264a3;
+	/* Outline/Highlight 1 Secondary */
+	--dt_color-otl-hgl-1-sec: #0e9dd333;
+	/* Outline/Highlight 2 */
+	--dt_color-otl-hgl-2: #007a5a;
+	/* Outline/Highlight 2 Secondary */
+	--dt_color-otl-hgl-2-sec: #007a5a1a;
+	/* Outline/Highlight 3 */
+	--dt_color-otl-hgl-3: #c79600;
+	/* Outline/Highlight 3 Secondary */
+	--dt_color-otl-hgl-3-sec: #f1b90033;
+	/* Outline/Important */
+	--dt_color-otl-imp: #e01e5a;
+	/* Outline/Important Secondary */
+	--dt_color-otl-imp-sec: #e01e5a4d;
+	/* Outline/Inverse Primary */
+	--dt_color-otl-inv-pry: #f8f8f8d9;
+	/* Outline/Inverse Secondary */
+	--dt_color-otl-inv-sec: #f8f8f88c;
+	/* Outline/Inverse Tertiary */
+	--dt_color-otl-inv-ter: #f8f8f833;
+	/* Palettes — sidebar uses its own palette ramps (not included, same structure as light) */
+	--dt_blend-mode-interaction: lighten;
+}
+

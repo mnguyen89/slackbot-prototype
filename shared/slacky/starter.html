@@ -1,0 +1,47 @@
+<!--
+  TEMPLATE — do not open this file directly (it will look broken here).
+
+  This is a starting template for a NEW prototype. The "shared/slacky/..." paths
+  below only work once this file has been copied OUT into a prototype folder that
+  sits one level ABOVE shared/slacky/.
+
+  To use it: run ./new-prototype.sh from the kit root. That creates a new folder,
+  copies the Slacky library into it, and copies this file in as index.html — with
+  all paths in the right place so the styles and links work.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Prototype</title>
+  <link rel="stylesheet" href="shared/slacky/reset.css">
+  <link rel="stylesheet" href="shared/slacky/tokens.css">
+  <link rel="stylesheet" href="shared/slacky/dark.css">
+  <link rel="stylesheet" href="shared/slacky/components.css">
+  <style>
+    body {
+      font-family: var(--font-family-default);
+      background: var(--dt_color-surface-primary);
+      color: var(--dt_color-content-primary);
+      padding: var(--dt_static_space-150);
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="font-size: var(--dt_static_type-size-title); font-weight: var(--dt_static_type-weight-bold); margin-bottom: var(--dt_static_space-100);">
+    My Prototype
+  </h1>
+
+  <p style="color: var(--dt_color-content-secondary); margin-bottom: var(--dt_static_space-150);">
+    Start building here. See <a href="shared/slacky/showcase.html">showcase.html</a> for component examples
+    and <a href="shared/slacky/REFERENCE.md">REFERENCE.md</a> for copy-paste HTML patterns.
+  </p>
+
+  <!-- Example: a button -->
+  <button class="c-button c-button--primary c-button--medium">Get started</button>
+
+  <script src="shared/slacky/slacky.js"></script>
+</body>
+</html>

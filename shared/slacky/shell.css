@@ -1,0 +1,302 @@
+/* ------------------------------------------------------------------ */
+/* Slack IA4 Shell — Aubergine Theme                                   */
+/* ------------------------------------------------------------------ */
+html, body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+
+body {
+	font-family: 'Slack-Lato', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	background: linear-gradient(180deg, #611f69 0%, #39063a 100%);
+	color: #1d1c1d;
+	-webkit-font-smoothing: antialiased;
+	display: flex;
+	flex-direction: column;
+}
+
+/* ------------------------------------------------------------------ */
+/* IA4 Client Container                                                */
+/* ------------------------------------------------------------------ */
+.p-ia4_client {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ */
+/* Top Nav — styled by components.css (.p-ia4_top_nav*).               */
+/* The shell uses the top-nav component; it is not redefined here.     */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Workspace Wrapper (Tab Rail + Workspace)                            */
+/* ------------------------------------------------------------------ */
+.p-client_workspace_wrapper {
+	flex: 1;
+	display: grid;
+	grid-template-columns: 70px 1fr;
+	grid-template-rows: 1fr;
+	min-height: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tab Rail — now defined in components.css (single source).           */
+/* Removed from shell.css to eliminate the duplicate definition.       */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Client Workspace — now defined in components.css (single source).   */
+/* Removed from shell.css to eliminate the duplicate definition.       */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Sidebar                                                             */
+/* ------------------------------------------------------------------ */
+.p-view_contents--sidebar {
+	background: rgba(249, 237, 255, 0.11);
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.p-view_contents--sidebar .p-channel_sidebar {
+	flex: 1;
+	border-radius: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Primary View                                                        */
+/* ------------------------------------------------------------------ */
+.p-view_contents--primary {
+	background: #fff;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	position: relative;
+}
+
+/* ------------------------------------------------------------------ */
+/* View Header — now defined in components.css (single source).        */
+/* Removed from shell.css to eliminate the duplicate definition.       */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Channel Tabs — now defined in components.css (single source).       */
+/* Removed from shell.css to eliminate the duplicate definition.       */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Message Pane — now defined in components.css (single source).       */
+/* Removed from shell.css to eliminate the duplicate definition.       */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Messages                                                            */
+/* ------------------------------------------------------------------ */
+.p-message {
+	display: flex;
+	gap: 8px;
+	padding: 8px 20px;
+	transition: background 0.1s ease;
+}
+
+.p-message:hover {
+	background: #f8f8f8;
+}
+
+
+.p-message--continuation {
+	padding-top: 0;
+}
+
+.p-message__avatar {
+	width: 36px;
+	height: 36px;
+	flex-shrink: 0;
+}
+
+.p-message__avatar img {
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	display: block;
+	object-fit: cover;
+}
+
+.p-message--continuation .p-message__avatar {
+	visibility: hidden;
+}
+
+.p-message__body {
+	flex: 1;
+	min-width: 0;
+}
+
+.p-message__header {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	margin-bottom: 2px;
+}
+
+.p-message__sender {
+	font-size: 15px;
+	font-weight: 900;
+	color: #1d1c1d;
+}
+
+.p-message__time {
+	font-size: 12px;
+	color: #616061;
+}
+
+.p-message__text {
+	font-size: 15px;
+	line-height: 1.46;
+	color: #1d1c1d;
+}
+
+.p-message__text code {
+	background: rgba(29, 28, 29, 0.04);
+	border: 1px solid rgba(29, 28, 29, 0.13);
+	border-radius: 3px;
+	padding: 1px 3px;
+	font-size: 12px;
+	font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
+	color: #e01e5a;
+}
+
+/* ------------------------------------------------------------------ */
+/* Date Divider — now defined in components.css (single source).       */
+/* Removed from shell.css to eliminate the duplicate definition.       */
+/* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/* Message extras                                                      */
+/* ------------------------------------------------------------------ */
+.p-message__mention {
+	color: #1264a3;
+	background: rgba(29, 155, 209, 0.1);
+	border-radius: 3px;
+	padding: 0 2px;
+	cursor: pointer;
+}
+
+.p-message__link {
+	color: #1264a3;
+	text-decoration: none;
+}
+
+.p-message__link:hover {
+	text-decoration: underline;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Message Composer (WYSIWYG Container)                                */
+/* ------------------------------------------------------------------ */
+.p-message_input {
+	padding: 0 20px 20px;
+	flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Flexpane (Thread Panel)                                             */
+/* ------------------------------------------------------------------ */
+.p-flexpane {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border-left: 1px solid rgba(29, 28, 29, 0.13);
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.p-flexpane[hidden] {
+	display: none;
+}
+
+.p-flexpane__header {
+	height: 49px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 0 12px 0 20px;
+	box-shadow: 0 1px 0 0 rgba(29, 28, 29, 0.13);
+	flex-shrink: 0;
+}
+
+.p-flexpane__header_text {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+}
+
+.p-flexpane__header_title {
+	font-size: 18px;
+	font-weight: 900;
+	color: #1d1c1d;
+	white-space: nowrap;
+}
+
+.p-flexpane__header_channel {
+	font-size: 13px;
+	color: #1d1c1d;
+	text-decoration: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.p-flexpane__header_channel:hover {
+	color: #1d1c1d;
+}
+
+.p-flexpane__close_btn {
+	width: 28px;
+	height: 28px;
+	font-size: 18px;
+}
+
+.p-flexpane__body {
+	flex: 1;
+	overflow-y: auto;
+	min-height: 0;
+	padding: 16px 0;
+}
+
+
+.p-flexpane__reply_count {
+	padding: 8px 20px;
+	font-size: 13px;
+	font-weight: 700;
+	color: #1264a3;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.p-flexpane__reply_count::after {
+	content: '';
+	flex: 1;
+	height: 1px;
+	background: rgba(29, 28, 29, 0.13);
+}
+
+.p-flexpane__composer {
+	padding: 8px 16px 16px;
+}
+
+.p-flexpane__composer .c-wysiwyg_container {
+	font-size: 13px;
+}
